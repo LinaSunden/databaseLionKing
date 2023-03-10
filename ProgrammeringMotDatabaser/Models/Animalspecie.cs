@@ -8,13 +8,15 @@ namespace ProgrammeringMotDatabaser.Models
 {
     internal class Animalspecie
     {
-        public int AnimalSpecielId { get; set; }
+        public int AnimalSpecieId { get; set; }
 
         public string AnimalSpecieName { get; set; }
 
         public string LatinName { get; set; }
 
-        public Animalclass Animalclass { get; set; }    
+        public int AnimalClassid { get; set; }
+
+        public Animalclass AnimalClassId { get; set; }    
 
         
 

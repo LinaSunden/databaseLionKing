@@ -65,18 +65,21 @@ namespace ProgrammeringMotDatabaser.DAL
         /// </summary>
         /// <param name="animal"></param>
         /// <returns></returns>
-        public async Task AddAnimal(Animal animal)  //Adds a name to an animal, check if it also gets id 
+        public async Task AddAnimal(Animal animal)  //Adds a name to an animal and gives it specieID and animalID 
         {
             string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand();
             command.Parameters.AddWithValue("charactername", animal.CharacterName);
-            command.Parameters.AddWithValue("animalspecieid", animal.Animalspecie);
+            command.Parameters.AddWithValue("animalspecieid", animal.Animalspecieid);
             await command.ExecuteNonQueryAsync();
 
         }
-
+        /// <summary>
+        /// method to retrieve the database values in animalspecienames and display in combobox
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<Animalspecie>> AddAnimalSpecieToCombox()
         {
             
@@ -94,11 +97,14 @@ namespace ProgrammeringMotDatabaser.DAL
             {
                 animalspecie = new Animalspecie()
                 {
-                    AnimalSpecielId = reader.GetInt32(0),
-                    AnimalSpecieName = (string)reader["animalspeciename"]
+                    AnimalSpecieId = reader.GetInt32(0),
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalClassid = reader.GetInt32(0)
 
                 };
+
                 animalspecies.Add(animalspecie);
+
             }
 
             return animalspecies;

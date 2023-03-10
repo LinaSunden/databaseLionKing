@@ -16,10 +16,13 @@
         <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="607,346,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="427,356,0,0" TextWrapping="Wrap" Text="Character name" VerticalAlignment="Top" Width="120"/>
         <Label Content="Create new animal" HorizontalAlignment="Left" Margin="40,72,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtname" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" Text="optional" BorderBrush="Black"/>
         <Label Content="Animal name" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="40,217,0,0" VerticalAlignment="Top" Width="120" />
-        <Label Content="Animal specie" HorizontalAlignment="Left" Margin="40,191,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnload" Content="Load animal species" HorizontalAlignment="Left" Margin="175,217,0,0" VerticalAlignment="Top" Click="btnload_Click"/>
+        <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="35,192,0,0" VerticalAlignment="Top" Width="158" />
+        <Label Content="Animal specie" HorizontalAlignment="Left" Margin="35,166,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnload" Content="Load animal species" HorizontalAlignment="Left" Margin="218,193,0,0" VerticalAlignment="Top" Click="btnload_Click"/>
+        <Label x:Name="lblanimalclass" Content="Label" HorizontalAlignment="Left" Margin="35,252,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnloadclass" Content="Load animal class" HorizontalAlignment="Left" Margin="40,278,0,0" VerticalAlignment="Top" Click="btnloadclass_Click"/>
+        <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="35,332,0,0" VerticalAlignment="Top" Width="158" Click="btncreateanimal_Click"/>
+        <TextBox x:Name="txtinputname" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" Text="input name..." VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
