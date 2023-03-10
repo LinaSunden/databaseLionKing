@@ -26,11 +26,16 @@ namespace ProgrammeringMotDatabaser
             InitializeComponent();
         }
 
-        private void btnsearch_Click(object sender, RoutedEventArgs e)
+        private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
             DbRepository db = new();
 
-            db.GetAnimalByName();
+            var animal = await db.GetAnimalByName();
+
+            
+            animal.Character_name= (string)lblname.Content;
+
+            
 
         }
     }
