@@ -10,5 +10,6 @@
         <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="156,302,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
         <Label x:Name="lblid" Content="Character id" HorizontalAlignment="Left" Margin="156,108,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblname" Content="Character name" HorizontalAlignment="Left" Margin="156,152,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="lstname" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="341,79,135,137"/>
     </Grid>
 </Window>

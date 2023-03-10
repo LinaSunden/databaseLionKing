@@ -32,8 +32,7 @@ namespace ProgrammeringMotDatabaser
 
             var animal = await db.GetAnimalByName();
 
-            
-            animal.Character_name= (string)lblname.Content;
+
 
             
 
