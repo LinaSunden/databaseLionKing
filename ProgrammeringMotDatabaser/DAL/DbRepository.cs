@@ -70,9 +70,9 @@ namespace ProgrammeringMotDatabaser.DAL
             string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand();
+            await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("charactername", animal.CharacterName);
-            command.Parameters.AddWithValue("animalspecieid", animal.Animalspecieid);
+            command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecieid);
             await command.ExecuteNonQueryAsync();
 
         }

@@ -101,21 +101,20 @@ namespace ProgrammeringMotDatabaser
             }
         }
 
-        private void btncreateanimal_Click(object sender, RoutedEventArgs e)
+        private async void btncreateanimal_Click(object sender, RoutedEventArgs e)
         {
             DbRepository db = new();
-
-
 
             var asd = GetAnimalSpecieId();
 
             var animal = new Animal()
             {
-                CharacterName = txtinputname.Text,
+                CharacterName = txtinput.Text,
                 AnimalSpecieid = int.Parse(asd),
 
             };
 
+            await db.AddAnimal(animal);
 
 
         }
@@ -137,5 +136,6 @@ namespace ProgrammeringMotDatabaser
 
         }
 
+       
     }
 }
