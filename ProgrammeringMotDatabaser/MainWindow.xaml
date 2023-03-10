@@ -5,15 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProgrammeringMotDatabaser"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="0,-15,0,-6">
-        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="156,302,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
-        <Label x:Name="lblid" Content="Character id" HorizontalAlignment="Left" Margin="156,108,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblname" Content="Character name" HorizontalAlignment="Left" Margin="156,152,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="lstbox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="594,58,32,143"/>
-        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="343,354,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="343,287,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="343,321,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="156,279,0,0" TextWrapping="Wrap" Text="Character name" VerticalAlignment="Top" Width="120"/>
+        Title="MainWindow" Height="550" Width="1000">
+    <Grid Margin="0,0,0,-6">
+        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="427,379,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
+        <Label x:Name="lblid" Content="Character id" HorizontalAlignment="Left" Margin="612,79,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblname" Content="Character name" HorizontalAlignment="Left" Margin="612,123,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="lstbox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="813,72,32,143"/>
+        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="607,379,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="607,312,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="607,346,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="427,356,0,0" TextWrapping="Wrap" Text="Character name" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Create new animal" HorizontalAlignment="Left" Margin="40,72,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtname" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" Text="optional" BorderBrush="Black"/>
+        <Label Content="Animal name" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="40,217,0,0" VerticalAlignment="Top" Width="120" />
+        <Label Content="Animal specie" HorizontalAlignment="Left" Margin="40,191,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnload" Content="Load animal species" HorizontalAlignment="Left" Margin="175,217,0,0" VerticalAlignment="Top" Click="btnload_Click"/>
     </Grid>
 </Window>

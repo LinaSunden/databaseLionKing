@@ -30,18 +30,36 @@ namespace ProgrammeringMotDatabaser
         {
             DbRepository db = new();
 
-            string charachterName = txtcharactername.Text; 
+            string charachterName = txtcharactername.Text;
 
             var animal = await db.GetAnimalByName(charachterName);
 
             lblid.Content = animal.AnimalId;
             lblname.Content = animal.CharacterName;
+
             //MessageBox.Show($"There is no animal called {characterName}");
 
 
 
             MessageBox.Show(animal.CharacterName);
-            
+
+
+
+
+
+
+
+        }
+
+       
+
+        private async void btnload_Click(object sender, RoutedEventArgs e) 
+        {
+            DbRepository db = new();
+
+            var animalspecies = await db.AddAnimalSpecieToCombox();
+            cbospecie.ItemsSource = animalspecies;
+            cbospecie.DisplayMemberPath = "AnimalSpecieName";
 
         }
     }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ProgrammeringMotDatabaser.DAL
 {
@@ -24,7 +25,7 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<Animal> GetAnimalByName(string characterName)
         {
           
-            string sqlQuestion = $"SELECT * FROM animal WHERE charactername='{characterName}'";  
+            string sqlQuestion = $"SELECT * FROM animal WHERE charactername='{characterName}'";  //enligt erik får vi inte göra på detta sätt 
             
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQuestion);
@@ -47,14 +48,63 @@ namespace ProgrammeringMotDatabaser.DAL
 
             }
 
-            if (animal.AnimalId == 0)
-            {
-                MessageBox.Show($"There is no animal called {characterName}");
+            //if (animal.AnimalId == 0)
+            //{
+            //    MessageBox.Show($"There is no animal called {characterName}");
 
-            }
+            //}
 
             return animal;
         }
+
+
+
+
+        /// <summary>
+        /// Method to add animalnam and animalspecieid, connected to the task of creating a new animal with connection to specie and class 
+        /// </summary>
+        /// <param name="animal"></param>
+        /// <returns></returns>
+        public async Task AddAnimal(Animal animal)  //Adds a name to an animal, check if it also gets id 
+        {
+            string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand();
+            command.Parameters.AddWithValue("charactername", animal.CharacterName);
+            command.Parameters.AddWithValue("animalspecieid", animal.Animalspecie);
+            await command.ExecuteNonQueryAsync();
+
+        }
+
+        public async Task<IEnumerable<Animalspecie>> AddAnimalSpecieToCombox()
+        {
+            
+            List<Animalspecie> animalspecies = new List<Animalspecie>();
+
+            string sqlCommand = "SELECT * FROM animalspecie";
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            await using var reader = await command.ExecuteReaderAsync();
+            
+            Animalspecie animalspecie= new Animalspecie();
+
+            while (await reader.ReadAsync())
+            {
+                animalspecie = new Animalspecie()
+                {
+                    AnimalSpecielId = reader.GetInt32(0),
+                    AnimalSpecieName = (string)reader["animalspeciename"]
+
+                };
+                animalspecies.Add(animalspecie);
+            }
+
+            return animalspecies;
+        }
+
+
 
     }
 }
