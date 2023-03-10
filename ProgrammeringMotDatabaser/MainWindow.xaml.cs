@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProgrammeringMotDatabaser.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,14 @@ namespace ProgrammeringMotDatabaser
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void btnsearch_Click(object sender, RoutedEventArgs e)
+        {
+            DbRepository db = new();
+
+            db.GetAnimalByName();
+
         }
     }
 }

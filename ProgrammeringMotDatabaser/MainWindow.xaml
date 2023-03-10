@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Label Content="Animal Name" HorizontalAlignment="Left" Margin="89,66,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.214,0.438"/>
+        <TextBox x:Name="txtname" HorizontalAlignment="Left" Margin="70,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Animal Specie" HorizontalAlignment="Left" Margin="257,66,0,0" VerticalAlignment="Top"/>
+        <Label Content="Animal Class" HorizontalAlignment="Left" Margin="430,66,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtspecie" HorizontalAlignment="Left" Margin="246,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtclass" HorizontalAlignment="Left" Margin="408,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="156,302,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
+        <Label x:Name="lblname" Content="name..." HorizontalAlignment="Left" Margin="70,148,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblspecie" Content="specie..." HorizontalAlignment="Left" Margin="257,148,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblclass" Content="class..." HorizontalAlignment="Left" Margin="417,148,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
