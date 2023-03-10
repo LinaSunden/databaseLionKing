@@ -22,7 +22,7 @@ namespace ProgrammeringMotDatabaser.DAL
         }
         public async Task<Animal> GetAnimalByName()
         {
-            string sqlQuestion = "SELECT * FROM character WHERE character_name='Simba'";  //notera att det är från character och inte animal
+            string sqlQuestion = "SELECT * FROM animal WHERE charactername='Simba'";  
             
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQuestion);
@@ -33,8 +33,8 @@ namespace ProgrammeringMotDatabaser.DAL
             {
                 animal = new Animal()
                 {
-                    Character_id = reader.GetInt32(0),
-                    Character_name = (string)reader["character_name"]
+                    AnimalId = reader.GetInt32(0),
+                    CharacterName = (string)reader["charactername"]
                     
                 };
             }
