@@ -30,10 +30,15 @@ namespace ProgrammeringMotDatabaser
         {
             DbRepository db = new();
 
-            var animal = await db.GetAnimalByName();
+            string charachterName = txtcharactername.Text; 
+
+            var animal = await db.GetAnimalByName(charachterName);
 
             lblid.Content = animal.AnimalId;
             lblname.Content = animal.CharacterName;
+            //MessageBox.Show($"There is no animal called {characterName}");
+
+
 
             MessageBox.Show(animal.CharacterName);
             

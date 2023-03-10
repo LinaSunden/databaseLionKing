@@ -6,10 +6,14 @@
         xmlns:local="clr-namespace:ProgrammeringMotDatabaser"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="0,-15,0,-6">
         <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="156,302,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
         <Label x:Name="lblid" Content="Character id" HorizontalAlignment="Left" Margin="156,108,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblname" Content="Character name" HorizontalAlignment="Left" Margin="156,152,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="lstname" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="341,79,135,137"/>
+        <ListBox x:Name="lstbox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="594,58,32,143"/>
+        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="343,354,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="343,287,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="343,321,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="156,279,0,0" TextWrapping="Wrap" Text="Character name" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

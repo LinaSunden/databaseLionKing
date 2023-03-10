@@ -8,7 +8,7 @@ namespace ProgrammeringMotDatabaser.Models
 {
     internal class Animal
     {
-        /// <summary>
+        /// <summary> 
         /// primary key
         /// </summary>
         public int AnimalId { get; set; } 
@@ -18,7 +18,7 @@ namespace ProgrammeringMotDatabaser.Models
         /// </summary>
         public string CharacterName { get; set; }
 
+        public Animalspecie Animalspecie { get; set; }
 
-      
     }
 }
