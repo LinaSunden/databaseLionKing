@@ -33,15 +33,14 @@ namespace ProgrammeringMotDatabaser.DAL
 
             Animal animal = new Animal();
 
-          
-
             while(await reader.ReadAsync())   //doublecheck if we should use switch 
             {
                 animal = new Animal()
 
                 {
                     AnimalId = reader.GetInt32(0),
-                    CharacterName = (string)reader["charactername"]
+                    CharacterName = (string)reader["charactername"],
+                    AnimalSpecieid = reader.GetInt32(0)
                     
                 };
                                 
@@ -76,6 +75,18 @@ namespace ProgrammeringMotDatabaser.DAL
             await command.ExecuteNonQueryAsync();
 
         }
+
+        public async Task AddAnimalClass()
+        {
+
+
+
+
+
+        }
+
+
+
         /// <summary>
         /// method to retrieve the database values in animalspecienames and display in combobox
         /// </summary>
@@ -99,12 +110,12 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     AnimalSpecieId = reader.GetInt32(0),
                     AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalClassid = reader.GetInt32(0)
+                    AnimalClassName = (string)reader["animalclassname"]
 
                 };
 
                 animalspecies.Add(animalspecie);
-
+                
             }
 
             return animalspecies;

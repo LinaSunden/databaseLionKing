@@ -32,8 +32,6 @@ namespace ProgrammeringMotDatabaser
         {
             DbRepository db = new();
 
-            var asd = GetAnimalSpecieId();
-
             string charachterName = txtcharactername.Text;
 
             var animal = await db.GetAnimalByName(charachterName);
@@ -45,7 +43,7 @@ namespace ProgrammeringMotDatabaser
 
 
 
-            MessageBox.Show(animal.CharacterName);
+            //MessageBox.Show(animal.CharacterName);
 
         }
 
@@ -58,13 +56,12 @@ namespace ProgrammeringMotDatabaser
             var animalspecies = await db.AddAnimalSpecieToCombox();
             cbospecie.ItemsSource = animalspecies;
             cbospecie.DisplayMemberPath = "AnimalSpecieName";
-
-            
+          
         }
 
       
         /// <summary>
-        /// Button to convert animal specie ID and connect to class
+        /// Button to convert animal specie ID and connect to class (jag har ingen aning hur det funkar tbh)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -73,34 +70,36 @@ namespace ProgrammeringMotDatabaser
             if (cbospecie.SelectedItem is Animalspecie select)
             {
 
-                var qwe = select.AnimalSpecieId.ToString();
-                if (qwe == "7" || qwe == "8")
-                    
-                {
-                    lblanimalclass.Content = $"Your animal belongs to the animalclass Mammals";
-
+                var animaSpecieId = select.AnimalSpecieId.ToString();
+                if (animaSpecieId == "7" || animaSpecieId == "8")
+                {                    
+                    txtblock.Text = "your animal belongs in the animalclass Mammal";                      
                 }
-                else if (qwe == "10")
+                else if (animaSpecieId == "10")
                 {
-                    lblanimalclass.Content = $"Your animal belongs to the animalclass Reptiles";
+                    txtblock.Text = "Your animal belongs in the animalclass Reptile";
                 }
-                else if (qwe == "11")
+                else if (animaSpecieId == "11")
                 {
-                    lblanimalclass.Content = $"Your animal belongs to the animalclass Invertebrates";
+                    txtblock.Text = "Your animal belongs in the animalclass Invertebrate";
                 }
-                else if (qwe == "9")
+                else if (animaSpecieId == "9")
                 {
-                    lblanimalclass.Content = $"Your animal belongs to the animalclass Birds";
+                    txtblock.Text = "Your animal belongs in the animalclass Bird";
                 }
-                else if (qwe == "12")
+                else if (animaSpecieId == "12")
                 {
-                    lblanimalclass.Content = $"Your animal belongs to the animalclass Fish";
+                    txtblock.Text = "Your animal belongs in the animalclass Fish";
                 }
 
 
             }
         }
-
+        /// <summary>
+        /// Button that creates animal and uses specieID from class
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btncreateanimal_Click(object sender, RoutedEventArgs e)
         {
             DbRepository db = new();
@@ -118,18 +117,19 @@ namespace ProgrammeringMotDatabaser
 
 
         }
-
+        /// <summary>
+        /// Method to retrieve the animalspecieID
+        /// </summary>
+        /// <returns></returns>
         public string GetAnimalSpecieId()
         {
 
             DbRepository db = new();
-
-            
-
+                        
             if (cbospecie.SelectedItem is Animalspecie select)
             {
-                var qwe = select.AnimalSpecieId.ToString();
-                return qwe;
+                var animalSpecieId = select.AnimalSpecieId.ToString();
+                return animalSpecieId;
             }
 
             return null;
