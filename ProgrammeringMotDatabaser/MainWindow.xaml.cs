@@ -73,23 +73,23 @@ namespace ProgrammeringMotDatabaser
                 var animaSpecieId = select.AnimalSpecieId.ToString();
                 if (animaSpecieId == "7" || animaSpecieId == "8")
                 {                    
-                    txtblock.Text = "your animal belongs in the animalclass Mammal";                      
+                    txtblock.Text = "your animal belongs in the animal class Mammal";                      
                 }
                 else if (animaSpecieId == "10")
                 {
-                    txtblock.Text = "Your animal belongs in the animalclass Reptile";
+                    txtblock.Text = "Your animal belongs in the animal class Reptile";
                 }
                 else if (animaSpecieId == "11")
                 {
-                    txtblock.Text = "Your animal belongs in the animalclass Invertebrate";
+                    txtblock.Text = "Your animal belongs in the animal class Invertebrate";
                 }
                 else if (animaSpecieId == "9")
                 {
-                    txtblock.Text = "Your animal belongs in the animalclass Bird";
+                    txtblock.Text = "Your animal belongs in the animal class Bird";
                 }
                 else if (animaSpecieId == "12")
                 {
-                    txtblock.Text = "Your animal belongs in the animalclass Fish";
+                    txtblock.Text = "Your animal belongs in the animal class Fish";
                 }
 
 
