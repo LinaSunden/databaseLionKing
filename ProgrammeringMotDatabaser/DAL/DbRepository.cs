@@ -16,45 +16,50 @@ namespace ProgrammeringMotDatabaser.DAL
     internal class DbRepository
     {
         private readonly string _connectionString;
-        
+
         public DbRepository()  //constructor, access to connectionstring
         {
             var config = new ConfigurationBuilder().AddUserSecrets<DbRepository>().Build();
             _connectionString = config.GetConnectionString("develop");
         }
+
+        /// <summary>
+        /// Method that searches for a specific animalname
+        /// </summary>
+        /// <param name="characterName"></param>
+        /// <returns></returns>
         public async Task<Animal> GetAnimalByName(string characterName)
         {
-          
-            string sqlQuestion = $"SELECT * FROM animal WHERE charactername='{characterName}'";  //enligt erik får vi inte göra på detta sätt 
             
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQuestion);
-            await using var reader = await command.ExecuteReaderAsync();
+                string sqlQuestion = $"SELECT * FROM animal WHERE charactername= @name";
 
-            Animal animal = new Animal();
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlQuestion);
+                command.Parameters.AddWithValue("name", characterName);
+                await using var reader = await command.ExecuteReaderAsync();
 
-            while(await reader.ReadAsync())   //doublecheck if we should use switch 
-            {
-                animal = new Animal()
 
+                Animal animal = new Animal();
+                while (await reader.ReadAsync()) 
                 {
-                    AnimalId = reader.GetInt32(0),
-                    CharacterName = (string)reader["charactername"],
-                    AnimalSpecieid = reader.GetInt32(0)
+                    animal = new Animal()
+
+                    {
+                        AnimalId = reader.GetInt32(0),
+                        CharacterName = (string)reader["charactername"],
+                    };
+
                     
-                };
-                                
-
-            }
-
-            //if (animal.AnimalId == 0)
-            //{
-            //    MessageBox.Show($"There is no animal called {characterName}");
-
-            //}
-
+                }
+         
+               
             return animal;
+
         }
+
+
+
+
 
 
 
@@ -93,7 +98,7 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<Animalspecie>> AddAnimalSpecieToCombox()
         {
-            
+
             List<Animalspecie> animalspecies = new List<Animalspecie>();
 
             string sqlCommand = "SELECT * FROM animalspecie";
@@ -101,8 +106,8 @@ namespace ProgrammeringMotDatabaser.DAL
 
             await using var command = dataSource.CreateCommand(sqlCommand);
             await using var reader = await command.ExecuteReaderAsync();
-            
-            Animalspecie animalspecie= new Animalspecie();
+
+            Animalspecie animalspecie = new Animalspecie();
 
             while (await reader.ReadAsync())
             {
@@ -115,7 +120,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 };
 
                 animalspecies.Add(animalspecie);
-                
+
             }
 
             return animalspecies;

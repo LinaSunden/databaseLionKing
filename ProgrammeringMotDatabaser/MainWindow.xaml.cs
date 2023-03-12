@@ -31,23 +31,26 @@ namespace ProgrammeringMotDatabaser
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
             DbRepository db = new();
+         
 
-            string charachterName = txtcharactername.Text;
+            string characterName = txtcharactername.Text;
+            var animal = await db.GetAnimalByName(characterName);
+ 
+            
+            if (animal.AnimalId == 0)
+            {
+                MessageBox.Show($"There is no animal called {characterName}");
 
-            var animal = await db.GetAnimalByName(charachterName);
-
-            lblid.Content = animal.AnimalId;
-            lblname.Content = animal.CharacterName;
-
-            //MessageBox.Show($"There is no animal called {characterName}");
-
-
-
-            //MessageBox.Show(animal.CharacterName);
+            }
+            else
+            {
+                lblanimalId.Content = animal.AnimalId;
+                lblcharacterName.Content = animal.CharacterName;
+            }
 
         }
 
-       
+
 
         private async void btnload_Click(object sender, RoutedEventArgs e) 
         {
@@ -136,6 +139,6 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-       
+     
     }
 }

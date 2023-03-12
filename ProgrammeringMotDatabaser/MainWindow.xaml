@@ -8,12 +8,12 @@
         Title="MainWindow" Height="550" Width="1500">
     <Grid Margin="0,0,0,-6">
         <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="830,318,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
-        <Label x:Name="lblid" Content="Character id" HorizontalAlignment="Left" Margin="830,352,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblname" Content="Character name" HorizontalAlignment="Left" Margin="830,396,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="lstbox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="1352,110,32,143"/>
-        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="1119,402,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="1119,335,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="1119,369,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblanimalId" Content="" HorizontalAlignment="Left" Margin="830,348,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblcharacterName" Content="" HorizontalAlignment="Left" Margin="830,376,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="lstBox" Margin="1215,35,86,218"/>
+        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="1215,399,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="1215,332,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="1215,366,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="830,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Create new animal" HorizontalAlignment="Left" Margin="40,72,0,0" VerticalAlignment="Top"/>
         <Label Content="Animal name" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top"/>
@@ -25,8 +25,8 @@
         <TextBox x:Name="txtinput" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="txtblock" HorizontalAlignment="Left" Margin="40,250,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="56" Width="148"/>
         <Label Content="Character name" HorizontalAlignment="Left" Margin="830,265,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblspecieID" Content="Animal Specie Id" HorizontalAlignment="Left" Margin="830,438,0,0" VerticalAlignment="Top"/>
-        <Label Content="Animal id:" HorizontalAlignment="Left" Margin="762,353,0,0" VerticalAlignment="Top"/>
-        <Label Content="Character name:" HorizontalAlignment="Left" Margin="734,396,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblspecieID" Content="Animal Specie Id" HorizontalAlignment="Left" Margin="721,409,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
+        <Label Content="Animal id:" HorizontalAlignment="Left" Margin="762,348,0,0" VerticalAlignment="Top"/>
+        <Label Content="Character name:" HorizontalAlignment="Left" Margin="721,376,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
