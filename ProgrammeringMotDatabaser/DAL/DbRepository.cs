@@ -50,6 +50,7 @@ namespace ProgrammeringMotDatabaser.DAL
                     {
                         AnimalId = reader.GetInt32(0),
                         CharacterName = (string)reader["charactername"],
+                        //Animalspecieid
                     };
 
                     
@@ -75,18 +76,60 @@ namespace ProgrammeringMotDatabaser.DAL
             Animalspecie animalspecie = new Animalspecie();
             while (await reader.ReadAsync())
             {
-                animalspecie = new Animalspecie()
+                
+                if (animalspecie.LatinName == null)
                 {
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    LatinName = (string)reader["latinname"],
-                };
+                    animalspecie = new Animalspecie()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        LatinName = null,
+
+                    };
+                }
+                else
+                {
+                    animalspecie = new Animalspecie()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        LatinName = (string)reader["latinname"],
+
+                    };
+                }
+                
                 animalSpecies.Add(animalspecie);
             }
             return animalSpecies;
         }
 
 
+        public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass()
+        {
+            List<Animalspecie> animalSpecies = new List<Animalspecie>();
+            //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
 
+            var sqlJoin = "from animalclass join animalspecie on animalclass.animalclassid equals animalspecie.animalclassid where animalclassname == 'Mammals' select new Animalclass.animalspeciename, animalspecie.animalclassname";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlJoin);
+            await using var reader = await command.ExecuteReaderAsync();
+            
+            Animalspecie animalspecie = new Animalspecie();
+                               
+            while (await reader.ReadAsync())  
+            {
+                animalspecie = new Animalspecie()
+               {
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalClassId = reader.GetInt32(0),
+               };
+                animalSpecies.Add(animalspecie);
+
+
+
+            }
+            return animalSpecies;
+
+        }
 
 
 
@@ -141,7 +184,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     AnimalSpecieId = reader.GetInt32(0),
                     AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalClassName = (string)reader["animalclassname"]
+                    
 
                 };
 

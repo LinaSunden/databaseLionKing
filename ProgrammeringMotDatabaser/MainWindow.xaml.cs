@@ -32,23 +32,24 @@ namespace ProgrammeringMotDatabaser
         DbRepository db = new();
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
-           
-         
-
-            string characterName = txtcharactername.Text;
-            var animal = await db.GetAnimalByName(characterName);
- 
+            var animalspecie = await db.GetAnimalBySpeficClass();
             
-            if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
-            {
-                MessageBox.Show($"There is no animal called {characterName}");
 
-            }
-            else
-            {
-                lblanimalId.Content = animal.AnimalId;
-                lblcharacterName.Content = animal.CharacterName;
-            }
+
+            //string characterName = txtcharactername.Text;
+            //var animal = await db.GetAnimalByName(characterName);
+
+
+            //if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
+            //{
+            //    MessageBox.Show($"There is no animal called {characterName}");
+
+            //}
+            //else
+            //{
+            //    lblanimalId.Content = animal.AnimalId;
+            //    lblcharacterName.Content = animal.CharacterName;
+            //}
 
         }
 
