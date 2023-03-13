@@ -34,7 +34,7 @@ namespace ProgrammeringMotDatabaser.DAL
                                                                         
         {
             
-                string sqlQuestion = $"SELECT * FROM animal WHERE charactername= @name";
+                string sqlQuestion = "SELECT * FROM animal WHERE charactername= @name";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlQuestion);
@@ -50,6 +50,10 @@ namespace ProgrammeringMotDatabaser.DAL
                     {
                         AnimalId = reader.GetInt32(0),
                         CharacterName = (string)reader["charactername"],
+                        //Animalspecie = new()
+                        //{
+                        //    AnimalSpecieName =
+                        //}
                         //Animalspecieid
                     };
 
@@ -77,24 +81,14 @@ namespace ProgrammeringMotDatabaser.DAL
             while (await reader.ReadAsync())
             {
                 
-                if (animalspecie.LatinName == null)
-                {
-                    animalspecie = new Animalspecie()
-                    {
-                        AnimalSpecieName = (string)reader["animalspeciename"],
-                        LatinName = null,
-
-                    };
-                }
-                else
-                {
+         
                     animalspecie = new Animalspecie()
                     {
                         AnimalSpecieName = (string)reader["animalspeciename"],
                         LatinName = (string)reader["latinname"],
-
+                        
                     };
-                }
+                
                 
                 animalSpecies.Add(animalspecie);
             }
@@ -102,34 +96,34 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
 
-        public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass()
-        {
-            List<Animalspecie> animalSpecies = new List<Animalspecie>();
-            //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
+        //public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass()
+        //{
+        //    List<Animalspecie> animalSpecies = new List<Animalspecie>();
+        //    //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
 
-            var sqlJoin = "from animalclass join animalspecie on animalclass.animalclassid equals animalspecie.animalclassid where animalclassname == 'Mammals' select new Animalclass.animalspeciename, animalspecie.animalclassname";
+        //    var sqlJoin = "from animalclass join animalspecie on animalclass.animalclassid equals animalspecie.animalclassid where animalclassname == 'Mammals' select new Animalclass.animalspeciename, animalspecie.animalclassname";
 
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlJoin);
-            await using var reader = await command.ExecuteReaderAsync();
+        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        //    await using var command = dataSource.CreateCommand(sqlJoin);
+        //    await using var reader = await command.ExecuteReaderAsync();
             
-            Animalspecie animalspecie = new Animalspecie();
+        //    Animalspecie animalspecie = new Animalspecie();
                                
-            while (await reader.ReadAsync())  
-            {
-                animalspecie = new Animalspecie()
-               {
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalClassId = reader.GetInt32(0),
-               };
-                animalSpecies.Add(animalspecie);
+        //    while (await reader.ReadAsync())  
+        //    {
+        //        animalspecie = new Animalspecie()
+        //       {
+        //            AnimalSpecieName = (string)reader["animalspeciename"],
+        //            AnimalClassId = reader.GetInt32(0),
+        //       };
+        //        animalSpecies.Add(animalspecie);
 
 
 
-            }
-            return animalSpecies;
+        //    }
+        //    return animalSpecies;
 
-        }
+        //}
 
 
 
