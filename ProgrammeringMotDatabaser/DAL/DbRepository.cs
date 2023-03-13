@@ -79,6 +79,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     AnimalSpecieName = (string)reader["animalspeciename"],
                     LatinName = (string)reader["latinname"],
+                    AnimalClassId = reader.GetInt32(0)
                 };
                 animalSpecies.Add(animalspecie);
             }
@@ -116,41 +117,28 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-
-
-        /// <summary>
-        /// method to retrieve the database values in animalspecienames and display in combobox
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Animalspecie>> AddAnimalSpecieToCombox()
+        public async Task<IEnumerable<Animalclass>> GetAnimalClass(Animalspecie animalspecie)
         {
+            List<Animalclass> animalClass = new List<Animalclass>();
+            string sqlQ = "SELECT * FROM animalclass ";
 
-            List<Animalspecie> animalspecies = new List<Animalspecie>();
-
-            string sqlCommand = "SELECT * FROM animalspecie";
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-
-            await using var command = dataSource.CreateCommand(sqlCommand);
+            await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
 
-            Animalspecie animalspecie = new Animalspecie();
-
+            Animalclass animalclass = new Animalclass();
             while (await reader.ReadAsync())
             {
-                animalspecie = new Animalspecie()
+                animalclass = new Animalclass()
                 {
-                    AnimalSpecieId = reader.GetInt32(0),
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalClassName = (string)reader["animalclassname"]
-
+                    AnimalClassName = (string)reader["animalclassname"],
+                    AnimalClassId = reader.GetInt32(0),
                 };
-
-                animalspecies.Add(animalspecie);
-
+                animalClass.Add(animalclass);
             }
-
-            return animalspecies;
+            return animalClass;
         }
+
 
 
 
