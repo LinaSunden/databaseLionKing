@@ -56,14 +56,17 @@ namespace ProgrammeringMotDatabaser.DAL
                         //}
                         //Animalspecieid
                     };
-
-                    
-                }
-         
+                                    
+                }        
                
             return animal;
-
         }
+
+       
+
+
+
+
 
         /// <summary>
         /// Method show all animal sorted by animal Species

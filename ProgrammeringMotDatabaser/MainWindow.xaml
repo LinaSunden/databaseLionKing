@@ -39,6 +39,6 @@
         <Button x:Name="btncreatespecie" Content="Create new specie" HorizontalAlignment="Left" Margin="407,339,0,0" VerticalAlignment="Top" Width="120" Click="btncreatespecie_Click"/>
         <ComboBox x:Name="cboclass" HorizontalAlignment="Left" Margin="407,302,0,0" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="btngetanimalclass" Content="Load animal class" HorizontalAlignment="Left" Margin="541,303,0,0" VerticalAlignment="Top" Click="btngetanimalclass_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="830,330,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+       
     </Grid>
 </Window>

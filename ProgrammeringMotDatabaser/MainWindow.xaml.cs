@@ -242,9 +242,6 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var resutl = db.GetAnimalByName(txtcharactername.Text);
-        }
+     
     }
 }
