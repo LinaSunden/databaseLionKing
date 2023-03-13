@@ -14,11 +14,10 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string LatinName { get; set; }
 
-        public string AnimalClassName { get; set; }
-
         public int AnimalClassId { get; set; }
 
-        public Animalclass Animalclassid { get; set; }
+
+        public Animalclass AnimalClassId { get; set; }
 
         
         public override string ToString()
