@@ -80,6 +80,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     AnimalSpecieName = (string)reader["animalspeciename"],
                     LatinName = (string)reader["latinname"],
+                    AnimalSpecieId = reader.GetInt32(0),
                 };
                 animalSpecies.Add(animalspecie);
             }
@@ -105,7 +106,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 animalspecie = new Animalspecie()
                {
                     AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalClassId = reader.GetInt32(0),
+                    //AnimalClassId = reader.GetInt32(0),
                };
                 animalSpecies.Add(animalspecie);
 
@@ -130,21 +131,24 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("charactername", animal.CharacterName);
-            command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecieid);
+            command.Parameters.AddWithValue("animalspecieid", animal.Animalspecie.AnimalSpecieId);
             await command.ExecuteNonQueryAsync();
 
         }
 
-        public async Task AddAnimalClass()
+        public async Task AddAnimalClass(Animalclass animalclass)
         {
+            string sqlCommand = "insert into animalclass(animalclassname) values(@animalclassname)";
 
-
-
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+            await command.ExecuteNonQueryAsync();
 
 
         }
 
-        public async Task<IEnumerable<Animalclass>> GetAnimalClass(Animalspecie animalspecie)
+        public async Task<IEnumerable<Animalclass>> GetAnimalClass()
         {
             List<Animalclass> animalClass = new List<Animalclass>();
             string sqlQ = "SELECT * FROM animalclass ";
@@ -158,8 +162,7 @@ namespace ProgrammeringMotDatabaser.DAL
             {
                 animalclass = new Animalclass()
                 {
-                    AnimalSpecieId = reader.GetInt32(0),
-                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalClassId = reader.GetInt32(0),
                     AnimalClassName = (string)reader["animalclassname"]
 
                 };
