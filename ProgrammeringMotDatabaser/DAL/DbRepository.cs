@@ -148,6 +148,18 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
+        public async Task AddAnimalSpecie(Animalspecie animalSpecie)
+        {
+            string sqlCommand = "insert into animalspecieid() values(@animalclassname)";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+            await command.ExecuteNonQueryAsync();
+
+
+        }
+
         public async Task<IEnumerable<Animalclass>> GetAnimalClass()
         {
             List<Animalclass> animalClass = new List<Animalclass>();

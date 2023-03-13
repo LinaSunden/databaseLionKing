@@ -83,6 +83,14 @@ namespace ProgrammeringMotDatabaser
 
         }
 
+
+        private void btncreatespecie_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+        }
+
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)
         {
             var newClassName = txtinputclassname.Text;
@@ -96,6 +104,7 @@ namespace ProgrammeringMotDatabaser
             await db.AddAnimalClass(animalClass);
 
         }
+
         private async void btngetanimalclass_Click(object sender, RoutedEventArgs e)
         {
 
@@ -189,6 +198,6 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-        
+       
     }
 }

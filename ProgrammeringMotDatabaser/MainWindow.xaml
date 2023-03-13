@@ -36,7 +36,7 @@
         <Label Content="Create new animal specie" HorizontalAlignment="Left" Margin="404,211,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="Animal specie name" HorizontalAlignment="Left" Margin="405,242,0,0" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Margin="407,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF0A0A0A"/>
-        <Button x:Name="btncreatespecie" Content="Create new specie" HorizontalAlignment="Left" Margin="407,349,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btncreatespecie" Content="Create new specie" HorizontalAlignment="Left" Margin="407,349,0,0" VerticalAlignment="Top" Width="120" Click="btncreatespecie_Click"/>
         <ComboBox x:Name="cboclass" HorizontalAlignment="Left" Margin="410,302,0,0" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="btngetanimalclass" Content="Load animal class" HorizontalAlignment="Left" Margin="545,306,0,0" VerticalAlignment="Top" Click="btngetanimalclass_Click"/>
     </Grid>
