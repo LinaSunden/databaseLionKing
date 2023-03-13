@@ -12,7 +12,7 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string AnimalClassName { get; set; }
 
-
+       
 
 
 

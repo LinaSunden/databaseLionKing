@@ -16,7 +16,6 @@ namespace ProgrammeringMotDatabaser.Models
 
         public int AnimalClassId { get; set; }
 
-
         public Animalclass Animalclass { get; set; }
 
         

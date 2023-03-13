@@ -52,10 +52,20 @@ namespace ProgrammeringMotDatabaser
             //}
 
         }
+        private async void btnshowclass_Click(object sender, RoutedEventArgs e)
+        {
+            var animalClasses = await db.GetAnimalClass();
+            lstBox.ItemsSource = animalClasses;
+            lstBox.DisplayMemberPath = "AnimalClassName";
+        }
 
+        private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
+        {
+            var animalSpecies = await db.GetAnimalSortedBySpecie();
+            lstBox.ItemsSource = animalSpecies;
+            //lstBox.DisplayMemberPath = "AnimalSpecieName";
+        }
 
-
-      
 
 
         /// <summary>
@@ -91,15 +101,15 @@ namespace ProgrammeringMotDatabaser
             var animalspecie = new Animalspecie()
             {
                 AnimalSpecieName = txtinputspeciename.Text,
-                AnimalClassId = int.Parse(classId)               
-                
-                
-                //Animalclass = new()
-                //{
-                //    AnimalClassId = int.Parse(classId)
+                //AnimalClassId = int.Parse(classId)               
 
-                //}
-                               
+
+                Animalclass = new()
+                {
+                    AnimalClassId = int.Parse(classId)
+
+                }
+
             };
 
             await db.AddAnimalSpecie(animalspecie);
@@ -126,15 +136,9 @@ namespace ProgrammeringMotDatabaser
             cboclass.ItemsSource = animalClass;
             cboclass.DisplayMemberPath = "AnimalClassName";
 
-
         }
 
-        private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
-        {
-            var animalSpecies = await db.GetAnimalSortedBySpecie();
-            lstBox.ItemsSource = animalSpecies;
-            //lstBox.DisplayMemberPath = "AnimalSpecieName";
-        }
+       
 
 
         /// <summary>
@@ -159,38 +163,41 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private void btnloadclass_Click(object sender, RoutedEventArgs e)
         {
-
-
-            var trying = GetAnimalSpecieId();
-
+            var findAnimalClassId = db.GetAnimalSortedBySpecie();
+            //var findAnimalClassName = 
 
             if (cbospecie.SelectedItem is Animalspecie select)
             {
-
-                var animaSpecieId = select.AnimalSpecieId.ToString();
-                if (animaSpecieId == "7" || animaSpecieId == "8")
+                var animalClassid = select.AnimalClassId.ToString();
+                if (animalClassid == "1")
                 {
-                    txtoutputclass.Text = "your animal belongs in the animal class Mammal";
-                }
-                else if (animaSpecieId == "10")
-                {
-                    txtoutputclass.Text = "Your animal belongs in the animal class Reptile";
-                }
-                else if (animaSpecieId == "11")
-                {
-                    txtoutputclass.Text = "Your animal belongs in the animal class Invertebrate";
-                }
-                else if (animaSpecieId == "9")
-                {
-                    txtoutputclass.Text = "Your animal belongs in the animal class Bird";
-                }
-                else if (animaSpecieId == "12")
-                {
-                    txtoutputclass.Text = "Your animal belongs in the animal class Fish";
+                    txtoutputclass.Text = $"{select} belongs in the animal class Mammal";
                 }
 
+                else if (animalClassid == "2")
+                {
+                    txtoutputclass.Text = $"{select} belongs in the animal class Reptile";
+                }
 
+                else if (animalClassid == "3")
+                {
+                    txtoutputclass.Text = $"{select} belongs in the animal class Invertabrate";
+                }
+                else if (animalClassid == "4")
+                {
+                    txtoutputclass.Text = $"{select} belongs in the animal class Bird";
+                }
+                else if (animalClassid == "5")
+                {
+                    txtoutputclass.Text = $"{select} belongs in the animal class Bird";
+                }
+                else txtoutputclass.Text = "Update the database";
             }
+
+
+
+
+
         }
 
         /// <summary>
@@ -222,6 +229,22 @@ namespace ProgrammeringMotDatabaser
 
         }
 
+        public string GetClassId()
+        {
 
+            if (cbospecie.SelectedItem is Animalspecie select)
+            {
+                var animalClassId = select.AnimalClassId.ToString();
+                return animalClassId;
+            }
+
+            return null;
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var resutl = db.GetAnimalByName(txtcharactername.Text);
+        }
     }
 }

@@ -85,18 +85,20 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     animalspecie = new Animalspecie()
                     {
+                        AnimalSpecieId = reader.GetInt32(0),
                         AnimalSpecieName = (string)reader["animalspeciename"],
                         LatinName = null,
-
+                        AnimalClassId = reader.GetInt32(3)
                     };
                 }
                 else
                 {
                     animalspecie = new Animalspecie()
                     {
+                        AnimalSpecieId = reader.GetInt32(0),
                         AnimalSpecieName = (string)reader["animalspeciename"],
                         LatinName = (string)reader["latinname"],
-
+                        AnimalClassId = reader.GetInt32(3)
                     };
                 }
                 
@@ -124,13 +126,9 @@ namespace ProgrammeringMotDatabaser.DAL
                 animalspecie = new Animalspecie()
                 {
                     AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalClassId = reader.GetInt32(3)
 
-                    Animalclass = new()  //gjort ändring 
-                    {
 
-                        AnimalClassId = reader.GetInt32(0),
-
-                    }
 
                 };
                 animalSpecies.Add(animalspecie);
@@ -180,7 +178,7 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("animalspeciename", animalSpecie.AnimalSpecieName);
-            command.Parameters.AddWithValue("animalclassid", animalSpecie.AnimalClassId);
+            command.Parameters.AddWithValue("animalclassid", animalSpecie.Animalclass.AnimalClassId);
             await command.ExecuteNonQueryAsync();
 
 
