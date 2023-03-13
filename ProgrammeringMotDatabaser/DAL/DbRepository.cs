@@ -30,8 +30,8 @@ namespace ProgrammeringMotDatabaser.DAL
         /// </summary>
         /// <param name="characterName"></param>
         /// <returns></returns>
-        public async Task<Animal> GetAnimalByName(string characterName) //det blir ju träff på Simba med stor bokstav men inte med liten. Det betyder att databasen kan få två simba eftersom man kan skriva med liten bokstav också.
-                                                                        //Frågar Erik om det är något vi ska göra något åt eller bara bortse ifrån.
+        public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav
+                                                                        
         {
             
                 string sqlQuestion = $"SELECT * FROM animal WHERE charactername= @name";
@@ -60,6 +60,10 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
+        /// <summary>
+        /// Method show all animal sorted by animal Species
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<Animalspecie>> GetAnimalSortedBySpecie()
         {
             List <Animalspecie> animalSpecies = new List <Animalspecie>();
