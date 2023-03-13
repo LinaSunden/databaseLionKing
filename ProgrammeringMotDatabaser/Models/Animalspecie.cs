@@ -16,10 +16,13 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string AnimalClassName { get; set; }
 
-        public Animalclass AnimalClassId { get; set; }    
+        public Animalclass AnimalClassId { get; set; }
 
-        
 
+        public override string ToString()
+        {
+            return $"{AnimalSpecieName}  {LatinName}"; 
+        }
 
     }
 }

@@ -6,9 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace ProgrammeringMotDatabaser.DAL
@@ -28,7 +30,8 @@ namespace ProgrammeringMotDatabaser.DAL
         /// </summary>
         /// <param name="characterName"></param>
         /// <returns></returns>
-        public async Task<Animal> GetAnimalByName(string characterName)
+        public async Task<Animal> GetAnimalByName(string characterName) //det blir ju träff på Simba med stor bokstav men inte med liten. Det betyder att databasen kan få två simba eftersom man kan skriva med liten bokstav också.
+                                                                        //Frågar Erik om det är något vi ska göra något åt eller bara bortse ifrån.
         {
             
                 string sqlQuestion = $"SELECT * FROM animal WHERE charactername= @name";
@@ -57,7 +60,26 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-
+        public async Task<IEnumerable<Animalspecie>> GetAnimalSortedBySpecie()
+        {
+            List <Animalspecie> animalSpecies = new List <Animalspecie>();
+            string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
+            
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animalspecie animalspecie = new Animalspecie();
+            while (await reader.ReadAsync())
+            {
+                animalspecie = new Animalspecie()
+                {
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    LatinName = (string)reader["latinname"],
+                };
+                animalSpecies.Add(animalspecie);
+            }
+            return animalSpecies;
+        }
 
 
 

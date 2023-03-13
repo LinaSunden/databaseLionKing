@@ -26,18 +26,20 @@ namespace ProgrammeringMotDatabaser
         {
             
             InitializeComponent();
+            
         }
 
+        DbRepository db = new();
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
-            DbRepository db = new();
+           
          
 
             string characterName = txtcharactername.Text;
             var animal = await db.GetAnimalByName(characterName);
  
             
-            if (animal.AnimalId == 0)
+            if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
             {
                 MessageBox.Show($"There is no animal called {characterName}");
 
@@ -54,8 +56,7 @@ namespace ProgrammeringMotDatabaser
 
         private async void btnload_Click(object sender, RoutedEventArgs e) 
         {
-            DbRepository db = new();
-
+            
             var animalspecies = await db.AddAnimalSpecieToCombox();
             cbospecie.ItemsSource = animalspecies;
             cbospecie.DisplayMemberPath = "AnimalSpecieName";
@@ -105,7 +106,7 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private async void btncreateanimal_Click(object sender, RoutedEventArgs e)
         {
-            DbRepository db = new();
+            
 
             var asd = GetAnimalSpecieId();
 
@@ -127,7 +128,7 @@ namespace ProgrammeringMotDatabaser
         public string GetAnimalSpecieId()
         {
 
-            DbRepository db = new();
+            
                         
             if (cbospecie.SelectedItem is Animalspecie select)
             {
@@ -139,6 +140,11 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-     
+        private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
+        {
+           var animalSpecies = await db.GetAnimalSortedBySpecie();
+           lstBox.ItemsSource = animalSpecies;
+           //lstBox.DisplayMemberPath = "AnimalSpecieName";
+        }
     }
 }

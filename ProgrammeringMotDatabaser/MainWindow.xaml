@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550" Width="1500">
     <Grid Margin="0,0,0,-6">
-        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="830,318,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
-        <Label x:Name="lblanimalId" Content="" HorizontalAlignment="Left" Margin="830,348,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblcharacterName" Content="" HorizontalAlignment="Left" Margin="830,376,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="lstBox" Margin="1215,35,86,218"/>
-        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="1215,399,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="1215,332,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnshowspecie" Content="Show all species" HorizontalAlignment="Left" Margin="1215,366,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="830,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="578,318,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
+        <Label x:Name="lblanimalId" Content="" HorizontalAlignment="Left" Margin="578,348,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblcharacterName" Content="" HorizontalAlignment="Left" Margin="578,376,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="lstBox" Margin="951,19,10,234"/>
+        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="951,387,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="951,320,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnShowSpecie" Content="Show all species" HorizontalAlignment="Left" Margin="951,354,0,0" VerticalAlignment="Top" Click="btnShowSpecie_Click"/>
+        <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="578,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Create new animal" HorizontalAlignment="Left" Margin="40,72,0,0" VerticalAlignment="Top"/>
         <Label Content="Animal name" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="35,192,0,0" VerticalAlignment="Top" Width="158" />
@@ -24,9 +24,9 @@
         <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="35,332,0,0" VerticalAlignment="Top" Width="158" Click="btncreateanimal_Click"/>
         <TextBox x:Name="txtinput" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="txtblock" HorizontalAlignment="Left" Margin="40,250,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="56" Width="148"/>
-        <Label Content="Character name" HorizontalAlignment="Left" Margin="830,265,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblspecieID" Content="Animal Specie Id" HorizontalAlignment="Left" Margin="721,409,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
-        <Label Content="Animal id:" HorizontalAlignment="Left" Margin="762,348,0,0" VerticalAlignment="Top"/>
-        <Label Content="Character name:" HorizontalAlignment="Left" Margin="721,376,0,0" VerticalAlignment="Top"/>
+        <Label Content="Character name" HorizontalAlignment="Left" Margin="578,265,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblspecieID" Content="Animal Specie Id" HorizontalAlignment="Left" Margin="469,409,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
+        <Label Content="Animal id:" HorizontalAlignment="Left" Margin="510,348,0,0" VerticalAlignment="Top"/>
+        <Label Content="Character name:" HorizontalAlignment="Left" Margin="469,376,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
