@@ -17,27 +17,27 @@
         <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="750,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Create new animal" HorizontalAlignment="Left" Margin="40,72,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="Animal name" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="35,192,0,0" VerticalAlignment="Top" Width="158" />
+        <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="35,192,0,0" VerticalAlignment="Top" Width="125" />
         <Label Content="Animal specie" HorizontalAlignment="Left" Margin="35,166,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnload" Content="Load animal species" HorizontalAlignment="Left" Margin="218,193,0,0" VerticalAlignment="Top" Click="btnload_Click"/>
-        <Button x:Name="btnloadclass" Content="Load animal class" HorizontalAlignment="Left" Margin="218,250,0,0" VerticalAlignment="Top" Click="btnloadclass_Click"/>
-        <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="35,332,0,0" VerticalAlignment="Top" Width="158" Click="btncreateanimal_Click"/>
+        <Button x:Name="btnload" Content="Load animal species" HorizontalAlignment="Left" Margin="199,192,0,0" VerticalAlignment="Top" Click="btnload_Click"/>
+        <Button x:Name="btnloadclass" Content="Load animal class" HorizontalAlignment="Left" Margin="199,240,0,0" VerticalAlignment="Top" Click="btnloadclass_Click" Width="110"/>
+        <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="35,332,0,0" VerticalAlignment="Top" Width="125" Click="btncreateanimal_Click"/>
         <TextBox x:Name="txtinput" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF111112"/>
         <Label Content="Character name" HorizontalAlignment="Left" Margin="750,265,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblspecieID" Content="Animal Specie Id" HorizontalAlignment="Left" Margin="653,414,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
         <Label Content="Animal id:" HorizontalAlignment="Left" Margin="695,353,0,0" VerticalAlignment="Top"/>
         <Label Content="Character name:" HorizontalAlignment="Left" Margin="654,381,0,0" VerticalAlignment="Top"/>
-        <Label Content="Animal class" HorizontalAlignment="Left" Margin="34,224,0,0" VerticalAlignment="Top"/>
+        <Label Content="Animal class" HorizontalAlignment="Left" Margin="35,237,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtoutputclass" HorizontalAlignment="Left" Margin="37,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" BorderBrush="#FF848484" Height="53"/>
-        <Label Content="Create new animal class" HorizontalAlignment="Left" Margin="401,72,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Create new animal class" HorizontalAlignment="Left" Margin="397,72,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBox x:Name="txtinputclassname" HorizontalAlignment="Left" Margin="401,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF111112"/>
-        <Label Content="Class name" HorizontalAlignment="Left" Margin="401,101,0,0" VerticalAlignment="Top"/>
+        <Label Content="Class name" HorizontalAlignment="Left" Margin="399,101,0,0" VerticalAlignment="Top"/>
         <Button x:Name="btncreateclass" Content="Create new class" HorizontalAlignment="Left" Margin="401,153,0,0" VerticalAlignment="Top" Width="120" Click="btncreateclass_Click"/>
-        <Label Content="Create new animal specie" HorizontalAlignment="Left" Margin="404,211,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Animal specie name" HorizontalAlignment="Left" Margin="405,242,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="407,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF0A0A0A"/>
-        <Button x:Name="btncreatespecie" Content="Create new specie" HorizontalAlignment="Left" Margin="407,349,0,0" VerticalAlignment="Top" Width="120" Click="btncreatespecie_Click"/>
-        <ComboBox x:Name="cboclass" HorizontalAlignment="Left" Margin="410,302,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btngetanimalclass" Content="Load animal class" HorizontalAlignment="Left" Margin="545,306,0,0" VerticalAlignment="Top" Click="btngetanimalclass_Click"/>
+        <Label Content="Create new animal specie" HorizontalAlignment="Left" Margin="397,211,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Animal specie name" HorizontalAlignment="Left" Margin="399,242,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtinputspeciename" HorizontalAlignment="Left" Margin="407,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF0A0A0A"/>
+        <Button x:Name="btncreatespecie" Content="Create new specie" HorizontalAlignment="Left" Margin="407,339,0,0" VerticalAlignment="Top" Width="120" Click="btncreatespecie_Click"/>
+        <ComboBox x:Name="cboclass" HorizontalAlignment="Left" Margin="407,302,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btngetanimalclass" Content="Load animal class" HorizontalAlignment="Left" Margin="541,303,0,0" VerticalAlignment="Top" Click="btngetanimalclass_Click"/>
     </Grid>
 </Window>

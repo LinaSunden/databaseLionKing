@@ -84,11 +84,25 @@ namespace ProgrammeringMotDatabaser
         }
 
 
-        private void btncreatespecie_Click(object sender, RoutedEventArgs e)
+        private async void btncreatespecie_Click(object sender, RoutedEventArgs e)
         {
+            var classId = GetAnimalClassId();
 
+            var animalspecie = new Animalspecie()
+            {
+                AnimalSpecieName = txtinputspeciename.Text,
+                AnimalClassId = int.Parse(classId)               
+                
+                
+                //Animalclass = new()
+                //{
+                //    AnimalClassId = int.Parse(classId)
 
+                //}
+                               
+            };
 
+            await db.AddAnimalSpecie(animalspecie);
         }
 
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)
@@ -195,7 +209,19 @@ namespace ProgrammeringMotDatabaser
             return null;
 
         }
+        public string GetAnimalClassId()
+        {
+            
+            if (cboclass.SelectedItem is Animalclass select)
+            {
+                var animalClassId = select.AnimalClassId.ToString();
+                return animalClassId;
+            }
 
-       
+            return null;
+
+        }
+
+
     }
 }

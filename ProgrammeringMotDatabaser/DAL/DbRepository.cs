@@ -122,10 +122,17 @@ namespace ProgrammeringMotDatabaser.DAL
             while (await reader.ReadAsync())  
             {
                 animalspecie = new Animalspecie()
-               {
+                {
                     AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalClassId = reader.GetInt32(0),
-               };
+
+                    Animalclass = new()  //gjort ändring 
+                    {
+
+                        AnimalClassId = reader.GetInt32(0),
+
+                    }
+
+                };
                 animalSpecies.Add(animalspecie);
 
 
@@ -168,11 +175,12 @@ namespace ProgrammeringMotDatabaser.DAL
 
         public async Task AddAnimalSpecie(Animalspecie animalSpecie)
         {
-            string sqlCommand = "insert into animalspecieid() values(@animalclassname)";
+            string sqlCommand = "insert into animalspecie(animalspeciename, animalclassid) values(@animalspeciename, @animalclassid)";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+            command.Parameters.AddWithValue("animalspeciename", animalSpecie.AnimalSpecieName);
+            command.Parameters.AddWithValue("animalclassid", animalSpecie.AnimalClassId);
             await command.ExecuteNonQueryAsync();
 
 

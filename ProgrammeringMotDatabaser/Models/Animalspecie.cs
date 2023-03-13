@@ -17,7 +17,7 @@ namespace ProgrammeringMotDatabaser.Models
         public int AnimalClassId { get; set; }
 
 
-        public Animalclass Animalclassid { get; set; }
+        public Animalclass Animalclass { get; set; }
 
         
         public override string ToString()
