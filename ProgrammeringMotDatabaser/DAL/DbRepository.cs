@@ -106,19 +106,19 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
 
-        //public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass()
-        //{
-        //    List<Animalspecie> animalSpecies = new List<Animalspecie>();
-        //    //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
+        public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass()
+        {
+            List<Animalspecie> animalSpecies = new List<Animalspecie>();
+            //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
 
-        //    var sqlJoin = "from animalclass join animalspecie on animalclass.animalclassid equals animalspecie.animalclassid where animalclassname == 'Mammals' select new Animalclass.animalspeciename, animalspecie.animalclassname";
+            var sqlJoin = "from animalclass join animalspecie on animalclass.animalclassid equals animalspecie.animalclassid where animalclassname == 'Mammals' select new Animalclass.animalspeciename, animalspecie.animalclassname";
 
-        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-        //    await using var command = dataSource.CreateCommand(sqlJoin);
-        //    await using var reader = await command.ExecuteReaderAsync();
-            
-        //    Animalspecie animalspecie = new Animalspecie();
-                               
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlJoin);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animalspecie animalspecie = new Animalspecie();
+
             while (await reader.ReadAsync())  
             {
                 animalspecie = new Animalspecie()
@@ -130,10 +130,10 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
 
-        //    }
-        //    return animalSpecies;
+            }
+            return animalSpecies;
 
-        //}
+        }
 
 
 

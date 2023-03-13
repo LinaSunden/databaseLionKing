@@ -186,8 +186,6 @@ namespace ProgrammeringMotDatabaser
         public string GetAnimalSpecieId()
         {
 
-
-
             if (cbospecie.SelectedItem is Animalspecie select)
             {
                 var animalSpecieId = select.AnimalSpecieId.ToString();
