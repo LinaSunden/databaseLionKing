@@ -81,14 +81,24 @@ namespace ProgrammeringMotDatabaser.DAL
             while (await reader.ReadAsync())
             {
                 
-         
+                if (animalspecie.LatinName == null)
+                {
+                    animalspecie = new Animalspecie()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        LatinName = null,
+
+                    };
+                }
+                else
+                {
                     animalspecie = new Animalspecie()
                     {
                         AnimalSpecieName = (string)reader["animalspeciename"],
                         LatinName = (string)reader["latinname"],
-                        
+
                     };
-                
+                }
                 
                 animalSpecies.Add(animalspecie);
             }
@@ -109,14 +119,14 @@ namespace ProgrammeringMotDatabaser.DAL
             
         //    Animalspecie animalspecie = new Animalspecie();
                                
-        //    while (await reader.ReadAsync())  
-        //    {
-        //        animalspecie = new Animalspecie()
-        //       {
-        //            AnimalSpecieName = (string)reader["animalspeciename"],
-        //            AnimalClassId = reader.GetInt32(0),
-        //       };
-        //        animalSpecies.Add(animalspecie);
+            while (await reader.ReadAsync())  
+            {
+                animalspecie = new Animalspecie()
+               {
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalClassId = reader.GetInt32(0),
+               };
+                animalSpecies.Add(animalspecie);
 
 
 
@@ -139,55 +149,46 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("charactername", animal.CharacterName);
-            command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecieid);
+            command.Parameters.AddWithValue("animalspecieid", animal.Animalspecie.AnimalSpecieId);
             await command.ExecuteNonQueryAsync();
 
         }
 
-        public async Task AddAnimalClass()
+        public async Task AddAnimalClass(Animalclass animalclass)
         {
+            string sqlCommand = "insert into animalclass(animalclassname) values(@animalclassname)";
 
-
-
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+            await command.ExecuteNonQueryAsync();
 
 
         }
 
-
-
-        /// <summary>
-        /// method to retrieve the database values in animalspecienames and display in combobox
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Animalspecie>> AddAnimalSpecieToCombox()
+        public async Task<IEnumerable<Animalclass>> GetAnimalClass()
         {
+            List<Animalclass> animalClass = new List<Animalclass>();
+            string sqlQ = "SELECT * FROM animalclass ";
 
-            List<Animalspecie> animalspecies = new List<Animalspecie>();
-
-            string sqlCommand = "SELECT * FROM animalspecie";
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-
-            await using var command = dataSource.CreateCommand(sqlCommand);
+            await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
 
-            Animalspecie animalspecie = new Animalspecie();
-
+            Animalclass animalclass = new Animalclass();
             while (await reader.ReadAsync())
             {
-                animalspecie = new Animalspecie()
+                animalclass = new Animalclass()
                 {
-                    AnimalSpecieId = reader.GetInt32(0),
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    
+                    AnimalClassId = reader.GetInt32(0),
+                    AnimalClassName = (string)reader["animalclassname"]
 
                 };
-
-                animalspecies.Add(animalspecie);
-
+                animalClass.Add(animalclass);
             }
-
-            return animalspecies;
+            return animalClass;
         }
+
 
 
 

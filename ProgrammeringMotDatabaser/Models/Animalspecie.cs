@@ -14,14 +14,19 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string LatinName { get; set; }
 
+        public int AnimalClassId { get; set; }
 
-        public Animalclass Animalclass { get; set; }
 
+        public Animalclass Animalclassid { get; set; }
 
+        
         public override string ToString()
         {
             return $"{AnimalSpecieName}  {LatinName}"; 
         }
+
+
+        //vi borde kunna skapa en lista av class id och class namn här 
 
     }
 }
