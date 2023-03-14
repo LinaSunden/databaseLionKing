@@ -24,7 +24,7 @@
         <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="35,192,0,0" VerticalAlignment="Top" Width="125" />
         <Label Content="Animal specie" HorizontalAlignment="Left" Margin="35,166,0,0" VerticalAlignment="Top"/>
         <Button x:Name="btnload" Content="Load animal species" HorizontalAlignment="Left" Margin="199,192,0,0" VerticalAlignment="Top" Click="btnload_Click"/>
-        <Button x:Name="btnloadclass" Content="Load animal class" HorizontalAlignment="Left" Margin="117,595,0,0" VerticalAlignment="Top" Click="btnloadclass_Click" Width="110"/>
+        <Button x:Name="btnloadclass" Content="Load animal class" HorizontalAlignment="Left" Margin="199,268,0,0" VerticalAlignment="Top" Click="btnloadclass_Click" Width="110"/>
         <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="35,332,0,0" VerticalAlignment="Top" Width="125" Click="btncreateanimal_Click"/>
         <TextBox x:Name="txtinput" HorizontalAlignment="Left" Margin="40,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF111112"/>
         <Label Content="Character name" HorizontalAlignment="Left" Margin="120,419,0,0" VerticalAlignment="Top"/>
