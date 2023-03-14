@@ -66,7 +66,21 @@ namespace ProgrammeringMotDatabaser
             lstBox.ItemsSource = animalSpecies;
             //lstBox.DisplayMemberPath = "AnimalSpecieName";
         }
+       
+        private async void btnsortlist_Click(object sender, RoutedEventArgs e)
+        {
 
+            Animalclass animalclass = (Animalclass)cbolistofclasses.SelectedItem;
+
+            var listOfSpecies= await db.GetAnimalBySpeficClass(animalclass);
+
+            lstBox.ItemsSource = listOfSpecies;
+            lstBox.DisplayMemberPath = "AnimalSpecieName";
+
+            //House house = (House)cboHouses.SelectedItem;
+
+            //if (house.SetPassword(currentPassword, newPassword) == true)
+        }
 
 
         /// <summary>
@@ -222,6 +236,7 @@ namespace ProgrammeringMotDatabaser
             cbolistofclasses.ItemsSource = animalClass;
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
         }
-     
+
+        
     }
 }
