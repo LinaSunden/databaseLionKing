@@ -75,7 +75,7 @@ namespace ProgrammeringMotDatabaser
             var listOfSpecies= await db.GetAnimalBySpeficClass(animalclass);
 
             lstBox.ItemsSource = listOfSpecies;
-            lstBox.DisplayMemberPath = "AnimalSpecieName";
+            //lstBox.DisplayMemberPath = "AnimalSpecieName";
 
             //House house = (House)cboHouses.SelectedItem;
 
@@ -237,6 +237,6 @@ namespace ProgrammeringMotDatabaser
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
         }
 
-        
+      
     }
 }

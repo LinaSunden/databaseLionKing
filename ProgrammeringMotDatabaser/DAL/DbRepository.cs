@@ -117,16 +117,15 @@ namespace ProgrammeringMotDatabaser.DAL
             List<Animalspecie> animalSpecies = new List<Animalspecie>();
             //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
 
-            var sqlJoin = $"SELECT animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
+            var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlJoin);
             command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            
+            await using var reader = await command.ExecuteReaderAsync();        
 
             Animalspecie animalspecie = new Animalspecie();
+            
 
             while (await reader.ReadAsync())  
             {
@@ -137,13 +136,11 @@ namespace ProgrammeringMotDatabaser.DAL
                     {
                         AnimalClassName = (string)reader["animalclassname"]
                     }
+                      //Försök få in Animalid också.               
                 };
-
                 animalSpecies.Add(animalspecie);
-
             }
             return animalSpecies;
-
         }
 
 
