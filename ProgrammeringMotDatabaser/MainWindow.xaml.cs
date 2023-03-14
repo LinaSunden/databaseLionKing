@@ -65,7 +65,15 @@ namespace ProgrammeringMotDatabaser
            var allAnimals = await db.GetAllAnimalsSortedBySpecie();
             lstBox.ItemsSource = allAnimals;
         }
-       
+
+        private async void btncharactername_Click(object sender, RoutedEventArgs e)
+        {
+            var allCharactersWithNames = await db.GetAnimalWithCharacterName();
+
+            lstBox.ItemsSource = allCharactersWithNames;
+
+        }
+
         private async void btnsortlist_Click(object sender, RoutedEventArgs e)
         {
             Animalclass animalclass = (Animalclass)cbolistofclasses.SelectedItem;
@@ -225,6 +233,6 @@ namespace ProgrammeringMotDatabaser
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
         }
 
-       
+      
     }
 }

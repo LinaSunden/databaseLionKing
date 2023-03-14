@@ -99,36 +99,45 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
 
-        //public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass(Animalclass animalclass)
-        //{
-        //    List<Animalspecie> animalSpecies = new List<Animalspecie>();
-        //    //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
-
-        //    var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
-
-        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-        //    await using var command = dataSource.CreateCommand(sqlJoin);
-        //    command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-        //    await using var reader = await command.ExecuteReaderAsync();        
-
-        //    Animalspecie animalspecie = new Animalspecie();
+        public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
+        {
+            List<Animal> animals = new List<Animal>();
 
 
-        //    while (await reader.ReadAsync())  
-        //    {
-        //        animalspecie = new Animalspecie()
-        //        {
-        //            AnimalSpecieName = (string)reader["animalspeciename"],
-        //            Animalclass = new()
-        //            {
-        //                AnimalClassName = (string)reader["animalclassname"]
-        //            }
-        //              //Försök få in Animalid också.               
-        //        };
-        //        animalSpecies.Add(animalspecie);
-        //    }
-        //    return animalSpecies;
-        //}
+            var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlJoin);           
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animal animal = new Animal();
+
+
+            while (await reader.ReadAsync())
+            {
+                animal = new()
+                {
+                    CharacterName = (string)reader["charactername"],
+
+
+                    Animalspecie = new()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+
+                        Animalclass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+
+                        }
+
+                    }
+                }; 
+
+                animals.Add(animal);
+            }
+               return animals;
+        }
+
 
         public async Task<IEnumerable<Animal>> GetAnimalBySpeficClass(Animalclass animalclass)
         {
@@ -186,12 +195,20 @@ namespace ProgrammeringMotDatabaser.DAL
 
         public async Task AddAnimalClass(Animalclass animalclass)
         {
-            string sqlCommand = "insert into animalclass(animalclassname) values(@animalclassname)";
+            try
+            {
+                string sqlCommand = "insert into animalclass(animalclassname) values(@animalclassname)";
 
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-            await command.ExecuteNonQueryAsync();
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
 
         }
