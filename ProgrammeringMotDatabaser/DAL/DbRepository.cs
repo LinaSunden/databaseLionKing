@@ -198,28 +198,36 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
 
-        public async Task<IEnumerable<Animalspecie>> GetAllAnimalsSortedBySpecie()
+        public async Task<IEnumerable<Animal>> GetAllAnimalsSortedBySpecie()
         {
-            List<Animalspecie> animalSpecies = new List<Animalspecie>();
+            List<Animal> animals = new List<Animal>();
             string sqlQ = "SELECT a.animalid, s.animalspeciename, s.latinname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid ORDER BY animalspeciename ASC";
-         
-            
-
+                     
 
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
-            Animalspecie animalspecie = new Animalspecie();
+
+            Animal animal = new Animal();
             //Animal animal = new Animal();
 
             while (await reader.ReadAsync())
             {
 
-                animalspecie = new Animalspecie()
+                animal = new Animal()
                 {
-                    AnimalSpecieId = reader.GetInt32(0),
-                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalId = reader.GetInt32(0),
+
+                    //AnimalSpecieId = reader.GetInt32(0),
+                    Animalspecie = new()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],                                       
+                        
+                    }
+
+                    
+                    
                     //LatinName = (string)reader["latinname"] //kolla hur man kan hantera nullvärden. 
                    
                    //hur ska vi nå animalid med C# kod.. Vi har animalspecieid som FK som kopplar ihop tabellerna Animal och Animalspecie.
@@ -233,9 +241,10 @@ namespace ProgrammeringMotDatabaser.DAL
                 //};
 
                 //animalSpecies.Add(animal);
-                animalSpecies.Add(animalspecie);
+
+                animals.Add(animal);
             }
-            return animalSpecies;
+            return animals;
         }
 
 

@@ -62,9 +62,15 @@ namespace ProgrammeringMotDatabaser
 
         private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
         {
-            var animalSpecies = await db.GetAnimalSpecie();
-            lstBox.ItemsSource = animalSpecies;
-          
+            //var animalSpecies = await db.GetAnimalSpecie();
+            //lstBox.ItemsSource = animalSpecies;
+
+           var allAnimals = await db.GetAllAnimalsSortedBySpecie();
+            lstBox.ItemsSource = allAnimals;
+
+
+
+
         }
        
         private async void btnsortlist_Click(object sender, RoutedEventArgs e)

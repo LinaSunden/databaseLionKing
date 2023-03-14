@@ -22,6 +22,13 @@ namespace ProgrammeringMotDatabaser.Models
 
         public Animalspecie Animalspecie { get; set; }
 
-        
+        public override string ToString()
+        {
+            return $" {Animalspecie.AnimalSpecieName} {AnimalId}";
+        }
+
+
     }
+
+    
 }
