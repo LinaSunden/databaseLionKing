@@ -26,32 +26,33 @@ namespace ProgrammeringMotDatabaser
         {
             
             InitializeComponent();
-            
-        }
+            DisplayCBO();           
 
+        }
+        
         DbRepository db = new();
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
-            var animalspecie = await db.GetAnimalBySpeficClass();
-            
+        
+            string characterName = txtcharactername.Text;
+            var animal = await db.GetAnimalByName(characterName);
 
 
-            //string characterName = txtcharactername.Text;
-            //var animal = await db.GetAnimalByName(characterName);
+            if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
+            {
+                MessageBox.Show($"There is no animal called {characterName}");
 
-
-            //if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
-            //{
-            //    MessageBox.Show($"There is no animal called {characterName}");
-
-            //}
-            //else
-            //{
-            //    lblanimalId.Content = animal.AnimalId;
-            //    lblcharacterName.Content = animal.CharacterName;
-            //}
+            }
+            else
+            {
+                lblanimalId.Content = animal.AnimalId;
+                lblcharacterName.Content = animal.CharacterName;
+                lblanimalspeciename.Content = animal.Animalspecie.AnimalSpecieName;
+            }
 
         }
+
+
         private async void btnshowclass_Click(object sender, RoutedEventArgs e)
         {
             var animalClasses = await db.GetAnimalClass();
@@ -76,15 +77,15 @@ namespace ProgrammeringMotDatabaser
         private async void btncreateanimal_Click(object sender, RoutedEventArgs e)
         {
 
-            var asd = GetAnimalSpecieId();
+            var specieId = GetAnimalSpecieId();
 
             var animal = new Animal()
             {
                 CharacterName = txtinput.Text,
                 Animalspecie = new()
                 { 
-                    AnimalSpecieId = int.Parse(asd),
-                                        
+                    AnimalSpecieId = int.Parse(specieId),  //vi kan nu skapa en koppling till animal class genom att vi väljer klassen från cbo 
+                                       
                     
                 }
             };
@@ -161,42 +162,15 @@ namespace ProgrammeringMotDatabaser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnloadclass_Click(object sender, RoutedEventArgs e)
+        private async void btnloadclass_Click(object sender, RoutedEventArgs e)
         {
-            var findAnimalClassId = db.GetAnimalSortedBySpecie();
+            var animaldsa = await db.GetAnimalClass();
+            cboclasses2.ItemsSource = animaldsa;
+            cboclasses2.DisplayMemberPath = "AnimalClassName";
+
+
+            //var findAnimalClassId = db.GetAnimalSortedBySpecie();
             //var findAnimalClassName = 
-
-            if (cbospecie.SelectedItem is Animalspecie select)
-            {
-                var animalClassid = select.AnimalClassId.ToString();
-                if (animalClassid == "1")
-                {
-                    txtoutputclass.Text = $"{select} belongs in the animal class Mammal";
-                }
-
-                else if (animalClassid == "2")
-                {
-                    txtoutputclass.Text = $"{select} belongs in the animal class Reptile";
-                }
-
-                else if (animalClassid == "3")
-                {
-                    txtoutputclass.Text = $"{select} belongs in the animal class Invertabrate";
-                }
-                else if (animalClassid == "4")
-                {
-                    txtoutputclass.Text = $"{select} belongs in the animal class Bird";
-                }
-                else if (animalClassid == "5")
-                {
-                    txtoutputclass.Text = $"{select} belongs in the animal class Bird";
-                }
-                else txtoutputclass.Text = "Update the database";
-            }
-
-
-
-
 
         }
 
@@ -242,6 +216,12 @@ namespace ProgrammeringMotDatabaser
 
         }
 
+        public async Task DisplayCBO()
+        {
+            var animalClass = await db.GetAnimalClass();
+            cbolistofclasses.ItemsSource = animalClass;
+            cbolistofclasses.DisplayMemberPath = "AnimalClassName";
+        }
      
     }
 }

@@ -26,35 +26,36 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
         /// <summary>
-        /// Method that searches for a specific animalname
+        /// Method that searches for a specific animal by animalname, animal id, animalname, animalspeciename
         /// </summary>
         /// <param name="characterName"></param>
         /// <returns></returns>
         public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav
                                                                         
         {
-            
-                string sqlQuestion = "SELECT * FROM animal WHERE charactername= @name";
-
+                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @name";
+                          
+               
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlQuestion);
                 command.Parameters.AddWithValue("name", characterName);
                 await using var reader = await command.ExecuteReaderAsync();
 
 
-                Animal animal = new Animal();
+                Animal animal = new();
                 while (await reader.ReadAsync()) 
                 {
-                    animal = new Animal()
+                    animal = new()
 
                     {
                         AnimalId = reader.GetInt32(0),
                         CharacterName = (string)reader["charactername"],
-                        //Animalspecie = new()
-                        //{
-                        //    AnimalSpecieName =
-                        //}
-                        //Animalspecieid
+
+                        Animalspecie = new()
+                        {
+                            AnimalSpecieName = (string)reader["animalspeciename"]
+                        }
+                        
                     };
                                     
                 }        
@@ -130,8 +131,6 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     AnimalSpecieName = (string)reader["animalspeciename"],
                     AnimalClassId = reader.GetInt32(3)
-
-
 
                 };
                 animalSpecies.Add(animalspecie);
