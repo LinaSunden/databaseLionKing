@@ -23,7 +23,7 @@ namespace ProgrammeringMotDatabaser.Models
         {
           
             
-                return $"{AnimalSpecieName}"; 
+                return $"{AnimalSpecieName} {Animalclass}"; 
 
 
 

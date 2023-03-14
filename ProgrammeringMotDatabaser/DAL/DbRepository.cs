@@ -99,9 +99,40 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
 
-        public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass(Animalclass animalclass)
+        //public async Task<IEnumerable<Animalspecie>> GetAnimalBySpeficClass(Animalclass animalclass)
+        //{
+        //    List<Animalspecie> animalSpecies = new List<Animalspecie>();
+        //    //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
+
+        //    var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
+
+        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        //    await using var command = dataSource.CreateCommand(sqlJoin);
+        //    command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+        //    await using var reader = await command.ExecuteReaderAsync();        
+
+        //    Animalspecie animalspecie = new Animalspecie();
+
+
+        //    while (await reader.ReadAsync())  
+        //    {
+        //        animalspecie = new Animalspecie()
+        //        {
+        //            AnimalSpecieName = (string)reader["animalspeciename"],
+        //            Animalclass = new()
+        //            {
+        //                AnimalClassName = (string)reader["animalclassname"]
+        //            }
+        //              //Försök få in Animalid också.               
+        //        };
+        //        animalSpecies.Add(animalspecie);
+        //    }
+        //    return animalSpecies;
+        //}
+
+        public async Task<IEnumerable<Animal>> GetAnimalBySpeficClass(Animalclass animalclass)
         {
-            List<Animalspecie> animalSpecies = new List<Animalspecie>();
+            List<Animal> animals = new List<Animal>();
             //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
 
             var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
@@ -109,28 +140,32 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlJoin);
             command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-            await using var reader = await command.ExecuteReaderAsync();        
+            await using var reader = await command.ExecuteReaderAsync();
 
-            Animalspecie animalspecie = new Animalspecie();
-            
+            Animal animal = new Animal();
 
             while (await reader.ReadAsync())  
             {
-                animalspecie = new Animalspecie()
+                animal = new Animal()
                 {
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    Animalclass = new()
+                    AnimalId = reader.GetInt32(0),   
+
+                    Animalspecie = new()
                     {
-                        AnimalClassName = (string)reader["animalclassname"]
-                    }
-                      //Försök få in Animalid också.               
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        
+                        Animalclass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+                        }
+                        
+                    }                    
                 };
-                animalSpecies.Add(animalspecie);
+
+                animals.Add(animal);
             }
-            return animalSpecies;
+            return animals;
         }
-
-
 
         /// <summary>
         /// Method to add animalnam and animalspecieid, connected to the task of creating a new animal with connection to specie and class 
@@ -203,14 +238,12 @@ namespace ProgrammeringMotDatabaser.DAL
             List<Animal> animals = new List<Animal>();
             string sqlQ = "SELECT a.animalid, s.animalspeciename, s.latinname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid ORDER BY animalspeciename ASC";
                      
-
-
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
 
             Animal animal = new Animal();
-            //Animal animal = new Animal();
+          
 
             while (await reader.ReadAsync())
             {

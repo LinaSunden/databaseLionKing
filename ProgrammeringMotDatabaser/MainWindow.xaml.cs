@@ -61,16 +61,9 @@ namespace ProgrammeringMotDatabaser
         }
 
         private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
-        {
-            //var animalSpecies = await db.GetAnimalSpecie();
-            //lstBox.ItemsSource = animalSpecies;
-
+        {          
            var allAnimals = await db.GetAllAnimalsSortedBySpecie();
             lstBox.ItemsSource = allAnimals;
-
-
-
-
         }
        
         private async void btnsortlist_Click(object sender, RoutedEventArgs e)
@@ -101,9 +94,7 @@ namespace ProgrammeringMotDatabaser
                 CharacterName = txtinput.Text,
                 Animalspecie = new()
                 { 
-                    AnimalSpecieId = int.Parse(specieId),  //vi kan nu skapa en koppling till animal class genom att vi väljer klassen från cbo 
-                                       
-                    
+                    AnimalSpecieId = int.Parse(specieId),  //vi kan nu skapa en koppling till animal class genom att vi väljer klassen från cbo                                                          
                 }
             };
 
@@ -119,9 +110,7 @@ namespace ProgrammeringMotDatabaser
             var animalspecie = new Animalspecie()
             {
                 AnimalSpecieName = txtinputspeciename.Text,
-                //AnimalClassId = int.Parse(classId)               
-
-
+                
                 Animalclass = new()
                 {
                     AnimalClassId = int.Parse(classId)
@@ -184,10 +173,6 @@ namespace ProgrammeringMotDatabaser
             var animaldsa = await db.GetAnimalClass();
             cboclasses2.ItemsSource = animaldsa;
             cboclasses2.DisplayMemberPath = "AnimalClassName";
-
-
-            //var findAnimalClassId = db.GetAnimalSortedBySpecie();
-            //var findAnimalClassName = 
 
         }
 

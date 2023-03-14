@@ -14,7 +14,7 @@ namespace ProgrammeringMotDatabaser.Models
 
         public override string ToString()
         {
-            return $" {AnimalClassName}";
+            return $" Animal class: {AnimalClassName}";
         }
 
 
