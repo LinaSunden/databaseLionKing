@@ -64,7 +64,7 @@ namespace ProgrammeringMotDatabaser
         {
             var animalSpecies = await db.GetAnimalSortedBySpecie();
             lstBox.ItemsSource = animalSpecies;
-            //lstBox.DisplayMemberPath = "AnimalSpecieName";
+          
         }
        
         private async void btnsortlist_Click(object sender, RoutedEventArgs e)
@@ -75,11 +75,7 @@ namespace ProgrammeringMotDatabaser
             var listOfSpecies= await db.GetAnimalBySpeficClass(animalclass);
 
             lstBox.ItemsSource = listOfSpecies;
-            //lstBox.DisplayMemberPath = "AnimalSpecieName";
-
-            //House house = (House)cboHouses.SelectedItem;
-
-            //if (house.SetPassword(currentPassword, newPassword) == true)
+            
         }
 
 
