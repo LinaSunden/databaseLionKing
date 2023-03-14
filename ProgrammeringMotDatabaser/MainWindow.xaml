@@ -15,9 +15,9 @@
         <Label x:Name="lblanimalId" Content="" HorizontalAlignment="Left" Margin="763,353,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblcharacterName" Content="" HorizontalAlignment="Left" Margin="763,381,0,0" VerticalAlignment="Top"/>
         <ListBox x:Name="lstBox" Margin="80,42,514,691" Grid.Column="1"/>
-        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="951,387,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Button x:Name="btncharactername" Content="Show animals with a character name" HorizontalAlignment="Left" Margin="872,387,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <Button x:Name="btnshowclass" Content="Show all classes" HorizontalAlignment="Left" Margin="951,320,0,0" VerticalAlignment="Top" Click="btnshowclass_Click" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnShowSpecie" Content="Show all species" HorizontalAlignment="Left" Margin="951,354,0,0" VerticalAlignment="Top" Click="btnShowSpecie_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="btnShowSpecie" Content="Sort all animals by speciename" HorizontalAlignment="Left" Margin="872,356,0,0" VerticalAlignment="Top" Click="btnShowSpecie_Click" Grid.ColumnSpan="2"/>
         <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="120,449,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Create new animal" HorizontalAlignment="Left" Margin="40,72,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="Animal name" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top"/>
@@ -45,10 +45,10 @@
         <Button x:Name="btngetanimalclass" Content="Load animal class" HorizontalAlignment="Left" Margin="541,303,0,0" VerticalAlignment="Top" Click="btngetanimalclass_Click"/>
         <ComboBox x:Name="cboclasses2" HorizontalAlignment="Left" Margin="40,270,0,0" VerticalAlignment="Top" Width="125"/>
         <Label x:Name="lblanimalspeciename" Content="" HorizontalAlignment="Left" Margin="763,414,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cbolistofclasses" HorizontalAlignment="Left" Margin="875,0,0,992" VerticalAlignment="Bottom" Width="120" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="cbolistofanimalspecie" HorizontalAlignment="Left" Margin="735,56,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Animal classes" HorizontalAlignment="Left" Margin="875,16,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Button x:Name="btnsortlist" Grid.Column="1" Content="Sort" HorizontalAlignment="Left" Margin="35,56,0,0" VerticalAlignment="Top" Height="22" Click="btnsortlist_Click"/>
+        <ComboBox x:Name="cbolistofclasses" HorizontalAlignment="Left" Margin="826,0,0,992" VerticalAlignment="Bottom" Width="120"/>
+        <Label Content="Animal classes" HorizontalAlignment="Left" Margin="826,25,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Button x:Name="btnsortlist" Content="Filter by class" HorizontalAlignment="Left" Margin="951,56,0,0" VerticalAlignment="Top" Height="22" Click="btnsortlist_Click" Grid.ColumnSpan="2"/>
+        <Label Content="Animal specie" HorizontalAlignment="Left" Margin="616,30,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
 
     </Grid>
 </Window>

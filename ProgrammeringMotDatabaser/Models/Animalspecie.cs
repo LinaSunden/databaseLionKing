@@ -21,11 +21,23 @@ namespace ProgrammeringMotDatabaser.Models
         
         public override string ToString()
         {
-            return $"{AnimalSpecieName} {Animalclass.AnimalClassName} {LatinName}"; 
+          
+            
+                return $"{AnimalSpecieName}"; 
+
+
+
+            //{Animalclass.AnimalClassName}";
+
+            //else
+            //{
+            //    return $"{AnimalSpecieName} {LatinName}";
+            //}
+
+
         }
 
 
-        //vi borde kunna skapa en lista av class id och class namn här 
 
     }
 }

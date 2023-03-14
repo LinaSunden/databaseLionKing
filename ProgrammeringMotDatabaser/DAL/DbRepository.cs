@@ -70,10 +70,10 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
         /// <summary>
-        /// Method show all animal sorted by animal Species
+        /// Method show all species sorted by animalspeciename. Used in comboboxes
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Animalspecie>> GetAnimalSortedBySpecie()
+        public async Task<IEnumerable<Animalspecie>> GetAnimalSpecie()
         {
             List <Animalspecie> animalSpecies = new List <Animalspecie>();
             string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
@@ -84,27 +84,14 @@ namespace ProgrammeringMotDatabaser.DAL
             Animalspecie animalspecie = new Animalspecie();
             while (await reader.ReadAsync())
             {
-                
-                if (animalspecie.LatinName == null) //Detta fungerar ej. Måste kolla hur vi gör med null-värden
-                {
+           
                     animalspecie = new Animalspecie()
                     {
                         AnimalSpecieId = reader.GetInt32(0),
                         AnimalSpecieName = (string)reader["animalspeciename"],
-                        LatinName = null,
                         AnimalClassId = reader.GetInt32(3)
                     };
-                }
-                else
-                {
-                    animalspecie = new Animalspecie()
-                    {
-                        AnimalSpecieId = reader.GetInt32(0),
-                        AnimalSpecieName = (string)reader["animalspeciename"],
-                        LatinName = (string)reader["latinname"],
-                        AnimalClassId = reader.GetInt32(3)
-                    };
-                }
+            
                 
                 animalSpecies.Add(animalspecie);
             }
@@ -210,6 +197,46 @@ namespace ProgrammeringMotDatabaser.DAL
             return animalClass;
         }
 
+
+        public async Task<IEnumerable<Animalspecie>> GetAllAnimalsSortedBySpecie()
+        {
+            List<Animalspecie> animalSpecies = new List<Animalspecie>();
+            string sqlQ = "SELECT a.animalid, s.animalspeciename, s.latinname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid ORDER BY animalspeciename ASC";
+         
+            
+
+
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animalspecie animalspecie = new Animalspecie();
+            //Animal animal = new Animal();
+
+            while (await reader.ReadAsync())
+            {
+
+                animalspecie = new Animalspecie()
+                {
+                    AnimalSpecieId = reader.GetInt32(0),
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    //LatinName = (string)reader["latinname"] //kolla hur man kan hantera nullvärden. 
+                   
+                   //hur ska vi nå animalid med C# kod.. Vi har animalspecieid som FK som kopplar ihop tabellerna Animal och Animalspecie.
+                   //
+                };
+
+                //animal = new Animal()
+                //{
+                //    AnimalId = reader.GetInt32(0),
+
+                //};
+
+                //animalSpecies.Add(animal);
+                animalSpecies.Add(animalspecie);
+            }
+            return animalSpecies;
+        }
 
 
 
