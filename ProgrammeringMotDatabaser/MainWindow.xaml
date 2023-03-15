@@ -43,7 +43,7 @@
         <ComboBox x:Name="cboclasses2" HorizontalAlignment="Left" Margin="311,920,0,0" VerticalAlignment="Top" Width="125" SelectionChanged="cboclasses2_SelectionChanged"/>
         <Label x:Name="lblanimalspeciename" Content="" HorizontalAlignment="Left" Margin="692,761,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cbolistofclasses" HorizontalAlignment="Left" Margin="734,0,0,831" VerticalAlignment="Bottom" Width="120" SelectionChanged="cbolistofclasses_SelectionChanged"/>
-        <Label Content="All Animals in a specifc animal classes" HorizontalAlignment="Left" Margin="732,187,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="All Animals in a specifc animal classes" HorizontalAlignment="Left" Margin="732,174,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBox x:Name="txtinputlatinname" HorizontalAlignment="Left" Margin="64,433,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF0A0A0A"/>
         <Label Content="Latin name" HorizontalAlignment="Left" Margin="56,411,0,0" VerticalAlignment="Top"/>
         <Label Content="1." HorizontalAlignment="Left" Margin="58,566,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -52,7 +52,7 @@
         <Label Content="7." HorizontalAlignment="Left" Margin="662,611,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="4." HorizontalAlignment="Left" Margin="662,531,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="6." HorizontalAlignment="Left" Margin="662,562,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="5." HorizontalAlignment="Left" Margin="712,187,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="5." HorizontalAlignment="Left" Margin="712,174,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Button x:Name="btnnumberofspecie" Grid.Column="1" Content="Show number of specie" HorizontalAlignment="Left" Margin="28,652,0,0" VerticalAlignment="Top" Click="btnnumberofspecie_Click"/>
         <Button x:Name="btnnmbranimals" Grid.Column="1" Content="Show number of animals in each class" HorizontalAlignment="Left" Margin="28,620,0,0" VerticalAlignment="Top" Click="btnnmbranimals_Click"/>
         <Label Content="8.a" HorizontalAlignment="Left" Margin="3,649,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="1"/>
