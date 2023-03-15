@@ -98,6 +98,36 @@ namespace ProgrammeringMotDatabaser.DAL
             return animalSpecies;
         }
 
+        public async Task<IEnumerable<Animal>> CountAnimalInEachSpecie()
+        {
+            List<Animal> animals = new List<Animal>();
+            string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie JOIN animal ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
+
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animal animal = new();
+            while (await reader.ReadAsync())
+            {
+
+                animal = new()
+                {
+                    AnimalSpecieId = reader.GetInt32(0),
+
+                    Animalspecie = new()
+                    {
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+                            AnimalClassId = reader.GetInt32(3)
+
+                    }
+                };
+
+
+                animals.Add(animal);
+            }
+            return animals;
+        }
 
         public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
         {

@@ -18,6 +18,7 @@ namespace ProgrammeringMotDatabaser.Models
         /// </summary>
         public string CharacterName { get; set; }
 
+       
         public int AnimalSpecieId { get; set; }
 
         public Animalspecie Animalspecie { get; set; }

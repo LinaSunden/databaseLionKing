@@ -53,12 +53,7 @@ namespace ProgrammeringMotDatabaser
         }
 
 
-        private async void btnshowclass_Click(object sender, RoutedEventArgs e)
-        {
-            var animalClasses = await db.GetAnimalClass();
-            lstBox.ItemsSource = animalClasses;
-            lstBox.DisplayMemberPath = "AnimalClassName";
-        }
+
 
         private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
         {          
@@ -82,10 +77,16 @@ namespace ProgrammeringMotDatabaser
 
             lstBox.ItemsSource = listOfClasses;           
         }
+        private async void btnnumberofspecie_Click(object sender, RoutedEventArgs e)
+        {
 
-       
 
-        
+
+
+        }
+
+
+
 
         /// <summary>
         /// Button that creates animal and uses specieID from class
@@ -149,7 +150,7 @@ namespace ProgrammeringMotDatabaser
 
             var animalClass = await db.GetAnimalClass();
             cboclass.ItemsSource = animalClass;
-            cboclass.DisplayMemberPath = "AnimalClassName";
+            cboclass.DisplayMemberPath =  "AnimalClassName"; //"Display";
 
         }
 
@@ -233,6 +234,6 @@ namespace ProgrammeringMotDatabaser
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
         }
 
-      
+       
     }
 }
