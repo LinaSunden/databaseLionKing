@@ -23,13 +23,13 @@
         <Label Content="Animal name" HorizontalAlignment="Left" Margin="78,604,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cbospecie" HorizontalAlignment="Left" Margin="80,693,0,0" VerticalAlignment="Top" Width="124" SelectionChanged="cbospecie_SelectionChanged" />
         <Label Content="Animal specie" HorizontalAlignment="Left" Margin="80,667,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="78,786,0,0" VerticalAlignment="Top" Width="125" Click="btncreateanimal_Click"/>
+        <Button x:Name="btncreateanimal" Content="Create animal" HorizontalAlignment="Left" Margin="78,774,0,0" VerticalAlignment="Top" Width="125" Click="btncreateanimal_Click"/>
         <TextBox x:Name="txtinput" HorizontalAlignment="Left" Margin="78,630,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF111112"/>
         <Label Content="Character name" HorizontalAlignment="Left" Margin="682,612,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lbldisplayspeciename" Content="Animal specie name:" HorizontalAlignment="Left" Margin="572,761,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
         <Label Content="Animal id:" HorizontalAlignment="Left" Margin="628,700,0,0" VerticalAlignment="Top"/>
         <Label Content="Character name:" HorizontalAlignment="Left" Margin="594,728,0,0" VerticalAlignment="Top"/>
-        <Label Content="Animal class" HorizontalAlignment="Left" Margin="306,887,0,0" VerticalAlignment="Top"/>
+        <Label Content="Animal class Denna och combobox nedan bör vi kunna ta bort samt tillhörande metod för att djurklassen skulle visas när man valde ett Item ifrån combobox" HorizontalAlignment="Left" Margin="306,887,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="859"/>
 
         <Label Content="Create new animal class" HorizontalAlignment="Left" Margin="54,197,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBox x:Name="txtinputclassname" HorizontalAlignment="Left" Margin="58,252,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF111112"/>
