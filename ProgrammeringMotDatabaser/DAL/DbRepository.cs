@@ -33,7 +33,7 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav
                                                                         
         {
-                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @name";
+                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @name";//testasre 
                           
                
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
