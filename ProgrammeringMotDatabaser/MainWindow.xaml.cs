@@ -170,19 +170,6 @@ namespace ProgrammeringMotDatabaser
        
 
 
-        /// <summary>
-        /// loads the combobox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void btnload_Click(object sender, RoutedEventArgs e)
-        {
-
-            var animalSpecies = await db.GetAnimalSpecie();
-            cbospecie.ItemsSource = animalSpecies;
-            cbospecie.DisplayMemberPath = "AnimalSpecieName";
-
-        }
 
 
 
