@@ -80,6 +80,7 @@ namespace ProgrammeringMotDatabaser.DAL
             
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             //hej på dig
+            // En kommentar från Moniras dator
             await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
             Animalspecie animalspecie = new Animalspecie();
@@ -103,7 +104,7 @@ namespace ProgrammeringMotDatabaser.DAL
         {
             List<Animal> animals = new List<Animal>();
             string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie JOIN animal ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
-
+            // en kommentar från Erik
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQ);
