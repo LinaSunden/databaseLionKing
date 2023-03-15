@@ -185,18 +185,6 @@ namespace ProgrammeringMotDatabaser
         }
 
 
-        /// <summary>
-        /// Button to convert animal specie ID and connect to class 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void btnloadclass_Click(object sender, RoutedEventArgs e)
-        {
-            var animaldsa = await db.GetAnimalClass();
-            cboclasses2.ItemsSource = animaldsa;
-            cboclasses2.DisplayMemberPath = "AnimalClassName";
-
-        }
 
         /// <summary>
         /// Method to retrieve the animalspecieID
@@ -245,8 +233,27 @@ namespace ProgrammeringMotDatabaser
             var animalClass = await db.GetAnimalClass();
             cbolistofclasses.ItemsSource = animalClass;
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
+
+           
+            cboclasses2.ItemsSource = animalClass;
+            cboclasses2.DisplayMemberPath = "AnimalClassName";
+
+
         }
 
-       
+        private async void cboclasses2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+           
+
+                if (cboclasses2.SelectedItem is Animalclass select)
+                {
+
+                   var returnAnimalSpecies = await db.GetAnimalClassesForQOne(select);
+                   cbospecie.ItemsSource = returnAnimalSpecies;
+                   cbospecie.DisplayMemberPath = "AnimalSpecieName";
+                }
+
+
+        }
     }
 }

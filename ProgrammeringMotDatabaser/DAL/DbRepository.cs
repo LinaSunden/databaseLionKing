@@ -33,7 +33,7 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav
                                                                         
         {
-                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @name";//testasre 
+                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @name";
                           
                
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
@@ -351,6 +351,43 @@ namespace ProgrammeringMotDatabaser.DAL
                 animalClass.Add(animalclass);
             }
             return animalClass;
+        }
+        /// <summary>
+        /// Method for question 1
+        /// </summary>
+        /// <param name="animalclass"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Animalspecie>> GetAnimalClassesForQOne(Animalclass animalclass)
+        {
+            List<Animalspecie> animalspecies = new List<Animalspecie>();
+            string sqlQ = $"SELECT animalspeciename, animalclassname, animalspecieid FROM animalspecie JOIN animalclass ON animalspecie.animalclassid = animalclass.animalclassid WHERE animalclassname = @animalclassname";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animalspecie animalspecie = new();
+            while (await reader.ReadAsync())
+            {
+                animalspecie = new Animalspecie()
+                {
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+                    AnimalSpecieId = reader.GetInt32(2),
+
+                    Animalclass = new()
+                    {
+                        
+                        AnimalClassName = (string)reader["animalclassname"]
+                    }
+
+
+                };
+
+             
+                animalspecies.Add(animalspecie);
+            }
+            return animalspecies;
         }
 
 
