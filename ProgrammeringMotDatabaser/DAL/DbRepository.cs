@@ -33,12 +33,12 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav
                                                                         
         {
-                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @name";
+                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @charactername";
                           
                
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlQuestion);
-                command.Parameters.AddWithValue("name", characterName);
+                command.Parameters.AddWithValue("charactername", characterName);
                 await using var reader = await command.ExecuteReaderAsync();
 
 
@@ -63,7 +63,35 @@ namespace ProgrammeringMotDatabaser.DAL
             return animal;
         }
 
-       
+        public async Task<Animalspecie> FindClass(Animalspecie selectAnimalspecie)
+        {
+            string sqlQuestion = "Select s.animalspeciename, c.animalclassname From animalspecie s Join animalclass c ON s.animalclassid = c.animalclassid Where animalspeciename = @speciename";
+
+            
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQuestion);
+            command.Parameters.AddWithValue("speciename", selectAnimalspecie.AnimalSpecieName);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animalspecie animalspecie = new();
+            while (await reader.ReadAsync())
+            {
+                animalspecie = new()
+
+                {
+                    AnimalSpecieName = (string)reader["animalspeciename"],
+
+                    Animalclass= new()
+                    {
+                        AnimalClassName = (string)reader["animalclassname"]
+                    }
+                
+
+                };
+
+            }
+            return animalspecie;
+        }
 
 
 
@@ -329,6 +357,8 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
         }
+
+       
 
         public async Task<IEnumerable<Animalclass>> GetAnimalClass()
         {

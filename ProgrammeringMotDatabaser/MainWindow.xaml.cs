@@ -26,8 +26,8 @@ namespace ProgrammeringMotDatabaser
         {
             
             InitializeComponent();
-            DisplayCBO();           
-
+            DisplayCBO();
+            WelcomeMessage();
         }
         
         DbRepository db = new();
@@ -69,14 +69,7 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-        private async void btnsortlist_Click(object sender, RoutedEventArgs e)
-        {
-            Animalclass animalclass = (Animalclass)cbolistofclasses.SelectedItem;
-
-            var listOfClasses= await db.GetAnimalBySpeficClass(animalclass);
-
-            lstBox.ItemsSource = listOfClasses;           
-        }
+      
         private async void btnnumberofspecie_Click(object sender, RoutedEventArgs e)
         {
             var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
@@ -86,12 +79,7 @@ namespace ProgrammeringMotDatabaser
             lstBox.DisplayMemberPath = "Display";
         }
 
-        private async void btncount_Click(object sender, RoutedEventArgs e)
-        {
-            var showTotalSpecies = await db.CountSpecie();
-            lblcountspecies.Content = $"Total number of animalspecies: {showTotalSpecies.AnimalSpecieId}";
-      
-        }
+    
         private async void btnnmbranimals_Click(object sender, RoutedEventArgs e)
         {
             var numberOfSpecieInClass = await db.NumberOfSpecieInClass();
@@ -158,14 +146,7 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-        private async void btngetanimalclass_Click(object sender, RoutedEventArgs e)
-        {
-
-            var animalClass = await db.GetAnimalClass();
-            cboclass.ItemsSource = animalClass;
-            cboclass.DisplayMemberPath =  "AnimalClassName"; //"Display";
-
-        }
+  
 
        
 
@@ -218,14 +199,19 @@ namespace ProgrammeringMotDatabaser
         public async Task DisplayCBO()
         {
             var animalClass = await db.GetAnimalClass();
+
             cbolistofclasses.ItemsSource = animalClass;
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
-
-           
+                       
             cboclasses2.ItemsSource = animalClass;
             cboclasses2.DisplayMemberPath = "AnimalClassName";
 
+            cboclass.ItemsSource = animalClass;
+            cboclass.DisplayMemberPath = "AnimalClassName";
 
+            var animalSpecie = await db.GetAnimalSpecie();
+            cbospecie.ItemsSource = animalSpecie;
+            cbospecie.DisplayMemberPath = "AnimalSpecieName";
         }
 
         private async void cboclasses2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -241,6 +227,36 @@ namespace ProgrammeringMotDatabaser
                 }
 
 
+        }
+
+
+       
+
+
+        public async void WelcomeMessage()
+        {
+            var showTotalSpecies = await db.CountSpecie();
+            txtBlockWelcome.Text = $"Welcome Mufasa \n Currently you have {showTotalSpecies.AnimalSpecieId} species in your kingdom";
+        }
+
+        private async void cbolistofclasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Animalclass animalclass = (Animalclass)cbolistofclasses.SelectedItem;
+
+            var listOfClasses = await db.GetAnimalBySpeficClass(animalclass);
+
+            lstBox.ItemsSource = listOfClasses;
+        }
+
+        private async void cbospecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Animalspecie animalspecie = (Animalspecie)cbospecie.SelectedItem;
+
+            var selectedAnimalspecie = await db.FindClass(animalspecie);
+
+
+            lblShowAnimalClassForSpecie.Content = $"{animalspecie} belongs to animal class: {selectedAnimalspecie.Animalclass.AnimalClassName}.";
+            
         }
     }
 }
