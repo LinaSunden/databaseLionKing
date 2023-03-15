@@ -79,6 +79,7 @@ namespace ProgrammeringMotDatabaser.DAL
             string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
             
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            // En kommentar från Moniras dator
             await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
             Animalspecie animalspecie = new Animalspecie();
