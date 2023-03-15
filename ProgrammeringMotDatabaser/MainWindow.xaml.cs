@@ -79,13 +79,26 @@ namespace ProgrammeringMotDatabaser
         }
         private async void btnnumberofspecie_Click(object sender, RoutedEventArgs e)
         {
+            var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
 
-
-
-
+            lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
+          
+            lstBox.DisplayMemberPath = "Display";
         }
 
+        private async void btncount_Click(object sender, RoutedEventArgs e)
+        {
+            var showTotalSpecies = await db.CountSpecie();
+            lblcountspecies.Content = $"Total number of animalspecies: {showTotalSpecies.AnimalSpecieId}";
+      
+        }
+        private async void btnnmbranimals_Click(object sender, RoutedEventArgs e)
+        {
+            var numberOfSpecieInClass = await db.NumberOfSpecieInClass();
+            lstBox.ItemsSource = numberOfSpecieInClass;
+            lstBox.DisplayMemberPath = "CountSpeciesInClass";
 
+        }
 
 
         /// <summary>

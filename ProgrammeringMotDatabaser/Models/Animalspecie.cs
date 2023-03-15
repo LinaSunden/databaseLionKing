@@ -14,7 +14,9 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string LatinName { get; set; }
 
-        public int AnimalClassId { get; set; } //denna måste finnas
+        public int AnimalClassId { get; set; }
+
+        public string Display => $"Total number  of animalspecies {AnimalSpecieId}";
 
         public Animalclass Animalclass { get; set; }
 

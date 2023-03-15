@@ -103,33 +103,105 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<IEnumerable<Animal>> CountAnimalInEachSpecie()
         {
             List<Animal> animals = new List<Animal>();
-            string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie JOIN animal ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
-            // en kommentar från Erik
+            string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
+          
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animal animal = new();
+            
+            while (await reader.ReadAsync())
+            {
+             
+                animal = new()
+                {
+                    AnimalId = reader.GetInt32(1),
+                  
+
+
+                    Animalspecie = new()
+                    {
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+                         
+
+                    }
+                   
+                };
+
+                
+                animals.Add(animal);
+                
+            }
+            return animals;
+        }
+
+        public async Task<Animalspecie> CountSpecie() // public async Task<Animal> GetAnimalByName()
+        {
+            string sqlQ = "SELECT COUNT (s.animalspecieid) as AmountOfSpecies FROM animalspecie s";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);            
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animalspecie animalspecie = new();
+            while (await reader.ReadAsync())
+            {
+                animalspecie = new()
+                {
+                   
+
+                  AnimalSpecieId = reader.GetInt32(0),
+                    
+
+                };
+
+            }
+
+            return animalspecie;
+
+            
+        }
+
+        public async Task<IEnumerable<Animal>> NumberOfSpecieInClass()
+        {
+            List<Animal> animals = new List<Animal>();
+            string sqlQ = "SELECT c.animalclassname, COUNT(s.animalspecieid) FROM animalclass c FULL JOIN animalspecie s ON s.animalclassid = c.animalclassid FULL JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY c.animalclassname ORDER BY COUNT(s.animalspecieid) DESC";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
             Animal animal = new();
+
             while (await reader.ReadAsync())
             {
 
                 animal = new()
                 {
-                    AnimalSpecieId = reader.GetInt32(0),
+                    
+
 
                     Animalspecie = new()
                     {
-                            AnimalSpecieName = (string)reader["animalspeciename"],
-                            AnimalClassId = reader.GetInt32(3)
+                        AnimalSpecieId = reader.GetInt32(1),
+                       
+                        
+                        Animalclass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+
+                        }
 
                     }
+
                 };
 
 
                 animals.Add(animal);
+
             }
             return animals;
         }
+
 
         public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
         {
