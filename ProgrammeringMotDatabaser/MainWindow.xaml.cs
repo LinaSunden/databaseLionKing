@@ -48,9 +48,16 @@ namespace ProgrammeringMotDatabaser
             }
             else
             {
+
+
+                lstBox.ItemsSource = (System.Collections.IEnumerable)animal;
+
                 lblanimalId.Content = animal.AnimalId;
                 lblcharacterName.Content = animal.CharacterName;
                 lblanimalspeciename.Content = animal.AnimalSpecie.AnimalSpecieName;
+                await DisplayCBO();
+                ClearTextboxes();
+                txtCharacterName.Focus();
             }
 
         }
@@ -71,6 +78,7 @@ namespace ProgrammeringMotDatabaser
                 var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
                 MessageBox.Show($"{checkIfAnimalExists.Display1}");
                 await DisplayCBO();
+              
             }
             catch (Exception ex)
             {
