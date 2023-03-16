@@ -33,8 +33,8 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
         {
-                string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @charactername";
-                          
+            string sqlQuestion = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid =animalspecie.animalclassid WHERE animal.charactername= @charactername";
+             
                
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlQuestion);
@@ -52,8 +52,17 @@ namespace ProgrammeringMotDatabaser.DAL
 
                         AnimalSpecie = new()
                         {
-                            AnimalSpecieName = (string)reader["animalspeciename"]
-                        }                      
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+                            LatinName = reader["animalspeciename"] == DBNull.Value ? null : (string)reader["latinname"],
+
+                            AnimalClass = new()
+                            {
+                                AnimalClassName = (string)reader["animalclassname"]
+
+                            }
+                        }
+                        
+                        
                     };                                    
                 }                       
             return animal;

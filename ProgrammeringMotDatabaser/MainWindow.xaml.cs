@@ -44,20 +44,17 @@ namespace ProgrammeringMotDatabaser
             if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
             {
                 MessageBox.Show($"There is no animal called {characterName}");
-
+                ClearTextboxes();
             }
             else
             {
-
-
-                lstBox.ItemsSource = (System.Collections.IEnumerable)animal;
-
-                lblanimalId.Content = animal.AnimalId;
-                lblcharacterName.Content = animal.CharacterName;
-                lblanimalspeciename.Content = animal.AnimalSpecie.AnimalSpecieName;
-                await DisplayCBO();
+                lblCharacterName.Content = $"Character name: {animal.CharacterName}";
+                lblAnimalSpecie.Content = $"Animal specie: {animal.AnimalSpecie.AnimalSpecieName}";
+                lblLatinName.Content = $"Latin name: {animal.AnimalSpecie.LatinName}";
+                lblAnimalClass.Content = $"Animal class: {animal.AnimalSpecie.AnimalClass.AnimalClassName}";
                 ClearTextboxes();
                 txtCharacterName.Focus();
+   
             }
 
         }
