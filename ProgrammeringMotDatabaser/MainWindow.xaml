@@ -6,36 +6,34 @@
         xmlns:local="clr-namespace:ProgrammeringMotDatabaser"
         mc:Ignorable="d"
         Title="MainWindow" Height="1080" Width="1920">
-    <Grid Margin="0,0,0,-6" RenderTransformOrigin="0.496,0.508">
+    <Grid Margin="42,18,-42,-24" RenderTransformOrigin="0.496,0.508">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="161*"/>
             <ColumnDefinition Width="159*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="530,557,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
-        <Label x:Name="lblanimalId" Content="" HorizontalAlignment="Left" Margin="540,592,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblcharacterName" Content="" HorizontalAlignment="Left" Margin="540,620,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="lstBox" Margin="732,230,706,503" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="txtcharactername" HorizontalAlignment="Left" Margin="530,534,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Character name" HorizontalAlignment="Left" Margin="530,504,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lbldisplayspeciename" Content="Animal specie name:" HorizontalAlignment="Left" Margin="420,653,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
-        <Label Content="Animal id:" HorizontalAlignment="Left" Margin="476,592,0,0" VerticalAlignment="Top"/>
-        <Label Content="Character name:" HorizontalAlignment="Left" Margin="442,620,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblanimalspeciename" Content="" HorizontalAlignment="Left" Margin="540,653,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cbolistofclasses" HorizontalAlignment="Left" Margin="575,0,0,630" VerticalAlignment="Bottom" Width="120" SelectionChanged="cbolistofclasses_SelectionChanged"/>
-        <Label Content="All Animals in a specifc animal classes" HorizontalAlignment="Left" Margin="495,391,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Button x:Name="btnsearch" Content="Search" HorizontalAlignment="Left" Margin="908,197,0,0" VerticalAlignment="Top" Click="btnsearch_Click"/>
+        <Label x:Name="lblanimalId" Content="" HorizontalAlignment="Left" Margin="410,586,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblcharacterName" Content="" HorizontalAlignment="Left" Margin="410,614,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="lstBox" Margin="602,224,606,432" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtCharacterName" HorizontalAlignment="Left" Margin="783,199,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Character name" HorizontalAlignment="Left" Margin="783,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.321,0.579"/>
+        <Label x:Name="lbldisplayspeciename" Content="Animal specie name:" HorizontalAlignment="Left" Margin="290,646,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.013,0.046"/>
+        <Label Content="Animal id:" HorizontalAlignment="Left" Margin="346,586,0,0" VerticalAlignment="Top"/>
+        <Label Content="Character name:" HorizontalAlignment="Left" Margin="312,614,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblanimalspeciename" Content="" HorizontalAlignment="Left" Margin="410,646,0,0" VerticalAlignment="Top"/>
         <Label Content="1." HorizontalAlignment="Left" Margin="19,708,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="2." HorizontalAlignment="Left" Margin="19,192,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="3." HorizontalAlignment="Left" Margin="19,363,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="7." HorizontalAlignment="Left" Margin="510,503,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="4." HorizontalAlignment="Left" Margin="487,277,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="6." HorizontalAlignment="Left" Margin="487,297,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="5." HorizontalAlignment="Left" Margin="450,403,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="8.a" HorizontalAlignment="Left" Margin="487,341,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="9." HorizontalAlignment="Left" Margin="485,321,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="7." HorizontalAlignment="Left" Margin="304,494,0,0" VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-2.233,0.888"/>
+        <Label Content="4." HorizontalAlignment="Left" Margin="316,266,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="6." HorizontalAlignment="Left" Margin="316,286,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="5." HorizontalAlignment="Left" Margin="306,418,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="8.a" HorizontalAlignment="Left" Margin="316,330,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="9." HorizontalAlignment="Left" Margin="314,310,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="8.b" HorizontalAlignment="Left" Margin="222,36,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="1"/>
-        <TextBlock x:Name="txtBlockWelcome" HorizontalAlignment="Left" Margin="767,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="77" Width="553" FontSize="18" FontWeight="Bold"/>
+        <TextBlock x:Name="txtBlockWelcome" HorizontalAlignment="Left" Margin="566,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="77" Width="554" FontSize="18" FontWeight="Bold" TextAlignment="Center"/>
         <Label x:Name="lblCreate" Content="Create" HorizontalAlignment="Left" Margin="51,138,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
-        <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="561,154,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
+        <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="432,149,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
         <Label x:Name="lblUpdate" Content="Update" HorizontalAlignment="Left" Margin="373,163,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
         <Label x:Name="lblDelete" Content="Delete" HorizontalAlignment="Left" Margin="815,163,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
         <GroupBox x:Name="gBoxCreateAnimalClass" Header="Create new animal class" Margin="47,182,734,734" FontWeight="Bold">
@@ -66,14 +64,25 @@
                 <Button x:Name="btncreateanimal" Content="Create animal" Width="125" Click="btncreateanimal_Click" Margin="-40, 20, 0, 10" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
-        <Label Content="Animal registry" HorizontalAlignment="Left" Margin="734,199,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
-        <Label Content="Select view of animal registry" HorizontalAlignment="Left" Margin="507,241,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
-        <RadioButton Content="All animals" HorizontalAlignment="Left" Margin="519,283,0,0" VerticalAlignment="Top" Checked="RadioButton_Checked" IsChecked="True" RenderTransformOrigin="0.039,0.537"/>
-        <RadioButton Content="Animals with character name" HorizontalAlignment="Left" Margin="518,303,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_1"/>
-        <RadioButton Content="Number of animals in each class" HorizontalAlignment="Left" Margin="519,324,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_2" />
-        <RadioButton Content="Number of animals in each specie " HorizontalAlignment="Left" Margin="519,351,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_3" />
-        <Label Content="Select class" HorizontalAlignment="Left" Margin="495,417,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="Animal registry" HorizontalAlignment="Left" Margin="604,194,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+        <Label Content="Select view of animal registry" HorizontalAlignment="Left" Margin="336,230,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="518,870,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <GroupBox x:Name="gBoxRadioBtnViews" Header="" Margin="340,258,373,686">
+            <StackPanel>
+                <RadioButton Content="All animals" Checked="RadioButton_Checked" IsChecked="True" RenderTransformOrigin="0.039,0.537" Margin="0, 0, 0, 5"/>
+                <RadioButton Content="Animals with character name" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_1" Margin="0, 0, 0, 5"/>
+                <RadioButton Content="Number of animals in each class" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_2" Margin="0, 0, 0, 5"/>
+                <RadioButton Content="Number of animals in each specie " RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_3" Margin="0, 0, 0, 5"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="gBoxAllAnimalsInSpecificClass" Header="All Animals in a specifc animal class" Margin="336,392,377,585" FontWeight="Bold">
+            <StackPanel>
+                <Label Content="Select class" FontWeight="Normal" Width="70" Margin="-150, 10, 0, 0"/>
+                <ComboBox x:Name="cbolistofclasses" Width="120" SelectionChanged="cbolistofclasses_SelectionChanged" Margin="0, -20, -80, 0" FontWeight="Normal"/>
+
+            </StackPanel>
+        </GroupBox>
 
     </Grid>
 </Window>

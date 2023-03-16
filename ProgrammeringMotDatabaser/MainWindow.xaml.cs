@@ -37,7 +37,7 @@ namespace ProgrammeringMotDatabaser
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
         
-            string characterName = txtcharactername.Text;
+            string characterName = txtCharacterName.Text;
             var animal = await db.GetAnimalByName(characterName);
 
 
@@ -70,6 +70,7 @@ namespace ProgrammeringMotDatabaser
             {
                 var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
                 MessageBox.Show($"{checkIfAnimalExists.Display1}");
+                await DisplayCBO();
             }
             catch (Exception ex)
             {
@@ -97,7 +98,7 @@ namespace ProgrammeringMotDatabaser
                     var animalspecie = await db.AddAnimalSpecie(animalSpecieName, int.Parse(classId));
 
                     MessageBox.Show($"You have successfully added a new specie {animalspecie.AnimalSpecieName} from the {animalspecie.AnimalClass.AnimalClassName} class");
-                    DisplayCBO();
+                   await DisplayCBO();
                 }
                 catch (Exception ex)
                 {
@@ -129,7 +130,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     var newAnimalClass = await db.AddAnimalClass(animalClass);
                     MessageBox.Show($"You have successfully added a new class {newAnimalClass.AnimalClassName}");
-                    DisplayCBO();
+                    await DisplayCBO();
                 }
                 catch (Exception ex)
                 {
@@ -273,5 +274,16 @@ namespace ProgrammeringMotDatabaser
 
 
         }
+
+        private void ClearTextboxes()
+        {
+            txtinputspeciename.Clear();
+            txtinputclassname.Clear();
+            txtinputlatinname.Clear();
+            txtinput.Clear();
+            txtCharacterName.Clear();
+        }
+
+   
     }
 }
