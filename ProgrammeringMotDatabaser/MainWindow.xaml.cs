@@ -90,20 +90,29 @@ namespace ProgrammeringMotDatabaser
         {
             var classId = GetAnimalClassId();
             string animalSpecieName = txtinputspeciename.Text;
+            string latinName = txtinputlatinname.Text;
 
-            if (animalSpecieName == "")
+            if (animalSpecieName == string.Empty)
             {
                 MessageBox.Show("Please fill in the name of the animal specie you wish to create");
 
             }
+          
             else
             {
+                if (latinName == string.Empty)
+                {
+                    latinName = null;
+                }
                 try
                 {
-                    var animalspecie = await db.AddAnimalSpecie(animalSpecieName, int.Parse(classId));
+                    var animalspecie = await db.AddAnimalSpecie(animalSpecieName, latinName, int.Parse(classId));
+                    //var animalClassName = await db.ShowClassName(animalspecie);
 
-                    MessageBox.Show($"You have successfully added a new specie {animalspecie.AnimalSpecieName} from the {animalspecie.AnimalClass.AnimalClassName} class");
-                   await DisplayCBO();
+                    MessageBox.Show($"You have successfully added a new specie {animalspecie.AnimalSpecieName} from the {animalspecie.AnimalClass.AnimalClassName} class {animalspecie.LatinName}");
+                    await DisplayCBO();
+                    ClearTextboxes();
+                    txtinputspeciename.Focus();
                 }
                 catch (Exception ex)
                 {
@@ -111,6 +120,7 @@ namespace ProgrammeringMotDatabaser
                     MessageBox.Show(ex.Message);
                 }
             }
+            
         }
 
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)

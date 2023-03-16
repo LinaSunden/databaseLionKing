@@ -472,19 +472,27 @@ namespace ProgrammeringMotDatabaser.DAL
             
         }
 
-        public async Task<AnimalSpecie> AddAnimalSpecie(string animalSpecieName, int animalClassId)
+        public async Task<AnimalSpecie> AddAnimalSpecie(string animalSpecieName, string latinname, int animalClassId)
         {
-            string sqlCommand = "insert into animalspecie(animalspeciename, animalclassid) values(@animalspeciename, @animalclassid)";
-
+            string sqlCommand = "insert into animalspecie(animalspeciename, latinname, animalclassid) values(@animalspeciename, @latinname, @animalclassid)";
+         
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("animalspeciename", animalSpecieName);
+            command.Parameters.AddWithValue("latinname", (object)latinname ?? DBNull.Value);
             command.Parameters.AddWithValue("animalclassid", animalClassId);
-            await command.ExecuteNonQueryAsync();
-           
+             await command.ExecuteNonQueryAsync();
+
+            //string sqlQuestion = "SELECT animalclassname From animalclass Where animalclassid = @animalclassid";
+            
+            //await using var command2 = dataSource.CreateCommand(sqlQuestion);
+            //command2.Parameters.AddWithValue("animalclassid",animalClassId);
+            //await using var reader = await command2.ExecuteReaderAsync();
+
             var animalspecie = new AnimalSpecie() //skapa en metod som returnerar speciename och classname
             {
                 AnimalSpecieName = animalSpecieName,
+                LatinName = latinname,
                 
                 AnimalClass = new()
                 {
@@ -499,9 +507,35 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-  
+        //public async Task<AnimalSpecie> ShowClassName(AnimalSpecie animalspecie) //test, ta bort denna metod när animalspecie även returnerar classname
+        //{
+        //    string sqlQuestion = "SELECT animalclassname From animalclass Where animalclassid = @animalclassid";
 
-       
+        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        //    await using var command = dataSource.CreateCommand(sqlQuestion);
+        //    command.Parameters.AddWithValue("animalclassid", animalspecie.AnimalClass.AnimalClassId);
+        //    await using var reader = await command.ExecuteReaderAsync();
+
+                        
+        //    while (await reader.ReadAsync())
+        //    {
+        //        animalspecie = new()
+        //        {
+                  
+        //                AnimalClass = new()
+        //                {
+        //                    AnimalClassName = (string)reader["animalclassname"]
+
+        //                }
+                    
+        //        };
+        //    }
+
+        //    return animalspecie;
+        //}
+
+
+
 
         public async Task<IEnumerable<AnimalClass>> GetAnimalClass()
         {
