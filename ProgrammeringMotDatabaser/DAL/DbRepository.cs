@@ -141,8 +141,7 @@ namespace ProgrammeringMotDatabaser.DAL
             string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
             
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            //hej på dig
-            // En kommentar från Moniras dator
+            
             await using var command = dataSource.CreateCommand(sqlQ);
             await using var reader = await command.ExecuteReaderAsync();
             AnimalSpecie animalspecie = new AnimalSpecie();
@@ -400,16 +399,34 @@ namespace ProgrammeringMotDatabaser.DAL
 
         public async Task<Animal> AddAnimalAndGetValue(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
         {
-            string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
+            try
+            {
+                string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
 
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("charactername", characterName);
-            command.Parameters.AddWithValue("animalspecieid", specieId);
-            await command.ExecuteNonQueryAsync();
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("charactername", characterName);
+                command.Parameters.AddWithValue("animalspecieid", specieId);
+                await command.ExecuteNonQueryAsync();
 
-            var animal = GetAnimalByName(characterName);
-            return await animal;
+                var animal = GetAnimalByName(characterName);
+                return await animal;
+            }
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "There is already an animal with that name. The animal name must be unique";
+                        break;
+                    default:
+                        break;
+                }
+                throw new Exception(errorMessage, ex);
+            }
             
         }
         

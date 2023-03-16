@@ -54,19 +54,8 @@ namespace ProgrammeringMotDatabaser
             }
 
         }
-
-
-
-
-     
-
-
-      
-     
-    
-      
-
-
+        
+               
         /// <summary>
         /// Button that creates animal and uses specieID from class
         /// </summary>
@@ -77,11 +66,16 @@ namespace ProgrammeringMotDatabaser
 
             var specieId = GetAnimalSpecieId();
             string animalName = txtinput.Text;
+            try
+            {
+                var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
+                MessageBox.Show($"{checkIfAnimalExists.Display1}");
+            }
+            catch (Exception ex)
+            {
 
-
-            var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
-
-            MessageBox.Show($"{checkIfAnimalExists.Display1}");
+                MessageBox.Show(ex.Message);
+            }         
 
         }
 
@@ -100,23 +94,30 @@ namespace ProgrammeringMotDatabaser
         {
            
             var newClassName = txtinputclassname.Text;
-            var animalClass = new AnimalClass()
+            if (newClassName == "")
             {
-
-                AnimalClassName = newClassName,
-
-            };
-
-            try
-            {
-                var newAnimalClass = await db.AddAnimalClass(animalClass);
-                MessageBox.Show($"You have successfully added a new class {newAnimalClass.AnimalClassName}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Please fill in the name of the animal class you wish to create");
             }
 
+            else
+            {
+                var animalClass = new AnimalClass()
+                {
+
+                    AnimalClassName = newClassName,
+
+                };
+
+                try
+                {
+                    var newAnimalClass = await db.AddAnimalClass(animalClass);
+                    MessageBox.Show($"You have successfully added a new class {newAnimalClass.AnimalClassName}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
   
@@ -145,7 +146,7 @@ namespace ProgrammeringMotDatabaser
         }
         public string GetAnimalClassId()
         {
-            
+
             if (cboclass.SelectedItem is AnimalClass select)
             {
                 var animalClassId = select.AnimalClassId.ToString();
@@ -156,18 +157,18 @@ namespace ProgrammeringMotDatabaser
 
         }
 
-        public string GetClassId()
-        {
+        //public string GetClassId()
+        //{
 
-            if (cbospecie.SelectedItem is AnimalSpecie select)
-            {
-                var animalClassId = select.AnimalClass.AnimalClassId.ToString();
-                return animalClassId;
-            }
+        //    if (cbospecie.SelectedItem is AnimalSpecie select)
+        //    {
+        //        var animalClassId = select.AnimalClass.AnimalClassId.ToString();
+        //        return animalClassId;
+        //    }
 
-            return null;
+        //    return null;
 
-        }
+        //}
 
         public async Task DisplayCBO()
         {
@@ -223,6 +224,7 @@ namespace ProgrammeringMotDatabaser
 
         private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
+            
             var allCharactersWithNames = await db.GetAnimalWithCharacterName();
 
             lstBox.ItemsSource = allCharactersWithNames;
@@ -250,6 +252,8 @@ namespace ProgrammeringMotDatabaser
         {
           var animal = await db.MainMethodRetrieveAllInfoAboutAnimal();
            
+
+
         }
     }
 }
