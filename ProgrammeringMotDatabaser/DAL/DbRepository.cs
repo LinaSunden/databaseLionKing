@@ -483,7 +483,7 @@ namespace ProgrammeringMotDatabaser.DAL
             command.Parameters.AddWithValue("animalclassid", animalClassId);
              await command.ExecuteNonQueryAsync();
 
-            //string sqlQuestion = "SELECT animalclassname From animalclass Where animalclassid = @animalclassid";
+            //string sqlQuestion = "SELECT animalclassname From animalclass Where animalclassid = @animalclassid"; Testade detta men fungerar ej. Får kanske göra en ny metod
             
             //await using var command2 = dataSource.CreateCommand(sqlQuestion);
             //command2.Parameters.AddWithValue("animalclassid",animalClassId);
