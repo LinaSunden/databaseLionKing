@@ -490,6 +490,11 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
+        public async Task<Animal> MethodUsedToAddValue(string animalClass)
+        {
+
+
+        }
        
 
         public async Task<IEnumerable<AnimalClass>> GetAnimalClass()

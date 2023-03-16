@@ -85,9 +85,26 @@ namespace ProgrammeringMotDatabaser
             var classId = GetAnimalClassId();
             string animalSpecieName = txtinputspeciename.Text;
 
-            var animalspecie = await db.AddAnimalSpecie(animalSpecieName, int.Parse(classId));
+            if (animalSpecieName == "")
+            {
+                MessageBox.Show("Please fill in the name of the animal specie you wish to create");
 
-            MessageBox.Show($"{animalspecie.AnimalSpecieName} {animalspecie.AnimalClass.AnimalClassName}");
+            }
+            else
+            {
+                try
+                {
+                    var animalspecie = await db.AddAnimalSpecie(animalSpecieName, int.Parse(classId));
+
+                    MessageBox.Show($"You have successfully added a new specie {animalspecie.AnimalSpecieName} from the {animalspecie.AnimalClass.AnimalClassName} class");
+                    DisplayCBO();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)
@@ -112,6 +129,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     var newAnimalClass = await db.AddAnimalClass(animalClass);
                     MessageBox.Show($"You have successfully added a new class {newAnimalClass.AnimalClassName}");
+                    DisplayCBO();
                 }
                 catch (Exception ex)
                 {
