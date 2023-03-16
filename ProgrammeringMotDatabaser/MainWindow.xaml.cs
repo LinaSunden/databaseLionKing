@@ -227,8 +227,6 @@ namespace ProgrammeringMotDatabaser
 
             lstBox.ItemsSource = allCharactersWithNames;
 
-
-
         }
 
 
