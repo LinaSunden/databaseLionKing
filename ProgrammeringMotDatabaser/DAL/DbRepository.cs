@@ -472,16 +472,16 @@ namespace ProgrammeringMotDatabaser.DAL
             command.Parameters.AddWithValue("animalspeciename", animalSpecieName);
             command.Parameters.AddWithValue("animalclassid", animalClassId);
             await command.ExecuteNonQueryAsync();
-
-
+           
             var animalspecie = new AnimalSpecie() //skapa en metod som returnerar speciename och classname
             {
                 AnimalSpecieName = animalSpecieName,
-
+                
                 AnimalClass = new()
                 {
                     AnimalClassId = animalClassId,
                     //AnimalClassName = (string)reader["animalclassname"]
+                    
                 }
 
             };
@@ -490,11 +490,8 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-        public async Task<Animal> MethodUsedToAddValue(string animalClass)
-        {
+  
 
-
-        }
        
 
         public async Task<IEnumerable<AnimalClass>> GetAnimalClass()
