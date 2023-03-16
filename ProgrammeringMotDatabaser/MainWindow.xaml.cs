@@ -255,7 +255,7 @@ namespace ProgrammeringMotDatabaser
             var selectedAnimalspecie = await db.FindClass(animalspecie);
 
 
-            lblShowAnimalClassForSpecie.Content = $"{animalspecie} belongs to animal class: {selectedAnimalspecie.Animalclass.AnimalClassName}.";
+            lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.Animalclass.AnimalClassName}";
             
         }
     }
