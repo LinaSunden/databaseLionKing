@@ -3,6 +3,7 @@ using ProgrammeringMotDatabaser.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -55,38 +56,13 @@ namespace ProgrammeringMotDatabaser
 
 
 
-        private async void btnShowSpecie_Click(object sender, RoutedEventArgs e)
-        {          
-           var allAnimals = await db.GetAllAnimalsSortedBySpecie();
-            lstBox.ItemsSource = allAnimals;
-        }
+     
 
-        private async void btncharactername_Click(object sender, RoutedEventArgs e)
-        {
-            var allCharactersWithNames = await db.GetAnimalWithCharacterName();
-
-            lstBox.ItemsSource = allCharactersWithNames;
-
-        }
 
       
-        private async void btnnumberofspecie_Click(object sender, RoutedEventArgs e)
-        {
-            var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
-
-            lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
-          
-            lstBox.DisplayMemberPath = "Display";
-        }
-
+     
     
-        private async void btnnmbranimals_Click(object sender, RoutedEventArgs e)
-        {
-            var numberOfSpecieInClass = await db.NumberOfSpecieInClass();
-            lstBox.ItemsSource = numberOfSpecieInClass;
-            lstBox.DisplayMemberPath = "CountSpeciesInClass";
-
-        }
+      
 
 
         /// <summary>
@@ -98,17 +74,10 @@ namespace ProgrammeringMotDatabaser
         {
 
             var specieId = GetAnimalSpecieId();
+            string animalName = txtinput.Text;
+            var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
 
-            var animal = new Animal()
-            {
-                CharacterName = txtinput.Text,
-                Animalspecie = new()
-                { 
-                    AnimalSpecieId = int.Parse(specieId),  //vi kan nu skapa en koppling till animal class genom att vi väljer klassen från cbo                                                          
-                }
-            };
-
-            await db.AddAnimal(animal);
+            MessageBox.Show($"{checkIfAnimalExists.Display1}");
 
         }
 
@@ -134,6 +103,7 @@ namespace ProgrammeringMotDatabaser
 
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)
         {
+           
             var newClassName = txtinputclassname.Text;
             var animalClass = new Animalclass()
             {
@@ -142,7 +112,15 @@ namespace ProgrammeringMotDatabaser
 
             };
 
-            await db.AddAnimalClass(animalClass);
+            try
+            {
+                var newAnimalClass = await db.AddAnimalClass(animalClass);
+                MessageBox.Show($"You have successfully added a new class {newAnimalClass.AnimalClassName}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
         }
 
@@ -258,5 +236,41 @@ namespace ProgrammeringMotDatabaser
             lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.Animalclass.AnimalClassName}";
             
         }
+
+        private async void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+           
+            var allAnimals = await db.GetAllAnimalsSortedBySpecie();
+
+            lstBox.ItemsSource = allAnimals;
+        }
+
+        private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+            var allCharactersWithNames = await db.GetAnimalWithCharacterName();
+
+            lstBox.ItemsSource = allCharactersWithNames;
+        }
+
+
+        private async void RadioButton_Checked_2(object sender, RoutedEventArgs e)
+        {
+            var numberOfSpecieInClass = await db.NumberOfSpecieInClass();
+            lstBox.ItemsSource = numberOfSpecieInClass;
+            lstBox.DisplayMemberPath = "CountSpeciesInClass";
+        }
+
+        private async void RadioButton_Checked_3(object sender, RoutedEventArgs e)
+        {
+            var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
+
+            lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
+
+            lstBox.DisplayMemberPath = "Display";
+        }
+
+
+    
+
     }
 }

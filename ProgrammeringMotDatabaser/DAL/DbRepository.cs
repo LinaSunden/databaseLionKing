@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Xml;
 
 namespace ProgrammeringMotDatabaser.DAL
 {
@@ -30,8 +31,7 @@ namespace ProgrammeringMotDatabaser.DAL
         /// </summary>
         /// <param name="characterName"></param>
         /// <returns></returns>
-        public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav
-                                                                        
+        public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
         {
                 string sqlQuestion = "SELECT * FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid WHERE animal.charactername= @charactername";
                           
@@ -46,7 +46,6 @@ namespace ProgrammeringMotDatabaser.DAL
                 while (await reader.ReadAsync()) 
                 {
                     animal = new()
-
                     {
                         AnimalId = reader.GetInt32(0),
                         CharacterName = (string)reader["charactername"],
@@ -54,12 +53,9 @@ namespace ProgrammeringMotDatabaser.DAL
                         Animalspecie = new()
                         {
                             AnimalSpecieName = (string)reader["animalspeciename"]
-                        }
-                        
-                    };
-                                    
-                }        
-               
+                        }                      
+                    };                                    
+                }                       
             return animal;
         }
 
@@ -325,7 +321,22 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-        public async Task AddAnimalClass(Animalclass animalclass)
+        public async Task<Animal> AddAnimalAndGetValue(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
+        {
+            string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("charactername", characterName);
+            command.Parameters.AddWithValue("animalspecieid", specieId);
+            await command.ExecuteNonQueryAsync();
+
+            var animal = GetAnimalByName(characterName);
+            return await animal;
+            
+        }
+
+        public async Task <Animalclass> AddAnimalClass(Animalclass animalclass)
         {
             try
             {
@@ -335,14 +346,27 @@ namespace ProgrammeringMotDatabaser.DAL
                 await using var command = dataSource.CreateCommand(sqlCommand);
                 command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
                 await command.ExecuteNonQueryAsync();
+                return animalclass;
             }
-            catch (Exception)
+            catch (PostgresException ex)
             {
+               
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+                
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The class already exists. The class name must be unique";
+                        break;
+                    default:
+                        break;
+                }
 
-                throw;
+                throw new Exception(errorMessage, ex);
             }
 
-
+            
         }
 
         public async Task AddAnimalSpecie(Animalspecie animalSpecie)
@@ -424,7 +448,7 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<IEnumerable<Animal>> GetAllAnimalsSortedBySpecie()
         {
             List<Animal> animals = new List<Animal>();
-            string sqlQ = "SELECT a.animalid, s.animalspeciename, s.latinname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid ORDER BY animalspeciename ASC";
+            string sqlQ = "SELECT a.animalid, a.charactername, s.animalspeciename, s.latinname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid ORDER BY animalspeciename ASC";
                      
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQ);
@@ -439,6 +463,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 animal = new Animal()
                 {
                     AnimalId = reader.GetInt32(0),
+                    CharacterName = (string)reader["charactername"],
 
                     //AnimalSpecieId = reader.GetInt32(0),
                     Animalspecie = new()
