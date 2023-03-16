@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProgrammeringMotDatabaser.Models
 {
-    internal class Animalclass
+    internal class AnimalClass
     {
         public int AnimalClassId { get; set; }
 

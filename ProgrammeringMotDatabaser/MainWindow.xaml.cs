@@ -32,6 +32,8 @@ namespace ProgrammeringMotDatabaser
         }
         
         DbRepository db = new();
+
+
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
         
@@ -48,7 +50,7 @@ namespace ProgrammeringMotDatabaser
             {
                 lblanimalId.Content = animal.AnimalId;
                 lblcharacterName.Content = animal.CharacterName;
-                lblanimalspeciename.Content = animal.Animalspecie.AnimalSpecieName;
+                lblanimalspeciename.Content = animal.AnimalSpecie.AnimalSpecieName;
             }
 
         }
@@ -75,6 +77,8 @@ namespace ProgrammeringMotDatabaser
 
             var specieId = GetAnimalSpecieId();
             string animalName = txtinput.Text;
+
+
             var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
 
             MessageBox.Show($"{checkIfAnimalExists.Display1}");
@@ -85,27 +89,18 @@ namespace ProgrammeringMotDatabaser
         private async void btncreatespecie_Click(object sender, RoutedEventArgs e)
         {
             var classId = GetAnimalClassId();
+            string animalSpecieName = txtinputspeciename.Text;
 
-            var animalspecie = new Animalspecie()
-            {
-                AnimalSpecieName = txtinputspeciename.Text,
-                
-                Animalclass = new()
-                {
-                    AnimalClassId = int.Parse(classId)
+            var animalspecie = await db.AddAnimalSpecie(animalSpecieName, int.Parse(classId));
 
-                }
-
-            };
-
-            await db.AddAnimalSpecie(animalspecie);
+            MessageBox.Show($"{animalspecie.AnimalSpecieName} {animalspecie.AnimalClass.AnimalClassName}");
         }
 
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)
         {
            
             var newClassName = txtinputclassname.Text;
-            var animalClass = new Animalclass()
+            var animalClass = new AnimalClass()
             {
 
                 AnimalClassName = newClassName,
@@ -139,7 +134,7 @@ namespace ProgrammeringMotDatabaser
         public string GetAnimalSpecieId()
         {
 
-            if (cbospecie.SelectedItem is Animalspecie select)
+            if (cbospecie.SelectedItem is AnimalSpecie select)
             {
                 var animalSpecieId = select.AnimalSpecieId.ToString();
                 return animalSpecieId;
@@ -151,7 +146,7 @@ namespace ProgrammeringMotDatabaser
         public string GetAnimalClassId()
         {
             
-            if (cboclass.SelectedItem is Animalclass select)
+            if (cboclass.SelectedItem is AnimalClass select)
             {
                 var animalClassId = select.AnimalClassId.ToString();
                 return animalClassId;
@@ -164,9 +159,9 @@ namespace ProgrammeringMotDatabaser
         public string GetClassId()
         {
 
-            if (cbospecie.SelectedItem is Animalspecie select)
+            if (cbospecie.SelectedItem is AnimalSpecie select)
             {
-                var animalClassId = select.AnimalClassId.ToString();
+                var animalClassId = select.AnimalClass.AnimalClassId.ToString();
                 return animalClassId;
             }
 
@@ -180,10 +175,7 @@ namespace ProgrammeringMotDatabaser
 
             cbolistofclasses.ItemsSource = animalClass;
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
-                       
-            cboclasses2.ItemsSource = animalClass;
-            cboclasses2.DisplayMemberPath = "AnimalClassName";
-
+                          
             cboclass.ItemsSource = animalClass;
             cboclass.DisplayMemberPath = "AnimalClassName";
 
@@ -192,25 +184,9 @@ namespace ProgrammeringMotDatabaser
             cbospecie.DisplayMemberPath = "AnimalSpecieName";
         }
 
-        private async void cboclasses2_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-           
-
-                if (cboclasses2.SelectedItem is Animalclass select)
-                {
-
-                   var returnAnimalSpecies = await db.GetAnimalClassesForQOne(select);
-                   cbospecie.ItemsSource = returnAnimalSpecies;
-                   cbospecie.DisplayMemberPath = "AnimalSpecieName";
-                }
-
-
-        }
-
+      
 
        
-
-
         public async void WelcomeMessage()
         {
             var showTotalSpecies = await db.CountSpecie();
@@ -219,7 +195,7 @@ namespace ProgrammeringMotDatabaser
 
         private async void cbolistofclasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Animalclass animalclass = (Animalclass)cbolistofclasses.SelectedItem;
+            AnimalClass animalclass = (AnimalClass)cbolistofclasses.SelectedItem;
 
             var listOfClasses = await db.GetAnimalBySpeficClass(animalclass);
 
@@ -228,19 +204,19 @@ namespace ProgrammeringMotDatabaser
 
         private async void cbospecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Animalspecie animalspecie = (Animalspecie)cbospecie.SelectedItem;
+            AnimalSpecie animalspecie = (AnimalSpecie)cbospecie.SelectedItem;
 
             var selectedAnimalspecie = await db.FindClass(animalspecie);
 
 
-            lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.Animalclass.AnimalClassName}";
+            lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.AnimalClass.AnimalClassName}";
             
         }
 
         private async void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
            
-            var allAnimals = await db.GetAllAnimalsSortedBySpecie();
+            var allAnimals = await db.MainMethodRetrieveAllInfoAboutAnimal();
 
             lstBox.ItemsSource = allAnimals;
         }
@@ -250,6 +226,9 @@ namespace ProgrammeringMotDatabaser
             var allCharactersWithNames = await db.GetAnimalWithCharacterName();
 
             lstBox.ItemsSource = allCharactersWithNames;
+
+
+
         }
 
 
@@ -269,8 +248,10 @@ namespace ProgrammeringMotDatabaser
             lstBox.DisplayMemberPath = "Display";
         }
 
-
-    
-
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+          var animal = await db.MainMethodRetrieveAllInfoAboutAnimal();
+           
+        }
     }
 }

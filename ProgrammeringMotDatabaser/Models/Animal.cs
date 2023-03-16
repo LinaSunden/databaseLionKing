@@ -18,19 +18,21 @@ namespace ProgrammeringMotDatabaser.Models
         /// </summary>
         public string CharacterName { get; set; }
 
-        public string Display => $"{Animalspecie.AnimalSpecieName} Count: {AnimalId}";
+        public string Display => $"{AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
 
-        public string Display1 => $"You have successfully created {CharacterName} who is a {Animalspecie.AnimalSpecieName} with animal id: {AnimalId}";
+        public string Display1 => $"You have successfully created {CharacterName} who is a {AnimalSpecie.AnimalSpecieName} with animal id: {AnimalId}";
 
-        public string CountSpeciesInClass => $"{Animalspecie.Animalclass.AnimalClassName} Count: {Animalspecie.AnimalSpecieId}";
+        public string CountSpeciesInClass => $"{AnimalSpecie.AnimalClass.AnimalClassName} Count: {AnimalSpecie.AnimalSpecieId}";
 
-        public int AnimalSpecieId { get; set; }
+        public string AllAnimalsSortedBySpecie => $"{CharacterName} {AnimalSpecie.AnimalSpecieName} {AnimalSpecie.LatinName} {AnimalSpecie.AnimalClass.AnimalClassName}";
 
-        public Animalspecie Animalspecie { get; set; }
+        //public int AnimalSpecieId { get; set; }  
+
+        public AnimalSpecie AnimalSpecie { get; set; }
 
         public override string ToString()
         {
-            return $" {CharacterName} Animal Id: {AnimalId}, Animal specie: {Animalspecie.AnimalSpecieName} {Animalspecie.Animalclass}";
+            return $"Charactername: {CharacterName}, Animal specie: {AnimalSpecie.AnimalSpecieName} Latin name: {AnimalSpecie.LatinName} Animal class name: {AnimalSpecie.AnimalClass.AnimalClassName}";
         }
 
 

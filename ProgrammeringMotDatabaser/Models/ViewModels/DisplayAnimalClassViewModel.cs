@@ -10,5 +10,7 @@ namespace ProgrammeringMotDatabaser.Models.ViewModels
     {
         // Häår kan man ha information som bara finns för en specifik vy
         // Gör detta om ni vill, men ni måste inte
+
+        
     }
 }

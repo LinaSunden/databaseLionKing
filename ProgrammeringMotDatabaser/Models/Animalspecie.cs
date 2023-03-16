@@ -6,35 +6,24 @@ using System.Threading.Tasks;
 
 namespace ProgrammeringMotDatabaser.Models
 {
-    internal class Animalspecie
+    internal class AnimalSpecie
     {
         public int AnimalSpecieId { get; set; }
 
         public string AnimalSpecieName { get; set; }
 
         public string LatinName { get; set; }
-
-        public int AnimalClassId { get; set; }
-
+       
         public string Display => $"Total number  of animalspecies {AnimalSpecieId}";
 
-        public Animalclass Animalclass { get; set; }
+        public AnimalClass AnimalClass { get; set; }
 
         
         public override string ToString()
         {
           
             
-                return $"{AnimalSpecieName} {Animalclass}"; 
-
-
-
-            //{Animalclass.AnimalClassName}";
-
-            //else
-            //{
-            //    return $"{AnimalSpecieName} {LatinName}";
-            //}
+                return $"{AnimalSpecieName} {AnimalClass} {AnimalClass.AnimalClassId}"; 
 
 
         }
