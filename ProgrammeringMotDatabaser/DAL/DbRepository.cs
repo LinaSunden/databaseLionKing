@@ -335,7 +335,7 @@ namespace ProgrammeringMotDatabaser.DAL
             return await animal;
             
         }
-
+        
         public async Task <Animalclass> AddAnimalClass(Animalclass animalclass)
         {
             try
