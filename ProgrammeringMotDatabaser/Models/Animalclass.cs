@@ -12,7 +12,7 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string AnimalClassName { get; set; }
 
-        public string Display => $" E: {AnimalClassName }";
+        public string Display => $"{AnimalClassName }";
 
         public override string ToString()
         {

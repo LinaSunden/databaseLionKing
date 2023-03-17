@@ -370,7 +370,6 @@ namespace ProgrammeringMotDatabaser.DAL
         public async Task<IEnumerable<Animal>> GetAnimalBySpeficClass(AnimalClass animalclass)
         {
             List<Animal> animals = new List<Animal>();
-            //string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
 
             var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
 
@@ -483,13 +482,7 @@ namespace ProgrammeringMotDatabaser.DAL
             command.Parameters.AddWithValue("animalclassid", animalClassId);
              await command.ExecuteNonQueryAsync();
 
-            //string sqlQuestion = "SELECT animalclassname From animalclass Where animalclassid = @animalclassid"; Testade detta men fungerar ej. Får kanske göra en ny metod
-            
-            //await using var command2 = dataSource.CreateCommand(sqlQuestion);
-            //command2.Parameters.AddWithValue("animalclassid",animalClassId);
-            //await using var reader = await command2.ExecuteReaderAsync();
-
-            var animalspecie = new AnimalSpecie() //skapa en metod som returnerar speciename och classname
+            var animalspecie = new AnimalSpecie() 
             {
                 AnimalSpecieName = animalSpecieName,
                 LatinName = latinname,
@@ -497,7 +490,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 AnimalClass = new()
                 {
                     AnimalClassId = animalClassId,
-                    //AnimalClassName = (string)reader["animalclassname"]
+                  
                     
                 }
 
@@ -507,34 +500,26 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-        //public async Task<AnimalSpecie> ShowClassName(AnimalSpecie animalspecie) //test, ta bort denna metod när animalspecie även returnerar classname
-        //{
-        //    string sqlQuestion = "SELECT animalclassname From animalclass Where animalclassid = @animalclassid";
+        public async Task<Animal> UpdateAnimal(string newCharaternamne, Animal animal)//lägg till parametrar och skicka in all information
+        {
+            string sqlCommand = "UPDATE animal SET charactername = @charactername WHERE animalid = @animalid";
+  
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("charactername", (object) newCharaternamne ?? DBNull.Value);
+            command.Parameters.AddWithValue("animalid", animal.AnimalId);
+            await command.ExecuteNonQueryAsync();
 
-        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-        //    await using var command = dataSource.CreateCommand(sqlQuestion);
-        //    command.Parameters.AddWithValue("animalclassid", animalspecie.AnimalClass.AnimalClassId);
-        //    await using var reader = await command.ExecuteReaderAsync();
+            var newAnimal = new Animal()
+            {
+                AnimalId = animal.AnimalId,
+                CharacterName = newCharaternamne,
+           
+            };
 
-                        
-        //    while (await reader.ReadAsync())
-        //    {
-        //        animalspecie = new()
-        //        {
-                  
-        //                AnimalClass = new()
-        //                {
-        //                    AnimalClassName = (string)reader["animalclassname"]
+            return newAnimal;
 
-        //                }
-                    
-        //        };
-        //    }
-
-        //    return animalspecie;
-        //}
-
-
+        }
 
 
         public async Task<IEnumerable<AnimalClass>> GetAnimalClass()

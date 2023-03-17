@@ -11,7 +11,7 @@
             <ColumnDefinition Width="161*"/>
             <ColumnDefinition Width="159*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lstBox" Margin="602,224,606,432" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="lstBox" Margin="602,224,606,432" Grid.ColumnSpan="2" MouseDoubleClick="lstBox_MouseDoubleClick"/>
         <Label Content="1." HorizontalAlignment="Left" Margin="19,708,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="2." HorizontalAlignment="Left" Margin="19,192,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="3." HorizontalAlignment="Left" Margin="19,363,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -26,7 +26,7 @@
         <Label x:Name="lblCreate" Content="Create" HorizontalAlignment="Left" Margin="51,138,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
         <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="432,149,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
         <Label x:Name="lblUpdate" Content="Update" HorizontalAlignment="Left" Margin="373,163,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
-        <Label x:Name="lblDelete" Content="Delete" HorizontalAlignment="Left" Margin="815,163,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
+        <Label x:Name="lblDelete" Content="Delete" HorizontalAlignment="Left" Margin="146,686,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
         <GroupBox x:Name="gBoxCreateAnimalClass" Header="Create new animal class" Margin="47,182,734,734" FontWeight="Bold">
             <StackPanel Margin="0, 10, 0, 10">
                 <Label Content="Class name" FontWeight="Normal"/>
@@ -85,6 +85,21 @@
                 <Label x:Name="lblAnimalClass" Content="Animal class:" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
+        <Label x:Name="lblupdateanimalid1" Grid.Column="1" Content="Animal Id:" HorizontalAlignment="Left" Margin="380,258,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblupdateanimalid" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="441,259,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtupdatecharacternameinput" Grid.Column="1" HorizontalAlignment="Left" Margin="441,299,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Grid.Column="1" Content="Character name: " HorizontalAlignment="Left" Margin="348,292,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cboupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="566,332,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Grid.Column="1" Content="Animal specie:" HorizontalAlignment="Left" Margin="355,323,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="441,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Grid.Column="1" Content="Latin name:" HorizontalAlignment="Left" Margin="370,347,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtupdatelatinname" Grid.Column="1" HorizontalAlignment="Left" Margin="441,354,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Grid.Column="1" Content="Animal class:" HorizontalAlignment="Left" Margin="363,371,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="441,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cboupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="566,377,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnupdateanimal" Grid.Column="1" Content="Update Animal" HorizontalAlignment="Left" Margin="566,299,0,0" VerticalAlignment="Top" Width="120" Click="btnupdateanimal_Click"/>
+        <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="146,746,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Grid.Column="1" Content="Charactername &amp; Id" HorizontalAlignment="Left" Margin="146,721,0,0" VerticalAlignment="Top"/>
 
 
     </Grid>
