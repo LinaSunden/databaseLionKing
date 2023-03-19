@@ -499,12 +499,28 @@ namespace ProgrammeringMotDatabaser.DAL
                 }
 
             };
-
             return animalspecie;
-
         }
 
-        public async Task<Animal> UpdateCharacterName(string newCharaternamne, Animal animal)//lägg till parametrar och skicka in all information
+        private static T? ConvertFromDBVal<T>(object obj)
+        {
+            if (obj == null || obj == DBNull.Value)
+            {
+                return default;
+            }
+            return (T)obj;
+        }
+        private static object ConvertToDBVal<T>(object obj)
+        {
+            if (obj == null || obj == string.Empty)
+            {
+                return DBNull.Value;
+            }
+            return (T)obj;
+        }
+
+
+        public async Task<Animal> UpdateCharacterName(string newCharaternamne, Animal animal)//funkar
         {
             string sqlCommand = "UPDATE animal SET charactername = @charactername WHERE animalid = @animalid";
   
@@ -525,32 +541,28 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-        public async Task<Animal> UpdateLatinName(string newLatinName, Animal animal)
+        public async Task<AnimalSpecie> UpdateLatinName(string newLatinName, string animalSN) //funkar 
         {
             string sqlCommand = "UPDATE animalspecie SET latinname = @latinname WHERE animalspeciename = @animalspeciename";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("latinname", (object)newLatinName ?? DBNull.Value);
-            command.Parameters.AddWithValue("animalspeciename", animal.AnimalSpecie.AnimalSpecieName);
+            command.Parameters.AddWithValue("animalspeciename", animalSN);
             await command.ExecuteNonQueryAsync();
 
-            var newAnimal = new Animal()
-            {
-                AnimalId = animal.AnimalId,
-
-                AnimalSpecie = new()
-                {
-                    AnimalSpecieId = animal.AnimalSpecie.AnimalSpecieId,
-                    AnimalSpecieName = animal.AnimalSpecie.AnimalSpecieName,
+            var newAnimal = new AnimalSpecie()
+            {             
+                    
+                    AnimalSpecieName = animalSN,
                     LatinName = newLatinName
-                }
+                
             };
 
             return newAnimal;
         }
 
-        public async Task<Animal> UpdateAnimalSpecie(int animalspecieid, int animalid)
+        public async Task<Animal> UpdateAnimalSpecie(Animal animal, int animalspecieid)
         {
 
             string sqlCommand = "UPDATE animal SET animalspecieid = @animalspecieid WHERE animalid = @animalid";
@@ -558,12 +570,12 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("animalspecieid", animalspecieid);
-            command.Parameters.AddWithValue("animalid", animalid);
+            command.Parameters.AddWithValue("animalid", animal.AnimalId);
             await command.ExecuteNonQueryAsync();
 
             var newAnimal = new Animal()
             {
-                AnimalId = animalid,
+                AnimalId = animal.AnimalId,
 
                 AnimalSpecie = new()
                 {

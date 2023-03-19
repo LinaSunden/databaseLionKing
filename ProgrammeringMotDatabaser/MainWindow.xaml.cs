@@ -34,7 +34,7 @@ namespace ProgrammeringMotDatabaser
         }
         
         DbRepository db = new();
-        Animal animal = new();
+        
 
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
@@ -161,10 +161,10 @@ namespace ProgrammeringMotDatabaser
         private async void btnupdateanimal_Click(object sender, RoutedEventArgs e)
         {                   
             string newCharacterName = txtupdatecharacternameinput.Text;
-            string newLatinName = txtupdatelatinname.Text;
-            var animalid = lblupdateanimalid.Content;
+            string newLatinName = txtupdatelatinname.Text;                      
+            var animalspecie = txtupdateanimalspecie.Text;
 
-            if (newCharacterName == string.Empty)
+            if (newCharacterName == string.Empty || newCharacterName == null)
             {
                 newCharacterName = null;          
             }
@@ -172,33 +172,20 @@ namespace ProgrammeringMotDatabaser
             var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
 
 
-            if (newLatinName == string.Empty)
+            if (newLatinName == string.Empty || newLatinName == null)
             {
                 newLatinName = null;     
             }
 
-            var updatedLatinName = await db.UpdateLatinName(newLatinName, DisplaySelectedAnimalInTextBox());
+            var updatedLatinName = await db.UpdateLatinName(newLatinName, animalspecie);
 
-
-
-            var updatedAnimalSpecie = await db.UpdateAnimalSpecie(updatedLatinName.AnimalSpecie.AnimalSpecieId, (int)animalid);
-
-
-
-            if (newAnimalName.CharacterName != newCharacterName && updatedLatinName.AnimalSpecie.LatinName != newLatinName) //dubbelkolla vrf inte meddelandena dyker upp 
+            if (cboupdateanimalspecie.SelectedItem is AnimalSpecie select)
             {
-                MessageBox.Show($"Your animal with animal id {newAnimalName.AnimalId} has updated name and class latin name.");
+                int animaSpecieId = select.AnimalSpecieId;
 
+                var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInTextBox(), animaSpecieId);
             }
-            else if (newAnimalName.CharacterName != newCharacterName)
-            {
-                MessageBox.Show($"Animal with id: {newAnimalName.AnimalId} has the new name: {newAnimalName.CharacterName} ");
-            }
-            //else if (updatedLatinName.AnimalSpecie.LatinName != newLatinName)
-            //{
-            //    MessageBox.Show($"{animalClass} latin name is now updated to: {updatedLatinName.AnimalSpecie.LatinName}");
-            //}
-           
+                   
             ClearTextboxes();
             var updateListBox = await db.MainMethodRetrieveAllInfoAboutAnimal();
             lstBox.ItemsSource= updateListBox;
@@ -211,7 +198,7 @@ namespace ProgrammeringMotDatabaser
             var selectedAnimalspecie = await db.FindClass(animalspecie);
 
             lblupdateanimalclass.Content = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
-            txtupdateanimalclass.Text = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
+            //txtupdateanimalclass.Text = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
 
             txtupdatelatinname.Text = $"{selectedAnimalspecie.LatinName}";
             txtupdateanimalspecie.Text = $"{selectedAnimalspecie.AnimalSpecieName}";
@@ -236,7 +223,8 @@ namespace ProgrammeringMotDatabaser
             txtupdatecharacternameinput.Text = selected.CharacterName;
             txtupdateanimalspecie.Text = selected.AnimalSpecie.AnimalSpecieName;
             txtupdatelatinname.Text = selected.AnimalSpecie.LatinName;
-           
+            var animalspecieid = selected.AnimalSpecie.AnimalSpecieId;
+
             lblupdateanimalclass.Content = selected.AnimalSpecie.AnimalClass.AnimalClassName;
             btnupdateanimal.IsEnabled = false;
             
@@ -286,8 +274,8 @@ namespace ProgrammeringMotDatabaser
             cboclass.ItemsSource = animalClass;
             cboclass.DisplayMemberPath = "AnimalClassName";
 
-            cboupdateanimalclass.ItemsSource = animalClass;
-            cboupdateanimalclass.DisplayMemberPath = "AnimalClassName";
+            //cboupdateanimalclass.ItemsSource = animalClass;
+            //cboupdateanimalclass.DisplayMemberPath = "AnimalClassName";
 
             var animalSpecie = await db.GetAnimalSpecie();
             cbospecie.ItemsSource = animalSpecie;
@@ -376,7 +364,7 @@ namespace ProgrammeringMotDatabaser
             txtinputlatinname.Clear();
             txtinput.Clear();
             txtCharacterName.Clear();
-            txtupdateanimalclass.Clear();
+            //txtupdateanimalclass.Clear();
             txtupdateanimalspecie.Clear();
             txtupdatecharacternameinput.Clear();
             txtupdatelatinname.Clear();

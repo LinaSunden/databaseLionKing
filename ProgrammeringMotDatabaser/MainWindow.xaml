@@ -84,8 +84,6 @@
                 <Label x:Name="lblAnimalClass" Content="Animal class:" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
-        <TextBox x:Name="txtupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="824,611,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cboupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="824,565,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="146,746,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Grid.Column="1" Content="Charactername &amp; Id" HorizontalAlignment="Left" Margin="146,721,0,0" VerticalAlignment="Top"/>
         <GroupBox Header="Select an animal to update" Margin="373,224,149,506" FontWeight="Bold" Grid.Column="1">
