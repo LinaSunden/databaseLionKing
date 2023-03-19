@@ -198,7 +198,6 @@ namespace ProgrammeringMotDatabaser
             var selectedAnimalspecie = await db.FindClass(animalspecie);
 
             lblupdateanimalclass.Content = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
-            //txtupdateanimalclass.Text = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
 
             txtupdatelatinname.Text = $"{selectedAnimalspecie.LatinName}";
             txtupdateanimalspecie.Text = $"{selectedAnimalspecie.AnimalSpecieName}";
@@ -273,9 +272,6 @@ namespace ProgrammeringMotDatabaser
                           
             cboclass.ItemsSource = animalClass;
             cboclass.DisplayMemberPath = "AnimalClassName";
-
-            //cboupdateanimalclass.ItemsSource = animalClass;
-            //cboupdateanimalclass.DisplayMemberPath = "AnimalClassName";
 
             var animalSpecie = await db.GetAnimalSpecie();
             cbospecie.ItemsSource = animalSpecie;
@@ -363,8 +359,7 @@ namespace ProgrammeringMotDatabaser
             txtinputclassname.Clear();
             txtinputlatinname.Clear();
             txtinput.Clear();
-            txtCharacterName.Clear();
-            //txtupdateanimalclass.Clear();
+            txtCharacterName.Clear();           
             txtupdateanimalspecie.Clear();
             txtupdatecharacternameinput.Clear();
             txtupdatelatinname.Clear();
@@ -389,20 +384,6 @@ namespace ProgrammeringMotDatabaser
             }
         }
 
-        private async void btntestlist_Click(object sender, RoutedEventArgs e)
-        {
 
-            var testing = await db.MainMethodRetrieveAllInfoAboutAnimal();
-
-              
-
-           
-
-            //    var idk = await ac.GetAnimalClassTest();
-
-            //lstBox.ItemsSource = testing;
-            //lstBox.DisplayMemberPath = "AnimalClassName";
-
-        }
 }
 }

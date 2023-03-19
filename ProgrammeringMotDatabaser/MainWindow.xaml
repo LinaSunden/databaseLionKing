@@ -104,7 +104,7 @@
             </StackPanel>
 
         </GroupBox>
-        <Button x:Name="btntestlist" Content="Button" HorizontalAlignment="Left" Margin="742,904,0,0" VerticalAlignment="Top" Click="btntestlist_Click"/>
+       
 
 
     </Grid>
