@@ -11,7 +11,7 @@
             <ColumnDefinition Width="161*"/>
             <ColumnDefinition Width="159*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lstBox" Margin="602,224,606,432" Grid.ColumnSpan="2" MouseDoubleClick="lstBox_MouseDoubleClick"/>
+        <ListBox x:Name="lstBox" Margin="602,224,606,432" Grid.ColumnSpan="2" MouseDoubleClick="lstBox_MouseDoubleClick" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
         <Label Content="1." HorizontalAlignment="Left" Margin="19,708,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="2." HorizontalAlignment="Left" Margin="19,192,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="3." HorizontalAlignment="Left" Margin="19,363,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -24,7 +24,7 @@
         <Label Content="8.b" HorizontalAlignment="Left" Margin="222,36,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="1"/>
         <TextBlock x:Name="txtBlockWelcome" HorizontalAlignment="Left" Margin="566,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="77" Width="554" FontSize="18" FontWeight="Bold" TextAlignment="Center"/>
         <Label x:Name="lblCreate" Content="Create" HorizontalAlignment="Left" Margin="51,138,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
-        <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="432,149,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
+        <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="336,172,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
         <Label x:Name="lblUpdate" Content="Update" HorizontalAlignment="Left" Margin="373,163,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
         <Label x:Name="lblDelete" Content="Delete" HorizontalAlignment="Left" Margin="146,686,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
         <GroupBox x:Name="gBoxCreateAnimalClass" Header="Create new animal class" Margin="47,182,734,734" FontWeight="Bold">
@@ -84,22 +84,28 @@
                 <Label x:Name="lblAnimalClass" Content="Animal class:" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
-        <Label x:Name="lblupdateanimalid1" Grid.Column="1" Content="Animal Id:" HorizontalAlignment="Left" Margin="380,258,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblupdateanimalid" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="441,259,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdatecharacternameinput" Grid.Column="1" HorizontalAlignment="Left" Margin="441,299,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" KeyDown="txtupdatecharacternameinput_KeyDown"/>
-        <Label Grid.Column="1" Content="Character name: " HorizontalAlignment="Left" Margin="348,292,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="609,329,0,0" VerticalAlignment="Top" Width="147" SelectionChanged="cboupdateanimalspecie_SelectionChanged"/>
-        <Label Grid.Column="1" Content="Animal specie:" HorizontalAlignment="Left" Margin="355,323,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="441,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" IsEnabled="False"/>
-        <Label Grid.Column="1" Content="Latin name:" HorizontalAlignment="Left" Margin="370,347,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdatelatinname" Grid.Column="1" HorizontalAlignment="Left" Margin="441,354,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" KeyDown="txtupdatelatinname_KeyDown" />
-        <Label Grid.Column="1" Content="Animal class:" HorizontalAlignment="Left" Margin="363,371,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="678,623,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cboupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="696,574,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnupdateanimal" Grid.Column="1" Content="Update Animal" HorizontalAlignment="Left" Margin="441,409,0,0" VerticalAlignment="Top" Width="120" Click="btnupdateanimal_Click"/>
+        <TextBox x:Name="txtupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="824,611,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cboupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="824,565,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="146,746,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Grid.Column="1" Content="Charactername &amp; Id" HorizontalAlignment="Left" Margin="146,721,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblupdateanimalclass" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="441,371,0,0" VerticalAlignment="Top"/>
+        <GroupBox Header="Select an animal to update" Margin="373,224,149,506" FontWeight="Bold" Grid.Column="1">
+            <StackPanel>
+                <TextBox x:Name="txtUpdateExplanation" TextWrapping="Wrap" Text="Select &quot;All animals&quot; with the raido button.&#xA;Double-click on the animal you wish to update.&#xA;Change properties below  " Width="258" FontWeight="Normal" Margin="0,10,150,0"/>
+                <Label x:Name="lblupdateanimalid" Content="Animal id:" FontWeight="Normal"/>
+                <Label Content="Character name: " FontWeight="Normal"/>
+                <TextBox x:Name="txtupdatecharacternameinput" TextWrapping="Wrap" Width="163" KeyDown="txtupdatecharacternameinput_KeyDown" Margin="0,-20,60,0" FontWeight="Normal"/>
+                <Label Content="Animal specie:" FontWeight="Normal"/>
+                <TextBox x:Name="txtupdateanimalspecie" TextWrapping="Wrap" Width="162" IsEnabled="False" Margin="0,-20,60,0" FontWeight="Normal"/>
+                <ComboBox x:Name="cboupdateanimalspecie" Width="147" SelectionChanged="cboupdateanimalspecie_SelectionChanged" Margin="0,-20,-260,0" FontWeight="Normal"/>
+                <Label Content="Latin name:" FontWeight="Normal"/>
+                <TextBox x:Name="txtupdatelatinname" TextWrapping="Wrap" Width="163" KeyDown="txtupdatelatinname_KeyDown" Margin="0,-20,60,0" FontWeight="Normal"/>
+                <Label Content="Animal class:" FontWeight="Normal" Margin="0,5,0,0"/>
+                <Label x:Name="lblupdateanimalclass" FontWeight="Normal" Margin="0,-25,60,0" Width="165"/>
+                <Button x:Name="btnupdateanimal" Content="Update Animal" Width="120" Click="btnupdateanimal_Click" FontWeight="Normal" Margin="0,10,100,0"/>
+                
+            </StackPanel>
+
+        </GroupBox>
 
 
     </Grid>

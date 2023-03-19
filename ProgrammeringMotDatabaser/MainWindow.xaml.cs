@@ -115,6 +115,7 @@ namespace ProgrammeringMotDatabaser
                     await DisplayCBO();
                     ClearTextboxes();
                     txtinputspeciename.Focus();
+                    WelcomeMessage();
                 }
                 catch (Exception ex)
                 {
@@ -162,14 +163,23 @@ namespace ProgrammeringMotDatabaser
             string newCharacterName = txtupdatecharacternameinput.Text;
             string newLatinName = txtupdatelatinname.Text;
             var animalid = lblupdateanimalid.Content;
-          
+
+            if (newCharacterName == string.Empty)
+            {
+                newCharacterName = null;          
+            }
 
             var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
 
-            
+
+            if (newLatinName == string.Empty)
+            {
+                newLatinName = null;     
+            }
+
             var updatedLatinName = await db.UpdateLatinName(newLatinName, DisplaySelectedAnimalInTextBox());
 
-           
+
 
             var updatedAnimalSpecie = await db.UpdateAnimalSpecie(updatedLatinName.AnimalSpecie.AnimalSpecieId, (int)animalid);
 
@@ -222,7 +232,7 @@ namespace ProgrammeringMotDatabaser
             Animal selected = lstBox.SelectedItem as Animal;
 
             lblupdateanimalclass.Content = selected.AnimalSpecie.AnimalClass.AnimalClassName;
-            lblupdateanimalid.Content = selected.AnimalId;
+            lblupdateanimalid.Content = $"Animal id: {selected.AnimalId}";
             txtupdatecharacternameinput.Text = selected.CharacterName;
             txtupdateanimalspecie.Text = selected.AnimalSpecie.AnimalSpecieName;
             txtupdatelatinname.Text = selected.AnimalSpecie.LatinName;
