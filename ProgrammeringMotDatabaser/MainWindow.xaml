@@ -58,7 +58,6 @@
 
         <Label Content="Animal registry" HorizontalAlignment="Left" Margin="604,194,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
         <Label Content="Select view of animal registry" HorizontalAlignment="Left" Margin="336,230,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="518,870,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <GroupBox x:Name="gBoxRadioBtnViews" Header="" Margin="340,258,373,686">
             <StackPanel>
                 <RadioButton Content="All animals" Checked="RadioButton_Checked" IsChecked="True" RenderTransformOrigin="0.039,0.537" Margin="0, 0, 0, 5"/>
@@ -87,19 +86,20 @@
         </GroupBox>
         <Label x:Name="lblupdateanimalid1" Grid.Column="1" Content="Animal Id:" HorizontalAlignment="Left" Margin="380,258,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblupdateanimalid" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="441,259,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdatecharacternameinput" Grid.Column="1" HorizontalAlignment="Left" Margin="441,299,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtupdatecharacternameinput" Grid.Column="1" HorizontalAlignment="Left" Margin="441,299,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" KeyDown="txtupdatecharacternameinput_KeyDown"/>
         <Label Grid.Column="1" Content="Character name: " HorizontalAlignment="Left" Margin="348,292,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="566,332,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cboupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="609,329,0,0" VerticalAlignment="Top" Width="147" SelectionChanged="cboupdateanimalspecie_SelectionChanged"/>
         <Label Grid.Column="1" Content="Animal specie:" HorizontalAlignment="Left" Margin="355,323,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="441,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtupdateanimalspecie" Grid.Column="1" HorizontalAlignment="Left" Margin="441,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" IsEnabled="False"/>
         <Label Grid.Column="1" Content="Latin name:" HorizontalAlignment="Left" Margin="370,347,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdatelatinname" Grid.Column="1" HorizontalAlignment="Left" Margin="441,354,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtupdatelatinname" Grid.Column="1" HorizontalAlignment="Left" Margin="441,354,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" KeyDown="txtupdatelatinname_KeyDown" />
         <Label Grid.Column="1" Content="Animal class:" HorizontalAlignment="Left" Margin="363,371,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="441,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cboupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="566,377,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnupdateanimal" Grid.Column="1" Content="Update Animal" HorizontalAlignment="Left" Margin="566,299,0,0" VerticalAlignment="Top" Width="120" Click="btnupdateanimal_Click"/>
+        <TextBox x:Name="txtupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="678,623,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cboupdateanimalclass" Grid.Column="1" HorizontalAlignment="Left" Margin="696,574,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnupdateanimal" Grid.Column="1" Content="Update Animal" HorizontalAlignment="Left" Margin="441,409,0,0" VerticalAlignment="Top" Width="120" Click="btnupdateanimal_Click"/>
         <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="146,746,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Grid.Column="1" Content="Charactername &amp; Id" HorizontalAlignment="Left" Margin="146,721,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblupdateanimalclass" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="441,371,0,0" VerticalAlignment="Top"/>
 
 
     </Grid>
