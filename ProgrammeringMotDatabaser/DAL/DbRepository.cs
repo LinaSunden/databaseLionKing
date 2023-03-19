@@ -576,18 +576,7 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
         }
-        public async Task<AnimalClass> Testing(IEnumerable<Animal> animals)
-        {
-            Animal animal = new();
-            await animal.GetAllAnimals();
-
-            var newClass = new AnimalClass()
-            {
-                AnimalClassName = animal.AnimalSpecie.AnimalClass.AnimalClassName
-            };
-
-            return newClass;
-        }
+    
 
 
 

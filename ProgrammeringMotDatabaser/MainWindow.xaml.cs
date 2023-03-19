@@ -406,7 +406,7 @@ namespace ProgrammeringMotDatabaser
 
             var testing = await db.MainMethodRetrieveAllInfoAboutAnimal();
 
-              var qwe =  animal.AnimalSpecie.AnimalClass.AnimalClassName;
+              
 
            
 
