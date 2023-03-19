@@ -34,7 +34,7 @@ namespace ProgrammeringMotDatabaser
         }
         
         DbRepository db = new();
-
+        Animal animal = new();
 
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
@@ -400,5 +400,21 @@ namespace ProgrammeringMotDatabaser
 
             }
         }
-    }
+
+        private async void btntestlist_Click(object sender, RoutedEventArgs e)
+        {
+
+            var testing = await db.MainMethodRetrieveAllInfoAboutAnimal();
+
+              var qwe =  animal.AnimalSpecie.AnimalClass.AnimalClassName;
+
+           
+
+            //    var idk = await ac.GetAnimalClassTest();
+
+            //lstBox.ItemsSource = testing;
+            //lstBox.DisplayMemberPath = "AnimalClassName";
+
+        }
+}
 }

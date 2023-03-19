@@ -135,6 +135,10 @@ namespace ProgrammeringMotDatabaser.DAL
 
             }
             return animalspecie;
+
+           
+
+
         }
 
 
@@ -291,8 +295,7 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var command = dataSource.CreateCommand(sqlJoin);
             await using var reader = await command.ExecuteReaderAsync();
 
-            Animal animal = new Animal();
-
+            Animal animal = new Animal();          
 
             while (await reader.ReadAsync())
             {
@@ -573,7 +576,18 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
         }
+        public async Task<AnimalClass> Testing(IEnumerable<Animal> animals)
+        {
+            Animal animal = new();
+            await animal.GetAllAnimals();
 
+            var newClass = new AnimalClass()
+            {
+                AnimalClassName = animal.AnimalSpecie.AnimalClass.AnimalClassName
+            };
+
+            return newClass;
+        }
 
 
 
@@ -637,7 +651,7 @@ namespace ProgrammeringMotDatabaser.DAL
             return animalspecies;
         }
 
-
+        
        
 
 
