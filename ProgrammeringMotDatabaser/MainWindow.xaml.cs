@@ -40,10 +40,10 @@ namespace ProgrammeringMotDatabaser
         {
 
             string characterName = txtCharacterName.Text;
-            var animal = await db.GetAnimalByName(characterName);
+            var animal = await db.GetAnimalByCharacterName(characterName);
 
 
-            if (animal.AnimalId == 0)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
+            if (animal.CharacterName == null)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
             {
                 MessageBox.Show($"There is no animal called {characterName}");
                 ClearTextboxes();
@@ -72,21 +72,31 @@ namespace ProgrammeringMotDatabaser
 
             var specieId = GetAnimalSpecieId();
             string animalName = txtinput.Text;
-            try
+          
+            if ( specieId == null ) 
             {
-                var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
-                MessageBox.Show($"{checkIfAnimalExists.Display1}");
-                /*await*/ DisplayCBO();
-
+                MessageBox.Show("To create an animal you need to declare it's specie from the combobox below");
+                
             }
-            catch (Exception ex)
-            {
+            else
+                    try
+                    {
+                        var checkIfAnimalExists = await db.AddAnimal(animalName, int.Parse(specieId));
+                        MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");
+                        
 
-                MessageBox.Show(ex.Message);
-            }
+                    }
+                    catch (Exception ex)
+                    {
 
-            //var updateListBox = await db.MainMethodRetrieveAllInfoAboutAnimal();
-            //lstBox.ItemsSource = updateListBox;
+                        MessageBox.Show(ex.Message);
+                    }
+
+
+            DisplayCBO();
+
+            var updateListBox = await db.AllInfoAboutAllAnimals();
+            lstBox.ItemsSource = updateListBox;
 
             rdbtnAllAnimals.IsChecked = true;
 
@@ -192,7 +202,7 @@ namespace ProgrammeringMotDatabaser
             }
 
             ClearTextboxes();
-            var updateListBox = await db.MainMethodRetrieveAllInfoAboutAnimal();
+            var updateListBox = await db.AllInfoAboutAllAnimals();
             lstBox.ItemsSource = updateListBox;
 
         }
@@ -398,6 +408,8 @@ namespace ProgrammeringMotDatabaser
             var listOfClasses = await db.GetAnimalBySpeficClass(animalclass);
 
             lstBox.ItemsSource = listOfClasses;
+            lstBox.DisplayMemberPath = "AnimalsInEachClass";
+
         }
 
         private async void cbospecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -423,11 +435,11 @@ namespace ProgrammeringMotDatabaser
         private async void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
 
-            var allAnimals = await db.MainMethodRetrieveAllInfoAboutAnimal();
+            var allAnimals = await db.AllInfoAboutAllAnimals();
 
             lstBox.ItemsSource = null;
             lstBox.ItemsSource = allAnimals;
-            lstBox.DisplayMemberPath = null;
+            lstBox.DisplayMemberPath = "AllInfoAboutAnimals";
         }
 
         private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
@@ -437,7 +449,7 @@ namespace ProgrammeringMotDatabaser
 
             lstBox.ItemsSource = null;
             lstBox.ItemsSource = allCharactersWithNames;
-            lstBox.DisplayMemberPath = null;
+            lstBox.DisplayMemberPath = "AllAnimalsWithAName";
 
         }
 
@@ -457,13 +469,12 @@ namespace ProgrammeringMotDatabaser
 
             lstBox.ItemsSource = null;
             lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
-
-            //lstBox.DisplayMemberPath = "Display";
+            lstBox.DisplayMemberPath = "CountAnimalInEachSpecie";
         }
 
         private async void DisplayDeleteList()
         {
-            var displayList = await db.MainMethodRetrieveAllInfoAboutAnimal();
+            var displayList = await db.AllInfoAboutAllAnimals();
 
             lstBoxDelete.ItemsSource = displayList;
             lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
@@ -501,6 +512,12 @@ namespace ProgrammeringMotDatabaser
                 btnupdateanimal.IsEnabled= true;
 
             }
+        }
+
+        private void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnsearch.IsEnabled= true;
+
         }
 
         //private void cboDeleteAimalSpecie_SelectionChanged(object sender, SelectionChangedEventArgs e)

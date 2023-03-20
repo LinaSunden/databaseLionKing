@@ -76,8 +76,8 @@
         <GroupBox x:Name="gBoxAllAnimalsInSpecificClass_Copy" Header="Find animal" Margin="315,391,398,438" FontWeight="Bold">
             <StackPanel>
                 <Label Content="Character name" RenderTransformOrigin="0.321,0.579" FontWeight="Normal"/>
-                <Button x:Name="btnsearch" Content="Search" Click="btnsearch_Click" Width="100" FontWeight="Normal" Margin="130, 0, 0, 0"/>
-                <TextBox x:Name="txtCharacterName" TextWrapping="Wrap" Width="120" FontWeight="Normal" Margin="-20, -20, 100, 0"/>
+                <Button x:Name="btnsearch" Content="Search" Click="btnsearch_Click" Width="100" FontWeight="Normal" Margin="130, 0, 0, 0" IsEnabled="False"/>
+                <TextBox x:Name="txtCharacterName" TextWrapping="Wrap" Width="120" FontWeight="Normal" Margin="-20, -20, 100, 0" TextChanged="txtCharacterName_TextChanged"/>
                 <Label x:Name="lblCharacterName" Content="Character name:" FontWeight="Normal"/>
                 <Label x:Name="lblAnimalSpecie" Content="Animal specie:" RenderTransformOrigin="0.013,0.046" FontWeight="Normal"/>
                 <Label x:Name="lblLatinName" Content="Latin name:" FontWeight="Normal"/>

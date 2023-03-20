@@ -14,19 +14,7 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string? LatinName { get; set; }
        
-        //public string Display => $"Total number  of animalspecies {AnimalSpecieId}";
-
         public AnimalClass AnimalClass { get; set; }
-
-        
-        public override string ToString()
-        {
-          
-            
-                return $"{AnimalSpecieName} {AnimalClass} {AnimalClass.AnimalClassId}"; 
-
-
-        }
 
 
 

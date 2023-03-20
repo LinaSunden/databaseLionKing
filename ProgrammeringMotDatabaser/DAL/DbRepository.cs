@@ -26,49 +26,157 @@ namespace ProgrammeringMotDatabaser.DAL
             _connectionString = config.GetConnectionString("develop");
         }
 
+
+        #region Create - Animal class, Animal specie and Animal
+
+    /// <summary>
+    /// Create a animal class
+    /// </summary>
+    /// <param name="animalclass"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+        public async Task<AnimalClass> AddAnimalClass(AnimalClass animalclass)
+        {
+            try
+            {
+                string sqlCommand = "insert into animalclass(animalclassname) values(@animalclassname)";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+                await command.ExecuteNonQueryAsync();
+                return animalclass;
+            }
+            catch (PostgresException ex)
+            {
+
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The class already exists. The class name must be unique";
+                        break;
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+
+
+        }
+
         /// <summary>
-        /// Method that searches for a specific animal by animalname, animal id, animalname, animalspeciename
+        /// Create Animal specie
+        /// </summary>
+        /// <param name="animalSpecieName"></param>
+        /// <param name="latinname"></param>
+        /// <param name="animalClassId"></param>
+        /// <returns></returns>
+        public async Task<AnimalSpecie> AddAnimalSpecie(string animalSpecieName, string latinname, int animalClassId)
+        {
+            string sqlCommand = "insert into animalspecie(animalspeciename, latinname, animalclassid) values(@animalspeciename, @latinname, @animalclassid)";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("animalspeciename", animalSpecieName);
+            command.Parameters.AddWithValue("latinname", (object)latinname ?? DBNull.Value);
+            command.Parameters.AddWithValue("animalclassid", animalClassId);
+            await command.ExecuteNonQueryAsync();
+
+            var animalspecie = new AnimalSpecie()
+            {
+                AnimalSpecieName = animalSpecieName,
+                LatinName = latinname,
+
+                AnimalClass = new()
+                {
+                    AnimalClassId = animalClassId,
+
+
+                }
+
+            };
+            return animalspecie;
+        }
+
+        /// <summary>
+        /// Create an animal  
         /// </summary>
         /// <param name="characterName"></param>
+        /// <param name="specieId"></param>
         /// <returns></returns>
-        public async Task<Animal> GetAnimalByName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
+        /// <exception cref="Exception"></exception>
+        public async Task<Animal> AddAnimal(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
         {
-            string sqlQuestion = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid =animalspecie.animalclassid WHERE animal.charactername= @charactername";
-             
-               
+            try
+            {
+                string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
+
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-                await using var command = dataSource.CreateCommand(sqlQuestion);
+                await using var command = dataSource.CreateCommand(sqlCommand);
                 command.Parameters.AddWithValue("charactername", characterName);
-                await using var reader = await command.ExecuteReaderAsync();
+                command.Parameters.AddWithValue("animalspecieid", specieId);
+                await command.ExecuteNonQueryAsync();
 
+                var animal = GetAnimalByCharacterName(characterName);
+                return await animal;
+            }
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
 
-                Animal animal = new();
-                while (await reader.ReadAsync()) 
+                switch (errorCode)
                 {
-                    animal = new()
-                    {
-                        AnimalId = reader.GetInt32(0),
-                        CharacterName = (string)reader["charactername"],
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "There is already an animal with that name. The animal name must be unique";
+                        break;
+                    default:
+                        break;
+                }
+                throw new Exception(errorMessage, ex);
+            }
 
-                        AnimalSpecie = new()
-                        {
-                            AnimalSpecieName = (string)reader["animalspeciename"],
-                            LatinName = reader["animalspeciename"] == DBNull.Value ? null : (string)reader["latinname"],
+        }
 
-                            AnimalClass = new()
-                            {
-                                AnimalClassName = (string)reader["animalclassname"]
+        //public async void ErrorMessageCatch()
+        //{
 
-                            }
-                        }
-                        
-                        
-                    };                                    
-                }                       
-            return animal;
-        }      
+        //        string errorMessage = "Something went wrong";
+        //        string errorCode = ex.SqlState;
 
-        public async Task<IEnumerable<Animal>> MainMethodRetrieveAllInfoAboutAnimal()
+        //        switch (errorCode)
+        //        {
+        //            case PostgresErrorCodes.UniqueViolation:
+        //                errorMessage = "There is already an animal with that name. The animal name must be unique";
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //        throw new Exception(errorMessage, ex);
+
+        //}
+
+        /// <summary>
+        /// Create a animal class
+        /// </summary>
+        /// <param name="animalclass"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+
+        #endregion
+
+
+        #region Read - All Methods that are conncted to read
+
+        /// <summary>
+        /// This method make a list with all Animals and all info about them. Using every propertie in class Animal, AnimalSpecie and Animal Class
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
         {
             List<Animal> animals = new List<Animal>();
 
@@ -82,9 +190,9 @@ namespace ProgrammeringMotDatabaser.DAL
             while (await reader.ReadAsync())
             {
                 animal = new()
-                {   
+                {
                     AnimalId = reader.GetInt32(0),
-                    CharacterName = reader["charactername"] == DBNull.Value ? null: (string)reader["charactername"],
+                    CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
 
 
                     AnimalSpecie = new()
@@ -104,8 +212,246 @@ namespace ProgrammeringMotDatabaser.DAL
                 animals.Add(animal);
             }
             return animals;
+
+            //Lägg in try catch. Någon kan ta bort Simba och då finns han inte längre när du söker.
         }
 
+        /// <summary>
+        /// Method returns all animals that have a character name
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
+        {
+            List<Animal> animals = new List<Animal>();
+
+
+            var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlJoin);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animal animal = new Animal();
+
+            while (await reader.ReadAsync())
+            {
+                animal = new()
+                {
+                    CharacterName = (string)reader["charactername"],
+
+
+                    AnimalSpecie = new()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+
+                        AnimalClass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+
+                        }
+
+                    }
+                };
+
+                animals.Add(animal);
+            }
+            return animals;
+        }
+
+
+        /// <summary>
+        /// Method that searches for a specific animal by charactername
+        /// </summary>
+        /// <param name="characterName"></param>
+        /// <returns></returns>
+        public async Task<Animal> GetAnimalByCharacterName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
+        {
+            string sqlQuestion = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid =animalspecie.animalclassid WHERE animal.charactername= @charactername";
+             
+               
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQuestion);
+            command.Parameters.AddWithValue("charactername", characterName);
+            await using var reader = await command.ExecuteReaderAsync();
+
+
+            try
+            {
+                Animal animal = new();
+                while (await reader.ReadAsync())
+                {
+                    animal = new()
+                    {
+                        AnimalId = reader.GetInt32(0),
+                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
+
+                        AnimalSpecie = new()
+                        {
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+                            LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
+
+                            AnimalClass = new()
+                            {
+                                AnimalClassName = (string)reader["animalclassname"]
+
+                            }
+                        }
+
+
+                    };
+                }
+                return animal;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            //Lägg in try catch. Någon kan ta bort Simba och då finns han inte längre när du söker.
+        }
+
+        /// <summary>
+        /// Count all animals in each specie
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Animal>> CountAnimalInEachSpecie()
+        {
+            List<Animal> animals = new List<Animal>();
+            string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animal animal = new();
+
+            while (await reader.ReadAsync())
+            {
+
+                animal = new()
+                {
+                    AnimalId = reader.GetInt32(1),
+
+
+
+                    AnimalSpecie = new()
+                    {
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+
+
+                    }
+
+                };
+
+
+                animals.Add(animal);
+
+            }
+            return animals;
+        }
+
+        /// <summary>
+        /// Count how many species there are 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<AnimalSpecie> CountSpecie()
+        {
+            string sqlQ = "SELECT COUNT (s.animalspecieid) as AmountOfSpecies FROM animalspecie s";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            AnimalSpecie animalspecie = new();
+            while (await reader.ReadAsync())
+            {
+                animalspecie = new()
+                {
+
+                    AnimalSpecieId = reader.GetInt32(0),
+
+                };
+
+            }
+
+            return animalspecie;
+        }
+
+        /// <summary>
+        /// Count how many species there are in each animal class
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Animal>> NumberOfSpecieInClass()
+        {
+            List<Animal> animals = new List<Animal>();
+            string sqlQ = "SELECT c.animalclassname, COUNT(s.animalspecieid) FROM animalclass c FULL JOIN animalspecie s ON s.animalclassid = c.animalclassid FULL JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY c.animalclassname ORDER BY COUNT(s.animalspecieid) DESC";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animal animal = new();
+
+            while (await reader.ReadAsync())
+            {
+
+                animal = new()
+                {
+                    AnimalSpecie = new()
+                    {
+                        AnimalSpecieId = reader.GetInt32(1),
+
+
+                        AnimalClass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+
+                        }
+
+                    }
+
+                };
+
+
+                animals.Add(animal);
+
+            }
+            return animals;
+        }
+
+
+        /// <summary>
+        /// Return a list of all animal classes
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<AnimalClass>> GetAnimalClass()
+        {
+            List<AnimalClass> animalClass = new List<AnimalClass>();
+            string sqlQ = "SELECT * FROM animalclass ";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            AnimalClass animalclass = new AnimalClass();
+            while (await reader.ReadAsync())
+            {
+                animalclass = new AnimalClass()
+                {
+                    AnimalClassId = reader.GetInt32(0),
+                    AnimalClassName = (string)reader["animalclassname"]
+
+                };
+                animalClass.Add(animalclass);
+            }
+            return animalClass;
+        }
+
+
+        /// <summary>
+        /// Find the name of a animal class with the help of animalspeciename
+        /// </summary>
+        /// <param name="selectAnimalspecie"></param>
+        /// <returns></returns>
         public async Task<AnimalSpecie> FindClass(AnimalSpecie selectAnimalspecie)
         {
             string sqlQuestion = "Select s.animalspeciename, c.animalclassname, s.latinname From animalspecie s Join animalclass c ON s.animalclassid = c.animalclassid Where animalspeciename = @animalspeciename";
@@ -136,8 +482,8 @@ namespace ProgrammeringMotDatabaser.DAL
             }
             return animalspecie;
 
-           
 
+            //Lägg in try catch. Någon kan ta bort en klass och då finns han inte längre när du söker.
 
         }
 
@@ -181,230 +527,13 @@ namespace ProgrammeringMotDatabaser.DAL
             return animalSpecies;
         }
 
-        public async Task<IEnumerable<Animal>> CountAnimalInEachSpecie()
-        {
-            List<Animal> animals = new List<Animal>();
-            string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
-          
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-            Animal animal = new();
-            
-            while (await reader.ReadAsync())
-            {
-             
-                animal = new()
-                {
-                    AnimalId = reader.GetInt32(1),
-                  
 
 
-                    AnimalSpecie = new()
-                    {
-                            AnimalSpecieName = (string)reader["animalspeciename"],
-                         
-
-                    }
-                   
-                };
-
-                
-                animals.Add(animal);
-                
-            }
-            return animals;
-        }
-
-        public async Task<AnimalSpecie> CountSpecie() // public async Task<Animal> GetAnimalByName()
-        {
-            string sqlQ = "SELECT COUNT (s.animalspecieid) as AmountOfSpecies FROM animalspecie s";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);            
-            await using var reader = await command.ExecuteReaderAsync();
-
-            AnimalSpecie animalspecie = new();
-            while (await reader.ReadAsync())
-            {
-                animalspecie = new()
-                {
-                   
-                 AnimalSpecieId = reader.GetInt32(0),                    
-
-                };
-
-            }
-
-            return animalspecie;
-
-            
-        }
-
-        public async Task<IEnumerable<Animal>> NumberOfSpecieInClass()
-        {
-            List<Animal> animals = new List<Animal>();
-            string sqlQ = "SELECT c.animalclassname, COUNT(s.animalspecieid) FROM animalclass c FULL JOIN animalspecie s ON s.animalclassid = c.animalclassid FULL JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY c.animalclassname ORDER BY COUNT(s.animalspecieid) DESC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-            Animal animal = new();
-
-            while (await reader.ReadAsync())
-            {
-
-                animal = new()
-                {                   
-                    AnimalSpecie = new()
-                    {
-                        AnimalSpecieId = reader.GetInt32(1),
-                       
-                        
-                        AnimalClass = new()
-                        {
-                            AnimalClassName = (string)reader["animalclassname"]
-
-                        }
-
-                    }
-
-                };
-
-
-                animals.Add(animal);
-
-            }
-            return animals;
-        }
-
-        public async Task<IEnumerable<Animal>> Test()
-        {
-            List<Animal> animals = new List<Animal>();
-            string sqlQ = " SELECT * FROM animalspecie";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-            Animal animal = new();
-
-            while (await reader.ReadAsync())
-            {
-
-                animal = new()
-                {
-
-                   AnimalSpecie = new()
-                    {
-                        AnimalSpecieId = reader.GetInt32(1),
-
-
-                        AnimalClass = new()
-                        {
-                            AnimalClassName = (string)reader["animalclassname"]
-
-                        }
-
-                    }
-
-                };
-
-
-                animals.Add(animal);
-
-            }
-            return animals;
-
-        }
-
-
-        public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
-        {
-            List<Animal> animals = new List<Animal>();
-
-
-            var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlJoin);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            Animal animal = new Animal();          
-
-            while (await reader.ReadAsync())
-            {
-                animal = new()
-                {
-                    CharacterName = (string)reader["charactername"],
-
-
-                    AnimalSpecie = new()
-                    {
-                        AnimalSpecieName = (string)reader["animalspeciename"],
-
-                        AnimalClass = new()
-                        {
-                            AnimalClassName = (string)reader["animalclassname"]
-
-                        }
-
-                    }
-                };
-
-                animals.Add(animal);
-            }
-            return animals;
-        }
-
-
-
-
-        //public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
-        //{
-
-        //    MainMethodRetrieveAllInfoAboutAnimal(); 
-        //    if (CharacterName == null)
-
-        //    List<Animal> animals = new List<Animal>();
-
-
-        //    var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
-
-        //    await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-        //    await using var command = dataSource.CreateCommand(sqlJoin);
-        //    await using var reader = await command.ExecuteReaderAsync();
-
-        //    Animal animal = new Animal();
-
-
-        //    while (await reader.ReadAsync())
-        //    {
-        //        animal = new()
-        //        {
-        //            CharacterName = (string)reader["charactername"],
-
-
-        //            AnimalSpecie = new()
-        //            {
-        //                AnimalSpecieName = (string)reader["animalspeciename"],
-
-        //                AnimalClass = new()
-        //                {
-        //                    AnimalClassName = (string)reader["animalclassname"]
-
-        //                }
-
-        //            }
-        //        };
-
-        //        animals.Add(animal);
-        //    }
-        //    return animals;
-        //}
-
-
-
-
+        /// <summary>
+        /// Method gives all animal how belongs to a specific animal class
+        /// </summary>
+        /// <param name="animalclass"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Animal>> GetAnimalBySpeficClass(AnimalClass animalclass)
         {
             List<Animal> animals = new List<Animal>();
@@ -441,119 +570,17 @@ namespace ProgrammeringMotDatabaser.DAL
             return animals;
         }
 
-  
-
-        public async Task<Animal> AddAnimalAndGetValue(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
-        {
-            try
-            {
-                string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
-
-                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-                await using var command = dataSource.CreateCommand(sqlCommand);
-                command.Parameters.AddWithValue("charactername", characterName);
-                command.Parameters.AddWithValue("animalspecieid", specieId);
-                await command.ExecuteNonQueryAsync();
-
-                var animal = GetAnimalByName(characterName);
-                return await animal;
-            }
-            catch (PostgresException ex)
-            {
-                string errorMessage = "Something went wrong";
-                string errorCode = ex.SqlState;
-
-                switch (errorCode)
-                {
-                    case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "There is already an animal with that name. The animal name must be unique";
-                        break;
-                    default:
-                        break;
-                }
-                throw new Exception(errorMessage, ex);
-            }
-            
-        }
-        
-        public async Task <AnimalClass> AddAnimalClass(AnimalClass animalclass)
-        {
-            try
-            {
-                string sqlCommand = "insert into animalclass(animalclassname) values(@animalclassname)";
-
-                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-                await using var command = dataSource.CreateCommand(sqlCommand);
-                command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-                await command.ExecuteNonQueryAsync();
-                return animalclass;
-            }
-            catch (PostgresException ex)
-            {
-               
-                string errorMessage = "Something went wrong";
-                string errorCode = ex.SqlState;
-                
-                switch (errorCode)
-                {
-                    case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The class already exists. The class name must be unique";
-                        break;
-                    default:
-                        break;
-                }
-
-                throw new Exception(errorMessage, ex);
-            }
-
-            
-        }
-
-        public async Task<AnimalSpecie> AddAnimalSpecie(string animalSpecieName, string latinname, int animalClassId)
-        {
-            string sqlCommand = "insert into animalspecie(animalspeciename, latinname, animalclassid) values(@animalspeciename, @latinname, @animalclassid)";
-         
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalspeciename", animalSpecieName);
-            command.Parameters.AddWithValue("latinname", (object)latinname ?? DBNull.Value);
-            command.Parameters.AddWithValue("animalclassid", animalClassId);
-             await command.ExecuteNonQueryAsync();
-
-            var animalspecie = new AnimalSpecie() 
-            {
-                AnimalSpecieName = animalSpecieName,
-                LatinName = latinname,
-                
-                AnimalClass = new()
-                {
-                    AnimalClassId = animalClassId,
-                  
-                    
-                }
-
-            };
-            return animalspecie;
-        }
-
-        private static T? ConvertFromDBVal<T>(object obj)
-        {
-            if (obj == null || obj == DBNull.Value)
-            {
-                return default;
-            }
-            return (T)obj;
-        }
-        private static object ConvertToDBVal<T>(object obj)
-        {
-            if (obj == null || obj == string.Empty)
-            {
-                return DBNull.Value;
-            }
-            return (T)obj;
-        }
+        #endregion
 
 
+        #region Update - Character name, Latin name and Animal specie
+
+        /// <summary>
+        /// Update character name of an animal
+        /// </summary>
+        /// <param name="newCharaternamne"></param>
+        /// <param name="animal"></param>
+        /// <returns></returns>
         public async Task<Animal> UpdateCharacterName(string newCharaternamne, Animal animal)
         {
             string sqlCommand = "UPDATE animal SET charactername = @charactername WHERE animalid = @animalid";
@@ -575,6 +602,12 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
+        /// <summary>
+        /// Update Latin name of a animal specie
+        /// </summary>
+        /// <param name="newLatinName"></param>
+        /// <param name="animalSN"></param>
+        /// <returns></returns>
         public async Task<AnimalSpecie> UpdateLatinName(string newLatinName, string animalSN) 
         {
             string sqlCommand = "UPDATE animalspecie SET latinname = @latinname WHERE animalspeciename = @animalspeciename";
@@ -596,14 +629,20 @@ namespace ProgrammeringMotDatabaser.DAL
             return newAnimal;
         }
 
-        public async Task<Animal> UpdateAnimalSpecie(Animal animal, int animalspecieid)
+        /// <summary>
+        /// Update animal specie 
+        /// </summary>
+        /// <param name="animal"></param>
+        /// <param name="newAnimalSpecieId"></param>
+        /// <returns></returns>
+        public async Task<Animal> UpdateAnimalSpecie(Animal animal, int newAnimalSpecieId)
         {
 
             string sqlCommand = "UPDATE animal SET animalspecieid = @animalspecieid WHERE animalid = @animalid";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalspecieid", animalspecieid);
+            command.Parameters.AddWithValue("animalspecieid", newAnimalSpecieId);
             command.Parameters.AddWithValue("animalid", animal.AnimalId);
             await command.ExecuteNonQueryAsync();
 
@@ -613,7 +652,7 @@ namespace ProgrammeringMotDatabaser.DAL
 
                 AnimalSpecie = new()
                 {
-                    AnimalSpecieId = animalspecieid,
+                    AnimalSpecieId = newAnimalSpecieId,
                    
                 }
             };
@@ -622,8 +661,16 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
         }
+        #endregion
 
 
+        #region Delete - Animal, animal specie and animal class
+
+        /// <summary>
+        /// Delete an animal
+        /// </summary>
+        /// <param name="animal"></param>
+        /// <returns></returns>
         public async Task DeleteAnimal(Animal animal)
         {
             string sqlCommand = "DELETE FROM animal WHERE animalid = @animalid";
@@ -635,6 +682,12 @@ namespace ProgrammeringMotDatabaser.DAL
 
           
         }
+
+        /// <summary>
+        /// Delete an animal in animal specie 
+        /// </summary>
+        /// <param name="animalSpecie"></param>
+        /// <returns></returns>
         public async Task DeleteAnimalInSpecie(AnimalSpecie animalSpecie)
         {
             string sqlCommand = "DELETE FROM animal WHERE animalspecieid = @animalspecieid";
@@ -647,6 +700,12 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
+        /// <summary>
+        /// Delete a animal specie
+        /// </summary>
+        /// <param name="animalSpecie"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAnimalSpecie(AnimalSpecie animalSpecie)
         {
             try
@@ -676,6 +735,12 @@ namespace ProgrammeringMotDatabaser.DAL
             }           
         }
 
+        /// <summary>
+        /// Delete a animal class
+        /// </summary>
+        /// <param name="animalClass"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAnimalClass(AnimalClass animalClass)
         {
             try
@@ -687,7 +752,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 command.Parameters.AddWithValue("animalclassid", animalClass.AnimalClassId);
                 await command.ExecuteNonQueryAsync();
             }
-            catch (PostgresException ex)
+            catch (PostgresException ex) //22001, Det är för många bokstäver, 23503  finns referenser kvar, 23505 finns redan ett värde med det namnet, måste vara unikt,
             {
 
                 string errorMessage = "Something went wrong";
@@ -696,78 +761,47 @@ namespace ProgrammeringMotDatabaser.DAL
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"You have animalspecies in the class. They need to be deleted first.";
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
                         break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
                     default:
                         break;
                 }
                 throw new Exception(errorMessage, ex);
             }
         }
+        #endregion
+
+ 
 
 
-        public async Task<IEnumerable<AnimalClass>> GetAnimalClass()
+
+       //Kolla på föreläsningen igen och se om vi fattar hur vi kan använda oss av dessa metoder på ett smart sätt.
+
+        private static T? ConvertFromDBVal<T>(object obj)
         {
-            List<AnimalClass> animalClass = new List<AnimalClass>();
-            string sqlQ = "SELECT * FROM animalclass ";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            AnimalClass animalclass = new AnimalClass();
-            while (await reader.ReadAsync())
+            if (obj == null || obj == DBNull.Value)
             {
-                animalclass = new AnimalClass()
-                {
-                    AnimalClassId = reader.GetInt32(0),
-                    AnimalClassName = (string)reader["animalclassname"]
-
-                };
-                animalClass.Add(animalclass);
+                return default;
             }
-            return animalClass;
+            return (T)obj;
         }
-        /// <summary>
-        /// Method for question 1
-        /// </summary>
-        /// <param name="animalclass"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<AnimalSpecie>> GetAnimalClassesForQOne(AnimalClass animalclass)
+        private static object ConvertToDBVal<T>(object obj)
         {
-            List<AnimalSpecie> animalspecies = new List<AnimalSpecie>();
-            string sqlQ = $"SELECT animalspeciename, animalclassname, animalspecieid FROM animalspecie JOIN animalclass ON animalspecie.animalclassid = animalclass.animalclassid WHERE animalclassname = @animalclassname";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            AnimalSpecie animalspecie = new();
-            while (await reader.ReadAsync())
+            if (obj == null || obj == string.Empty)
             {
-                animalspecie = new AnimalSpecie()
-                {
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    AnimalSpecieId = reader.GetInt32(2),
-
-                    AnimalClass = new()
-                    {
-                        
-                        AnimalClassName = (string)reader["animalclassname"]
-                    }
-
-
-                };
-
-             
-                animalspecies.Add(animalspecie);
+                return DBNull.Value;
             }
-            return animalspecies;
+            return (T)obj;
         }
-
-        
-       
 
 
     }
