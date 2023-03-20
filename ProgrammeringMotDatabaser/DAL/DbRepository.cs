@@ -628,9 +628,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 }
 
                 throw new Exception(errorMessage, ex);
-            }
-
-            
+            }           
         }
 
 

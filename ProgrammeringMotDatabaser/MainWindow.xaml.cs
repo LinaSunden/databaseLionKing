@@ -198,14 +198,21 @@ namespace ProgrammeringMotDatabaser
         }
        
         private async void btnDeleteAnimalSpecie_Click(object sender, RoutedEventArgs e)
-        {            
-            if (cboDeleteAimalSpecie.SelectedItem is Animal select)
+        {
+            try
             {
-                //var animalSpecie = select.Animal.AnimalSpecie.AnimalspecieId;
+                if (cboDeleteAimalSpecie.SelectedItem is Animal select)
+                {
+                    //var animalSpecie = select.Animal.AnimalSpecie.AnimalspecieId;
 
-                await db.DeleteAnimalSpecie(select);
+                    await db.DeleteAnimalSpecie(select);
+                }
             }
-           
+               catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
        
         
