@@ -27,6 +27,8 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string AllAnimalsSortedBySpecie => $"{CharacterName} {AnimalSpecie.AnimalSpecieName} {AnimalSpecie.LatinName} {AnimalSpecie.AnimalClass.AnimalClassName}";
 
+        public string DeleteAnimals => $" {AnimalId} {CharacterName} {AnimalSpecie.AnimalSpecieName}";
+
         //public int AnimalSpecieId { get; set; }  
 
         public AnimalSpecie AnimalSpecie { get; set; }

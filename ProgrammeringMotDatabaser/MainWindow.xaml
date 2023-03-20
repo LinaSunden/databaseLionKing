@@ -11,30 +11,30 @@
             <ColumnDefinition Width="161*"/>
             <ColumnDefinition Width="159*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lstBox" Margin="602,224,606,432" Grid.ColumnSpan="2" MouseDoubleClick="lstBox_MouseDoubleClick" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-        <Label Content="1." HorizontalAlignment="Left" Margin="19,708,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="2." HorizontalAlignment="Left" Margin="19,192,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="3." HorizontalAlignment="Left" Margin="19,363,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="7." HorizontalAlignment="Left" Margin="304,494,0,0" VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-2.233,0.888"/>
-        <Label Content="4." HorizontalAlignment="Left" Margin="316,266,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="6." HorizontalAlignment="Left" Margin="316,286,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="5." HorizontalAlignment="Left" Margin="306,418,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="8.a" HorizontalAlignment="Left" Margin="316,330,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="9." HorizontalAlignment="Left" Margin="314,310,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <ListBox x:Name="lstBox" Margin="599,197,609,459" Grid.ColumnSpan="2" MouseDoubleClick="lstBox_MouseDoubleClick" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+        <Label Content="1." HorizontalAlignment="Left" Margin="18,646,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="2." HorizontalAlignment="Left" Margin="18,130,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="3." HorizontalAlignment="Left" Margin="18,302,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="7." HorizontalAlignment="Left" Margin="283,392,0,0" VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-2.233,0.888"/>
+        <Label Content="4." HorizontalAlignment="Left" Margin="295,164,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="6." HorizontalAlignment="Left" Margin="295,184,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="5." HorizontalAlignment="Left" Margin="285,316,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="8.a" HorizontalAlignment="Left" Margin="295,228,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="9." HorizontalAlignment="Left" Margin="293,208,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="8.b" HorizontalAlignment="Left" Margin="222,36,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="1"/>
-        <TextBlock x:Name="txtBlockWelcome" HorizontalAlignment="Left" Margin="566,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="77" Width="554" FontSize="18" FontWeight="Bold" TextAlignment="Center"/>
-        <Label x:Name="lblCreate" Content="Create" HorizontalAlignment="Left" Margin="51,138,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
-        <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="336,172,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
-        <Label x:Name="lblUpdate" Content="Update" HorizontalAlignment="Left" Margin="373,163,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
-        <Label x:Name="lblDelete" Content="Delete" HorizontalAlignment="Left" Margin="146,686,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
-        <GroupBox x:Name="gBoxCreateAnimalClass" Header="Create new animal class" Margin="47,182,734,734" FontWeight="Bold">
+        <TextBlock x:Name="txtBlockWelcome" HorizontalAlignment="Left" Margin="605,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="77" Width="554" FontSize="18" FontWeight="Bold" TextAlignment="Center"/>
+        <Label x:Name="lblCreate" Content="Create" HorizontalAlignment="Left" Margin="50,76,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
+        <Label x:Name="lblRead" Content="Read" HorizontalAlignment="Left" Margin="315,70,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
+        <Label x:Name="lblUpdate" Content="Update" HorizontalAlignment="Left" Margin="370,136,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Column="1"/>
+        <Label x:Name="lblDelete" Content="Delete" HorizontalAlignment="Left" Margin="305,665,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16"/>
+        <GroupBox x:Name="gBoxCreateAnimalClass" Header="Create new animal class" Margin="46,120,735,795" FontWeight="Bold">
             <StackPanel Margin="0, 10, 0, 10">
                 <Label Content="Class name" FontWeight="Normal"/>
                 <TextBox x:Name="txtinputclassname" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FF111112" Margin="10, 0, 0, 0" FontWeight="Normal"/>
                 <Button x:Name="btncreateclass" Content="Create new class" Width="120" Click="btncreateclass_Click" Margin="-30, 10, 0, 0" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gBoxCreateAnimalSpecie" Header="Create new animal specie" Margin="48,363,733,427" FontWeight="Bold">
+        <GroupBox x:Name="gBoxCreateAnimalSpecie" Header="Create new animal specie" Margin="46,302,734,488" FontWeight="Bold">
             <StackPanel Margin="0, 10, 0, 10">
                 <Label Content="Animal specie name" FontWeight="Normal" />
                 <TextBox x:Name="txtinputspeciename" TextWrapping="Wrap" Width="120" BorderBrush="#FF0A0A0A" Margin="-40, 0, 0, 10" FontWeight="Normal"/>
@@ -45,7 +45,7 @@
                 <Button x:Name="btncreatespecie" Content="Create new specie" Width="120" Click="btncreatespecie_Click" Margin="-40, 20, 0, 10" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gBoxCreateAnimal" Header="Create new animal" Margin="51,720,734,94" FontWeight="Bold">
+        <GroupBox x:Name="gBoxCreateAnimal" Header="Create new animal" Margin="50,658,735,155" FontWeight="Bold">
             <StackPanel Margin="0, 10, 0, 10">
                 <Label Content="Animal name" FontWeight="Normal"/>
                 <TextBox x:Name="txtinput" TextWrapping="Wrap" Width="120" BorderBrush="#FF111112" Margin="-40, 0, 0, 10" FontWeight="Normal"/>
@@ -56,9 +56,9 @@
             </StackPanel>
         </GroupBox>
 
-        <Label Content="Animal registry" HorizontalAlignment="Left" Margin="604,194,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
-        <Label Content="Select view of animal registry" HorizontalAlignment="Left" Margin="336,230,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
-        <GroupBox x:Name="gBoxRadioBtnViews" Header="" Margin="340,258,373,686">
+        <Label Content="Animal registry" HorizontalAlignment="Left" Margin="601,167,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+        <Label Content="Select view of animal registry" HorizontalAlignment="Left" Margin="315,128,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+        <GroupBox x:Name="gBoxRadioBtnViews" Header="" Margin="319,156,394,788">
             <StackPanel>
                 <RadioButton Content="All animals" Checked="RadioButton_Checked" IsChecked="True" RenderTransformOrigin="0.039,0.537" Margin="0, 0, 0, 5"/>
                 <RadioButton Content="Animals with character name" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_1" Margin="0, 0, 0, 5"/>
@@ -66,14 +66,14 @@
                 <RadioButton Content="Number of animals in each specie " RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_3" Margin="0, 0, 0, 5"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gBoxAllAnimalsInSpecificClass" Header="All Animals in a specifc animal class" Margin="336,392,377,585" FontWeight="Bold">
+        <GroupBox x:Name="gBoxAllAnimalsInSpecificClass" Header="All Animals in a specifc animal class" Margin="315,290,398,687" FontWeight="Bold">
             <StackPanel>
                 <Label Content="Select class" FontWeight="Normal" Width="70" Margin="-150, 10, 0, 0"/>
                 <ComboBox x:Name="cbolistofclasses" Width="120" SelectionChanged="cbolistofclasses_SelectionChanged" Margin="0, -20, -80, 0" FontWeight="Normal"/>
 
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gBoxAllAnimalsInSpecificClass_Copy" Header="Find animal" Margin="336,493,377,336" FontWeight="Bold">
+        <GroupBox x:Name="gBoxAllAnimalsInSpecificClass_Copy" Header="Find animal" Margin="315,391,398,438" FontWeight="Bold">
             <StackPanel>
                 <Label Content="Character name" RenderTransformOrigin="0.321,0.579" FontWeight="Normal"/>
                 <Button x:Name="btnsearch" Content="Search" Click="btnsearch_Click" Width="100" FontWeight="Normal" Margin="130, 0, 0, 0"/>
@@ -84,9 +84,7 @@
                 <Label x:Name="lblAnimalClass" Content="Animal class:" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>
-        <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="146,746,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label Grid.Column="1" Content="Charactername &amp; Id" HorizontalAlignment="Left" Margin="146,721,0,0" VerticalAlignment="Top"/>
-        <GroupBox Header="Select an animal to update" Margin="373,224,149,506" FontWeight="Bold" Grid.Column="1">
+        <GroupBox Header="Select an animal to update" Margin="370,197,152,533" FontWeight="Bold" Grid.Column="1">
             <StackPanel>
                 <TextBox x:Name="txtUpdateExplanation" TextWrapping="Wrap" Text="Select &quot;All animals&quot; with the raido button.&#xA;Double-click on the animal you wish to update.&#xA;Change properties below  " Width="258" FontWeight="Normal" Margin="0,10,150,0"/>
                 <Label x:Name="lblupdateanimalid" Content="Animal id:" FontWeight="Normal"/>
@@ -100,11 +98,40 @@
                 <Label Content="Animal class:" FontWeight="Normal" Margin="0,5,0,0"/>
                 <Label x:Name="lblupdateanimalclass" FontWeight="Normal" Margin="0,-25,60,0" Width="165"/>
                 <Button x:Name="btnupdateanimal" Content="Update Animal" Width="120" Click="btnupdateanimal_Click" FontWeight="Normal" Margin="0,10,100,0"/>
-                
+
             </StackPanel>
 
         </GroupBox>
-       
+        <ListBox x:Name="lstBoxDelete" Margin="305,723,185,18" ScrollViewer.VerticalScrollBarVisibility="Visible" MouseDoubleClick="lstBoxDelete_MouseDoubleClick"/>
+        <GroupBox x:Name="gBoxDeleteAnimal" Header="Select an animal to delete" Margin="805,721,834,147" FontWeight="Bold" Grid.ColumnSpan="2">
+            <StackPanel>
+                <TextBox x:Name="txtDeleteExplanation" TextWrapping="Wrap" Text="Double-click on the animal you wish to delete from the list " Width="267" FontWeight="Normal" Margin="0,10,0,0"/>
+                <Label x:Name="lblDeleteAnimalid" Content="Animal id:" FontWeight="Normal"/>
+                <Label x:Name="lblCharacterNameDelete" Content="Character name: " FontWeight="Normal"/>
+                <Label x:Name="lblAnimalSpecieDelete" Content="Animal specie:" FontWeight="Normal"/>
+                <Button x:Name="btnDeleteAnimal" Content="Delete Animal" Width="120" FontWeight="Normal" Margin="0,10,-50,0" Click="btnDeleteAnimal_Click"/>
+
+            </StackPanel>
+
+        </GroupBox>
+        <Label x:Name="lblDelete1" Content="Delete a specific animal" HorizontalAlignment="Left" Margin="305,692,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+        <GroupBox x:Name="gBoxDeleteAnimalSpecie" Header="Delete animal specie" Margin="196,723,584,145" FontWeight="Bold" Grid.Column="1">
+            <StackPanel>
+                <ComboBox x:Name="cboDeleteAimalSpecie" FontWeight="Normal" Height="22" Width="147"  Margin="0,10,0,0" SelectionChanged="cboDeleteAimalSpecie_SelectionChanged"/>
+                <Button x:Name="btnDeleteAnimalSpecie" Content="Delete Animal Specie" Width="120" FontWeight="Normal"  Margin="0,20,0,0" Click="btnDeleteAnimalSpecie_Click" />
+
+            </StackPanel>
+
+        </GroupBox>
+        <GroupBox x:Name="gBoxDeleteAnimalClass" Header="Delete animal class" Margin="499,723,281,145" FontWeight="Bold" Grid.Column="1">
+            <StackPanel>
+                <ComboBox x:Name="cboDeleteAimalClass" FontWeight="Normal" Height="22" Width="147"  Margin="0,10,0,0"/>
+                <Button x:Name="btnDeleteAnimalClass" Content="Delete Animal Specie" Width="120" FontWeight="Normal"  Margin="0,20,0,0" />
+
+            </StackPanel>
+
+        </GroupBox>
+
 
 
     </Grid>

@@ -27,18 +27,18 @@ namespace ProgrammeringMotDatabaser
     {
         public MainWindow()
         {
-            
+
             InitializeComponent();
             DisplayCBO();
             WelcomeMessage();
         }
-        
+
         DbRepository db = new();
-        
+
 
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
-        
+
             string characterName = txtCharacterName.Text;
             var animal = await db.GetAnimalByName(characterName);
 
@@ -56,12 +56,12 @@ namespace ProgrammeringMotDatabaser
                 lblAnimalClass.Content = $"Animal class: {animal.AnimalSpecie.AnimalClass.AnimalClassName}";
                 ClearTextboxes();
                 txtCharacterName.Focus();
-   
+
             }
 
         }
-        
-               
+
+
         /// <summary>
         /// Button that creates animal and uses specieID from class
         /// </summary>
@@ -77,13 +77,13 @@ namespace ProgrammeringMotDatabaser
                 var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
                 MessageBox.Show($"{checkIfAnimalExists.Display1}");
                 await DisplayCBO();
-              
+
             }
             catch (Exception ex)
             {
 
                 MessageBox.Show(ex.Message);
-            }         
+            }
 
         }
 
@@ -99,7 +99,7 @@ namespace ProgrammeringMotDatabaser
                 MessageBox.Show("Please fill in the name of the animal specie you wish to create");
 
             }
-          
+
             else
             {
                 if (latinName == string.Empty)
@@ -109,7 +109,7 @@ namespace ProgrammeringMotDatabaser
                 try
                 {
                     var animalspecie = await db.AddAnimalSpecie(animalSpecieName, latinName, (int)animalClass.AnimalClassId);
-                  
+
 
                     MessageBox.Show($"You have successfully added a new specie {animalspecie.AnimalSpecieName} from the {animalClass.AnimalClassName} class {animalspecie.LatinName}");
                     await DisplayCBO();
@@ -123,12 +123,12 @@ namespace ProgrammeringMotDatabaser
                     MessageBox.Show(ex.Message);
                 }
             }
-            
+
         }
 
         private async void btncreateclass_Click(object sender, RoutedEventArgs e)
         {
-           
+
             var newClassName = txtinputclassname.Text;
             if (newClassName == "")
             {
@@ -159,14 +159,14 @@ namespace ProgrammeringMotDatabaser
 
 
         private async void btnupdateanimal_Click(object sender, RoutedEventArgs e)
-        {                   
+        {
             string newCharacterName = txtupdatecharacternameinput.Text;
-            string newLatinName = txtupdatelatinname.Text;                      
+            string newLatinName = txtupdatelatinname.Text;
             var animalspecie = txtupdateanimalspecie.Text;
 
             if (newCharacterName == string.Empty || newCharacterName == null)
             {
-                newCharacterName = null;          
+                newCharacterName = null;
             }
 
             var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
@@ -174,7 +174,7 @@ namespace ProgrammeringMotDatabaser
 
             if (newLatinName == string.Empty || newLatinName == null)
             {
-                newLatinName = null;     
+                newLatinName = null;
             }
 
             var updatedLatinName = await db.UpdateLatinName(newLatinName, animalspecie);
@@ -185,12 +185,56 @@ namespace ProgrammeringMotDatabaser
 
                 var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInTextBox(), animaSpecieId);
             }
-                   
+
             ClearTextboxes();
             var updateListBox = await db.MainMethodRetrieveAllInfoAboutAnimal();
-            lstBox.ItemsSource= updateListBox;
-            
+            lstBox.ItemsSource = updateListBox;
+
         }
+
+        private async void btnDeleteAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            await db.DeleteAnimal(DisplayDeleteListBox());
+        }
+       
+        private async void btnDeleteAnimalSpecie_Click(object sender, RoutedEventArgs e)
+        {            
+            if (cboDeleteAimalSpecie.SelectedItem is Animal select)
+            {
+                //var animalSpecie = select.Animal.AnimalSpecie.AnimalspecieId;
+
+                await db.DeleteAnimalSpecie(select);
+            }
+           
+        }
+       
+        
+        
+        private void lstBoxDelete_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DisplayDeleteListBox();
+        }
+
+
+
+
+
+
+        internal Animal DisplayDeleteListBox()
+        {
+            Animal selected = lstBoxDelete.SelectedItem as Animal;
+
+            lblDeleteAnimalid.Content = $"AnimalId: {selected.AnimalId}";
+            lblCharacterNameDelete.Content = $"Name: {selected.CharacterName}";
+            lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
+
+            return selected;
+        }
+
+
+
+
+
         private async void cboupdateanimalspecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             AnimalSpecie animalspecie = (AnimalSpecie)cboupdateanimalspecie.SelectedItem;
@@ -202,13 +246,13 @@ namespace ProgrammeringMotDatabaser
             txtupdatelatinname.Text = $"{selectedAnimalspecie.LatinName}";
             txtupdateanimalspecie.Text = $"{selectedAnimalspecie.AnimalSpecieName}";
 
-            btnupdateanimal.IsEnabled= true;
-          
+            btnupdateanimal.IsEnabled = true;
+
         }
 
 
         private void lstBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {           
+        {
             DisplaySelectedAnimalInTextBox();
         }
 
@@ -226,7 +270,7 @@ namespace ProgrammeringMotDatabaser
 
             lblupdateanimalclass.Content = selected.AnimalSpecie.AnimalClass.AnimalClassName;
             btnupdateanimal.IsEnabled = false;
-            
+
             return selected;
         }
 
@@ -247,13 +291,13 @@ namespace ProgrammeringMotDatabaser
             return null;
 
         }
-     
+
 
         internal AnimalClass GetAnimalClass()
         {
 
             if (cboclass.SelectedItem is AnimalClass selectClass)
-            {              
+            {
                 return selectClass;
             }
 
@@ -269,7 +313,7 @@ namespace ProgrammeringMotDatabaser
 
             cbolistofclasses.ItemsSource = animalClass;
             cbolistofclasses.DisplayMemberPath = "AnimalClassName";
-                          
+
             cboclass.ItemsSource = animalClass;
             cboclass.DisplayMemberPath = "AnimalClassName";
 
@@ -280,17 +324,22 @@ namespace ProgrammeringMotDatabaser
             cboupdateanimalspecie.ItemsSource = animalSpecie;
             cboupdateanimalspecie.DisplayMemberPath = "AnimalSpecieName";
 
+            cboDeleteAimalSpecie.ItemsSource = animalSpecie;
+            cboDeleteAimalSpecie.DisplayMemberPath = "AnimalSpecieName";
+
+            DisplayDeleteList();
+
         }
 
-      
 
-       
+
+
         public async void WelcomeMessage()
         {
             var showTotalSpecies = await db.CountSpecie();
             txtBlockWelcome.Text = $"Welcome Mufasa \n Currently you have {showTotalSpecies.AnimalSpecieId} species in your kingdom";
 
-            btnupdateanimal.IsEnabled= false ;
+            btnupdateanimal.IsEnabled = false;
         }
 
         private async void cbolistofclasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -310,16 +359,16 @@ namespace ProgrammeringMotDatabaser
 
 
             lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.AnimalClass.AnimalClassName}";
-            
+
         }
 
-    
+
 
 
 
         private async void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-           
+
             var allAnimals = await db.MainMethodRetrieveAllInfoAboutAnimal();
 
             lstBox.ItemsSource = allAnimals;
@@ -327,7 +376,7 @@ namespace ProgrammeringMotDatabaser
 
         private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
-            
+
             var allCharactersWithNames = await db.GetAnimalWithCharacterName();
 
             lstBox.ItemsSource = allCharactersWithNames;
@@ -351,7 +400,15 @@ namespace ProgrammeringMotDatabaser
             lstBox.DisplayMemberPath = "Display";
         }
 
-   
+        private async void DisplayDeleteList()
+        {
+            var displayList = await db.MainMethodRetrieveAllInfoAboutAnimal();
+
+            lstBoxDelete.ItemsSource = displayList;
+            lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
+
+        }
+
 
         private void ClearTextboxes()
         {
@@ -384,6 +441,9 @@ namespace ProgrammeringMotDatabaser
             }
         }
 
+        private void cboDeleteAimalSpecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
-}
+        }
+    }
 }

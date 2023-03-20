@@ -520,7 +520,7 @@ namespace ProgrammeringMotDatabaser.DAL
         }
 
 
-        public async Task<Animal> UpdateCharacterName(string newCharaternamne, Animal animal)//funkar
+        public async Task<Animal> UpdateCharacterName(string newCharaternamne, Animal animal)
         {
             string sqlCommand = "UPDATE animal SET charactername = @charactername WHERE animalid = @animalid";
   
@@ -541,7 +541,7 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-        public async Task<AnimalSpecie> UpdateLatinName(string newLatinName, string animalSN) //funkar 
+        public async Task<AnimalSpecie> UpdateLatinName(string newLatinName, string animalSN) 
         {
             string sqlCommand = "UPDATE animalspecie SET latinname = @latinname WHERE animalspeciename = @animalspeciename";
 
@@ -588,8 +588,50 @@ namespace ProgrammeringMotDatabaser.DAL
 
 
         }
-    
 
+
+        public async Task DeleteAnimal(Animal animal)
+        {
+            string sqlCommand = "DELETE FROM animal WHERE animalid = @animalid";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);           
+            command.Parameters.AddWithValue("animalid", animal.AnimalId);
+            await command.ExecuteNonQueryAsync();
+
+          
+        }
+        public async Task DeleteAnimalSpecie(Animal animal)
+        {
+            try
+            {
+                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecie.AnimalSpecieId);
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (PostgresException ex)
+            {
+
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation: 
+                        errorMessage = "There are still animals as this specie. Do you want to delete them all?";
+                        break;
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+
+            
+        }
 
 
         public async Task<IEnumerable<AnimalClass>> GetAnimalClass()
