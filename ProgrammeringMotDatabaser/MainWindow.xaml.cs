@@ -76,7 +76,7 @@ namespace ProgrammeringMotDatabaser
             {
                 var checkIfAnimalExists = await db.AddAnimalAndGetValue(animalName, int.Parse(specieId));
                 MessageBox.Show($"{checkIfAnimalExists.Display1}");
-                await DisplayCBO();
+                /*await*/ DisplayCBO();
 
             }
             catch (Exception ex)
@@ -84,6 +84,11 @@ namespace ProgrammeringMotDatabaser
 
                 MessageBox.Show(ex.Message);
             }
+
+            //var updateListBox = await db.MainMethodRetrieveAllInfoAboutAnimal();
+            //lstBox.ItemsSource = updateListBox;
+
+            rdbtnAllAnimals.IsChecked = true;
 
         }
 
@@ -201,22 +206,51 @@ namespace ProgrammeringMotDatabaser
         {
             try
             {
-                if (cboDeleteAimalSpecie.SelectedItem is Animal select)
+                if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
                 {
-                    //var animalSpecie = select.Animal.AnimalSpecie.AnimalspecieId;
-
+             
                     await db.DeleteAnimalSpecie(select);
                 }
             }
-               catch (Exception ex)
+               catch (Exception ex) 
             {
-                MessageBox.Show(ex.Message);
+               MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
+                    {
+                        await db.DeleteAnimalInSpecie(select);
+                        await db.DeleteAnimalSpecie(select);
+                        MessageBox.Show($"All animals in the {select.AnimalSpecieName} specie, and the specie itself, is now deleted");
+                    }
+                   
+                }
+                else if (messageBoxResult == MessageBoxResult.No)
+                {
+
+                    //Kan lägga till att comboboxen hamnar på ursprungsläget igen att ingenting är valt.
+                }
             }
 
         }
-       
-        
-        
+        private async void btnDeleteAnimalClass_Click(object sender, RoutedEventArgs e) //återkom till denna när vi har tid, se till att användaren kan se vilka arter som ska tas bort elr erbjud användaren att ta bort arterna som krävs
+        {
+            try
+            {
+                if (cboDeleteAimalClass.SelectedItem is AnimalClass select)
+                {
+
+                    await db.DeleteAnimalClass(select);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
         private void lstBoxDelete_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DisplayDeleteListBox();
@@ -245,6 +279,10 @@ namespace ProgrammeringMotDatabaser
         private async void cboupdateanimalspecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             AnimalSpecie animalspecie = (AnimalSpecie)cboupdateanimalspecie.SelectedItem;
+            if (animalspecie == null)
+            {
+                return;
+            }
 
             var selectedAnimalspecie = await db.FindClass(animalspecie);
 
@@ -324,6 +362,10 @@ namespace ProgrammeringMotDatabaser
             cboclass.ItemsSource = animalClass;
             cboclass.DisplayMemberPath = "AnimalClassName";
 
+            cboDeleteAimalClass.ItemsSource = animalClass;
+            cboDeleteAimalClass.DisplayMemberPath = "AnimalClassName";
+          
+
             var animalSpecie = await db.GetAnimalSpecie();
             cbospecie.ItemsSource = animalSpecie;
             cbospecie.DisplayMemberPath = "AnimalSpecieName";
@@ -362,6 +404,11 @@ namespace ProgrammeringMotDatabaser
         {
             AnimalSpecie animalspecie = (AnimalSpecie)cbospecie.SelectedItem;
 
+            if (animalspecie == null)
+            {
+                return;
+            }
+
             var selectedAnimalspecie = await db.FindClass(animalspecie);
 
 
@@ -378,7 +425,9 @@ namespace ProgrammeringMotDatabaser
 
             var allAnimals = await db.MainMethodRetrieveAllInfoAboutAnimal();
 
+            lstBox.ItemsSource = null;
             lstBox.ItemsSource = allAnimals;
+            lstBox.DisplayMemberPath = null;
         }
 
         private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
@@ -386,7 +435,9 @@ namespace ProgrammeringMotDatabaser
 
             var allCharactersWithNames = await db.GetAnimalWithCharacterName();
 
+            lstBox.ItemsSource = null;
             lstBox.ItemsSource = allCharactersWithNames;
+            lstBox.DisplayMemberPath = null;
 
         }
 
@@ -394,17 +445,20 @@ namespace ProgrammeringMotDatabaser
         private async void RadioButton_Checked_2(object sender, RoutedEventArgs e)
         {
             var numberOfSpecieInClass = await db.NumberOfSpecieInClass();
+            lstBox.ItemsSource = null;
             lstBox.ItemsSource = numberOfSpecieInClass;
             lstBox.DisplayMemberPath = "CountSpeciesInClass";
+              
         }
 
         private async void RadioButton_Checked_3(object sender, RoutedEventArgs e)
         {
             var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
 
+            lstBox.ItemsSource = null;
             lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
 
-            lstBox.DisplayMemberPath = "Display";
+            //lstBox.DisplayMemberPath = "Display";
         }
 
         private async void DisplayDeleteList()
@@ -428,6 +482,7 @@ namespace ProgrammeringMotDatabaser
             txtupdatecharacternameinput.Clear();
             txtupdatelatinname.Clear();
             lblupdateanimalid.Content = string.Empty;
+            lblupdateanimalclass.Content =  string.Empty;
         }
 
         private void txtupdatecharacternameinput_KeyDown(object sender, KeyEventArgs e) //dubbelkolla om vi kan lösa detta med delete keyn också
@@ -448,9 +503,11 @@ namespace ProgrammeringMotDatabaser
             }
         }
 
-        private void cboDeleteAimalSpecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        //private void cboDeleteAimalSpecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
 
-        }
+        //}
+
+
     }
 }

@@ -19,15 +19,15 @@ namespace ProgrammeringMotDatabaser.Models
         /// </summary>
         public string CharacterName { get; set; }
 
-        public string Display => $"{AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
+        //public string Display => $"{AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
 
         public string Display1 => $"You have successfully created {CharacterName} who is a {AnimalSpecie.AnimalSpecieName} with animal id: {AnimalId}";
 
         public string CountSpeciesInClass => $"{AnimalSpecie.AnimalClass.AnimalClassName} Count: {AnimalSpecie.AnimalSpecieId}";
 
-        public string AllAnimalsSortedBySpecie => $"{CharacterName} {AnimalSpecie.AnimalSpecieName} {AnimalSpecie.LatinName} {AnimalSpecie.AnimalClass.AnimalClassName}";
+        //public string AllAnimalsSortedBySpecie => $"{CharacterName} {AnimalSpecie.AnimalSpecieName} {AnimalSpecie.LatinName} {AnimalSpecie.AnimalClass.AnimalClassName}";
 
-        public string DeleteAnimals => $" {AnimalId} {CharacterName} {AnimalSpecie.AnimalSpecieName}";
+        public string DeleteAnimals => $" {AnimalId} {CharacterName} {AnimalSpecie.AnimalSpecieName}"; //refererar till att listan där vi väljer delete visas
 
         //public int AnimalSpecieId { get; set; }  
 
@@ -39,7 +39,7 @@ namespace ProgrammeringMotDatabaser.Models
         }
 
 
-       
+
     }
 
     

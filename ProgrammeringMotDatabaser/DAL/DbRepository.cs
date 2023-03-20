@@ -108,12 +108,12 @@ namespace ProgrammeringMotDatabaser.DAL
 
         public async Task<AnimalSpecie> FindClass(AnimalSpecie selectAnimalspecie)
         {
-            string sqlQuestion = "Select s.animalspeciename, c.animalclassname, s.latinname From animalspecie s Join animalclass c ON s.animalclassid = c.animalclassid Where animalspeciename = @speciename";
+            string sqlQuestion = "Select s.animalspeciename, c.animalclassname, s.latinname From animalspecie s Join animalclass c ON s.animalclassid = c.animalclassid Where animalspeciename = @animalspeciename";
 
             
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQuestion);
-            command.Parameters.AddWithValue("speciename", selectAnimalspecie.AnimalSpecieName);
+            command.Parameters.AddWithValue("animalspeciename", selectAnimalspecie.AnimalSpecieName);
             await using var reader = await command.ExecuteReaderAsync();
 
             AnimalSpecie animalspecie = new();
@@ -230,9 +230,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 animalspecie = new()
                 {
                    
-
-                  AnimalSpecieId = reader.GetInt32(0),
-                    
+                 AnimalSpecieId = reader.GetInt32(0),                    
 
                 };
 
@@ -257,10 +255,7 @@ namespace ProgrammeringMotDatabaser.DAL
             {
 
                 animal = new()
-                {
-                    
-
-
+                {                   
                     AnimalSpecie = new()
                     {
                         AnimalSpecieId = reader.GetInt32(1),
@@ -281,6 +276,45 @@ namespace ProgrammeringMotDatabaser.DAL
 
             }
             return animals;
+        }
+
+        public async Task<IEnumerable<Animal>> Test()
+        {
+            List<Animal> animals = new List<Animal>();
+            string sqlQ = " SELECT * FROM animalspecie";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlQ);
+            await using var reader = await command.ExecuteReaderAsync();
+            Animal animal = new();
+
+            while (await reader.ReadAsync())
+            {
+
+                animal = new()
+                {
+
+                   AnimalSpecie = new()
+                    {
+                        AnimalSpecieId = reader.GetInt32(1),
+
+
+                        AnimalClass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+
+                        }
+
+                    }
+
+                };
+
+
+                animals.Add(animal);
+
+            }
+            return animals;
+
         }
 
 
@@ -601,7 +635,19 @@ namespace ProgrammeringMotDatabaser.DAL
 
           
         }
-        public async Task DeleteAnimalSpecie(Animal animal)
+        public async Task DeleteAnimalInSpecie(AnimalSpecie animalSpecie)
+        {
+            string sqlCommand = "DELETE FROM animal WHERE animalspecieid = @animalspecieid";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sqlCommand);
+            command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
+            await command.ExecuteNonQueryAsync();
+
+
+        }
+
+        public async Task DeleteAnimalSpecie(AnimalSpecie animalSpecie)
         {
             try
             {
@@ -609,7 +655,7 @@ namespace ProgrammeringMotDatabaser.DAL
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlCommand);
-                command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecie.AnimalSpecieId);
+                command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
                 await command.ExecuteNonQueryAsync();
             }
             catch (PostgresException ex)
@@ -626,9 +672,37 @@ namespace ProgrammeringMotDatabaser.DAL
                     default:
                         break;
                 }
-
                 throw new Exception(errorMessage, ex);
             }           
+        }
+
+        public async Task DeleteAnimalClass(AnimalClass animalClass)
+        {
+            try
+            {
+                string sqlCommand = "DELETE FROM animalclass WHERE animalclassid = @animalclassid";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalclassid", animalClass.AnimalClassId);
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (PostgresException ex)
+            {
+
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"You have animalspecies in the class. They need to be deleted first.";
+                        break;
+                    default:
+                        break;
+                }
+                throw new Exception(errorMessage, ex);
+            }
         }
 
 
