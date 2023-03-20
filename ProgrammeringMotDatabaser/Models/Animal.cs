@@ -25,15 +25,15 @@ namespace ProgrammeringMotDatabaser.Models
         #region DisplayMemberPath
         public string CreateAnimalSuccess => $"You have successfully created {CharacterName} who is a {AnimalSpecie.AnimalSpecieName} with animal id: {AnimalId}";
 
-        public string CountSpeciesInClass => $"Animal class: {AnimalSpecie.AnimalClass.AnimalClassName} Count: {AnimalSpecie.AnimalSpecieId}";
+        public string CountSpeciesInClass => $"Class: {AnimalSpecie.AnimalClass.AnimalClassName} Count: {AnimalSpecie.AnimalSpecieId}";
 
-        public string DeleteAnimals => $"Animal id: {AnimalId}, Charactername: {CharacterName}, Animal specie: {AnimalSpecie.AnimalSpecieName}"; //refererar till att listan där vi väljer delete visas
+        public string DeleteAnimals => $"Animal id: {AnimalId}, Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}"; //refererar till att listan där vi väljer delete visas
 
-        public string CountAnimalInEachSpecie => $"Animal specie: {AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
+        public string CountAnimalInEachSpecie => $"Specie: {AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
 
-        public string AllAnimalsWithAName => $"Charactername: {CharacterName}, Animal specie: {AnimalSpecie.AnimalSpecieName}, Latin name: {AnimalSpecie.LatinName}, Animal class: {AnimalSpecie.AnimalClass.AnimalClassName}";
+        public string AllAnimalsWithAName => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}, Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 
-        public string AllInfoAboutAnimals => $"Charactername: {CharacterName}, Animal specie: {AnimalSpecie.AnimalSpecieName} Latin name: {AnimalSpecie.LatinName} Animal class: {AnimalSpecie.AnimalClass.AnimalClassName}";
+        public string AllInfoAboutAnimals => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName} Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 
         public string AnimalsInEachClass => $"Animal id: {AnimalId}, Specie: {AnimalSpecie.AnimalSpecieName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 

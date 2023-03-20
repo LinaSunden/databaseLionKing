@@ -51,7 +51,16 @@
                 <TextBox x:Name="txtinput" TextWrapping="Wrap" Width="120" BorderBrush="#FF111112" Margin="-40, 0, 0, 10" FontWeight="Normal"/>
                 <Label Content="Animal specie" FontWeight="Normal"/>
                 <ComboBox x:Name="cbospecie" Width="124" SelectionChanged="cbospecie_SelectionChanged" Margin="-40, 0, 0, 10" FontWeight="Normal" />
-                <Label x:Name="lblShowAnimalClassForSpecie" Content="" RenderTransformOrigin="0.3,-0.037" FontWeight="Normal"/>
+                <Label x:Name="lblShowAnimalClassForSpecie" Content="" RenderTransformOrigin="0.3,-0.037" FontWeight="Normal">
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="-3.275"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="1.541"/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
                 <Button x:Name="btncreateanimal" Content="Create animal" Width="125" Click="btncreateanimal_Click" Margin="-40, 20, 0, 10" FontWeight="Normal"/>
             </StackPanel>
         </GroupBox>

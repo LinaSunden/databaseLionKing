@@ -31,6 +31,7 @@ namespace ProgrammeringMotDatabaser
             InitializeComponent();
             DisplayCBO();
             WelcomeMessage();
+
         }
 
         DbRepository db = new();
@@ -95,8 +96,9 @@ namespace ProgrammeringMotDatabaser
 
             DisplayCBO();
 
-            var updateListBox = await db.AllInfoAboutAllAnimals();
-            lstBox.ItemsSource = updateListBox;
+            UpdateListBoxes();
+            ClearCbo();
+            ClearTextboxes();
 
             rdbtnAllAnimals.IsChecked = true;
 
@@ -209,7 +211,7 @@ namespace ProgrammeringMotDatabaser
 
         private async void btnDeleteAnimal_Click(object sender, RoutedEventArgs e)
         {
-            await db.DeleteAnimal(DisplayDeleteListBox());
+            await db.DeleteAnimal(DisplayAnimalsDeleteListBox());
         }
        
         private async void btnDeleteAnimalSpecie_Click(object sender, RoutedEventArgs e)
@@ -263,7 +265,7 @@ namespace ProgrammeringMotDatabaser
 
         private void lstBoxDelete_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            DisplayDeleteListBox();
+            DisplayAnimalsDeleteListBox();
         }
 
 
@@ -271,7 +273,7 @@ namespace ProgrammeringMotDatabaser
 
 
 
-        internal Animal DisplayDeleteListBox()
+        internal Animal DisplayAnimalsDeleteListBox()
         {
             Animal selected = lstBoxDelete.SelectedItem as Animal;
 
@@ -386,7 +388,18 @@ namespace ProgrammeringMotDatabaser
             cboDeleteAimalSpecie.ItemsSource = animalSpecie;
             cboDeleteAimalSpecie.DisplayMemberPath = "AnimalSpecieName";
 
-            DisplayDeleteList();
+            
+
+        }
+        private async void UpdateListBoxes()
+        {
+            var displayList = await db.AllInfoAboutAllAnimals();
+
+            lstBoxDelete.ItemsSource = displayList;
+            lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
+
+            lstBox.ItemsSource = displayList;
+            lstBox.DisplayMemberPath = "AllInfoAboutAnimals";
 
         }
 
@@ -397,6 +410,11 @@ namespace ProgrammeringMotDatabaser
         {
             var showTotalSpecies = await db.CountSpecie();
             txtBlockWelcome.Text = $"Welcome Mufasa \n Currently you have {showTotalSpecies.AnimalSpecieId} species in your kingdom";
+
+            var displayList = await db.AllInfoAboutAllAnimals();
+
+            lstBoxDelete.ItemsSource = displayList;
+            lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
 
             btnupdateanimal.IsEnabled = false;
         }
@@ -472,14 +490,7 @@ namespace ProgrammeringMotDatabaser
             lstBox.DisplayMemberPath = "CountAnimalInEachSpecie";
         }
 
-        private async void DisplayDeleteList()
-        {
-            var displayList = await db.AllInfoAboutAllAnimals();
-
-            lstBoxDelete.ItemsSource = displayList;
-            lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
-
-        }
+      
 
 
         private void ClearTextboxes()
@@ -494,6 +505,18 @@ namespace ProgrammeringMotDatabaser
             txtupdatelatinname.Clear();
             lblupdateanimalid.Content = string.Empty;
             lblupdateanimalclass.Content =  string.Empty;
+            lblShowAnimalClassForSpecie.Content = string.Empty;
+        }
+
+        private void ClearCbo()
+        {
+            cbospecie.SelectedItem = null;
+            cboclass.SelectedItem = null;
+            cbolistofclasses.SelectedItem = null;
+            cboDeleteAimalClass.SelectedItem= null;
+            cboDeleteAimalSpecie.SelectedItem= null;
+            cboupdateanimalspecie.SelectedItem= null;
+
         }
 
         private void txtupdatecharacternameinput_KeyDown(object sender, KeyEventArgs e) //dubbelkolla om vi kan lösa detta med delete keyn också
