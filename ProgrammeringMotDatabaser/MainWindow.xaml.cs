@@ -129,10 +129,10 @@ namespace ProgrammeringMotDatabaser
 
 
                     MessageBox.Show($"You have successfully added a new specie {animalspecie.AnimalSpecieName} from the {animalClass.AnimalClassName} class {animalspecie.LatinName}");
-                    await DisplayCBO();
-                    ClearTextboxes();
+                    
+                    
                     txtinputspeciename.Focus();
-                    WelcomeMessage();
+                    
                 }
                 catch (Exception ex)
                 {
@@ -140,6 +140,13 @@ namespace ProgrammeringMotDatabaser
                     MessageBox.Show(ex.Message);
                 }
             }
+            DisplayCBO();
+
+            UpdateListBoxes();
+            ClearCbo();
+            ClearTextboxes();
+
+            rdbtnAllAnimals.IsChecked = true;
 
         }
 
