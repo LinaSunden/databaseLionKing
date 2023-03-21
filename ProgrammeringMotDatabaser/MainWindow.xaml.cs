@@ -420,7 +420,7 @@ namespace ProgrammeringMotDatabaser
                 {
 
                     await db.DeleteAnimalClass(select);
-                    MessageBox.Show($"All animals in the {select.AnimalClassName} class, and the specie itself, is now deleted");
+                    MessageBox.Show($"The {select.AnimalClassName} class is now deleted");
                     ClearCbo();
                     ClearTextboxes();
                     UpdateListBoxes();
