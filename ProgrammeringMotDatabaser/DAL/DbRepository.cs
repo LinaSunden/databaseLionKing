@@ -77,29 +77,59 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<AnimalSpecie> AddAnimalSpecie(string animalSpecieName, string latinname, int animalClassId)
         {
-            string sqlCommand = "insert into animalspecie(animalspeciename, latinname, animalclassid) values(@animalspeciename, @latinname, @animalclassid)";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalspeciename", animalSpecieName);
-            command.Parameters.AddWithValue("latinname", (object)latinname ?? DBNull.Value);
-            command.Parameters.AddWithValue("animalclassid", animalClassId);
-            await command.ExecuteNonQueryAsync();
-
-            var animalspecie = new AnimalSpecie()
+            try
             {
-                AnimalSpecieName = animalSpecieName,
-                LatinName = latinname,
+                string sqlCommand = "insert into animalspecie(animalspeciename, latinname, animalclassid) values(@animalspeciename, @latinname, @animalclassid)";
 
-                AnimalClass = new()
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalspeciename", animalSpecieName);
+                command.Parameters.AddWithValue("latinname", (object)latinname ?? DBNull.Value);
+                command.Parameters.AddWithValue("animalclassid", animalClassId);
+                await command.ExecuteNonQueryAsync();
+
+                var animalspecie = new AnimalSpecie()
                 {
-                    AnimalClassId = animalClassId,
+                    AnimalSpecieName = animalSpecieName,
+                    LatinName = latinname,
+
+                    AnimalClass = new()
+                    {
+                        AnimalClassId = animalClassId,
 
 
+                    }
+
+                };
+                return animalspecie;
+            }
+            catch (PostgresException ex)
+            {
+
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
                 }
 
-            };
-            return animalspecie;
+                throw new Exception(errorMessage, ex);
+            }
         }
 
         /// <summary>
@@ -117,7 +147,7 @@ namespace ProgrammeringMotDatabaser.DAL
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlCommand);
-                command.Parameters.AddWithValue("charactername", characterName);
+                command.Parameters.AddWithValue("charactername", (object)characterName ?? DBNull.Value); 
                 command.Parameters.AddWithValue("animalspecieid", specieId);
                 await command.ExecuteNonQueryAsync();
 
@@ -178,42 +208,71 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
         {
-            List<Animal> animals = new List<Animal>();
-
-            var sqlJoin = "SELECT a.animalid, a.charactername, s.animalspecieid, s.animalspeciename, s.latinname, c.animalclassid, c.animalclassname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid JOIN animalclass c ON c.animalclassid = s.animalclassid GROUP BY a.animalid, s.animalspeciename,  s.latinname, c.animalclassname,  s.animalspecieid, c.animalclassid ORDER BY animalspeciename ASC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlJoin);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            Animal animal = new Animal();
-            while (await reader.ReadAsync())
+            try
             {
-                animal = new()
+                List<Animal> animals = new List<Animal>();
+
+                var sqlJoin = "SELECT a.animalid, a.charactername, s.animalspecieid, s.animalspeciename, s.latinname, c.animalclassid, c.animalclassname FROM animal a JOIN animalspecie s ON s.animalspecieid = a.animalspecieid JOIN animalclass c ON c.animalclassid = s.animalclassid GROUP BY a.animalid, s.animalspeciename,  s.latinname, c.animalclassname,  s.animalspecieid, c.animalclassid ORDER BY animalspeciename ASC";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlJoin);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                Animal animal = new Animal();
+                while (await reader.ReadAsync())
                 {
-                    AnimalId = reader.GetInt32(0),
-                    CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
-
-
-                    AnimalSpecie = new()
+                    animal = new()
                     {
-                        AnimalSpecieId = reader.GetInt32(2),
-                        AnimalSpecieName = (string)reader["animalspeciename"],
-                        LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
+                        AnimalId = reader.GetInt32(0),
+                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
 
-                        AnimalClass = new()
+
+                        AnimalSpecie = new()
                         {
-                            AnimalClassId = reader.GetInt32(5),
-                            AnimalClassName = (string)reader["animalclassname"]
+                            AnimalSpecieId = reader.GetInt32(2),
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+                            LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
 
+                            AnimalClass = new()
+                            {
+                                AnimalClassId = reader.GetInt32(5),
+                                AnimalClassName = (string)reader["animalclassname"]
+
+                            }
                         }
-                    }
-                };
-                animals.Add(animal);
+                    };
+                    animals.Add(animal);
+                }
+                return animals;
             }
-            return animals;
+            catch(PostgresException ex)
+            {
 
-            //Lägg in try catch. Någon kan ta bort Simba och då finns han inte längre när du söker.
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+             
         }
 
         /// <summary>
@@ -222,40 +281,70 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<Animal>> GetAnimalWithCharacterName()
         {
-            List<Animal> animals = new List<Animal>();
-
-
-            var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlJoin);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            Animal animal = new Animal();
-
-            while (await reader.ReadAsync())
+            try
             {
-                animal = new()
+                List<Animal> animals = new List<Animal>();
+
+
+                var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlJoin);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                Animal animal = new Animal();
+
+                while (await reader.ReadAsync())
                 {
-                    CharacterName = (string)reader["charactername"],
-
-
-                    AnimalSpecie = new()
+                    animal = new()
                     {
-                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"], 
 
-                        AnimalClass = new()
+
+                        AnimalSpecie = new()
                         {
-                            AnimalClassName = (string)reader["animalclassname"]
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+
+                            AnimalClass = new()
+                            {
+                                AnimalClassName = (string)reader["animalclassname"]
+
+                            }
 
                         }
+                    };
 
-                    }
-                };
-
-                animals.Add(animal);
+                    animals.Add(animal);
+                }
+                return animals;
             }
-            return animals;
+
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
         }
 
 
@@ -266,6 +355,8 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<Animal> GetAnimalByCharacterName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
         {
+            try
+            {
             string sqlQuestion = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid =animalspecie.animalclassid WHERE animal.charactername= @charactername";
              
                
@@ -275,8 +366,7 @@ namespace ProgrammeringMotDatabaser.DAL
             await using var reader = await command.ExecuteReaderAsync();
 
 
-            try
-            {
+            
                 Animal animal = new();
                 while (await reader.ReadAsync())
                 {
@@ -302,13 +392,33 @@ namespace ProgrammeringMotDatabaser.DAL
                 }
                 return animal;
             }
-            catch (Exception)
+
+            catch (PostgresException ex)
             {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
 
-                throw;
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
             }
-
-            //Lägg in try catch. Någon kan ta bort Simba och då finns han inte längre när du söker.
         }
 
         /// <summary>
@@ -317,37 +427,68 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<Animal>> CountAnimalInEachSpecie()
         {
-            List<Animal> animals = new List<Animal>();
-            string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-            Animal animal = new();
-
-            while (await reader.ReadAsync())
+            try
             {
+                List<Animal> animals = new List<Animal>();
+                string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
 
-                animal = new()
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlQ);
+                await using var reader = await command.ExecuteReaderAsync();
+                Animal animal = new();
+
+                while (await reader.ReadAsync())
                 {
-                    AnimalId = reader.GetInt32(1),
 
-
-
-                    AnimalSpecie = new()
+                    animal = new()
                     {
-                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        AnimalId = reader.GetInt32(1),
 
 
-                    }
 
-                };
+                        AnimalSpecie = new()
+                        {
+                            AnimalSpecieName = (string)reader["animalspeciename"],
 
 
-                animals.Add(animal);
+                        }
 
+                    };
+
+
+                    animals.Add(animal);
+
+                }
+                return animals;
             }
-            return animals;
+
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+
         }
 
         /// <summary>
@@ -356,66 +497,127 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<AnimalSpecie> CountSpecie()
         {
-            string sqlQ = "SELECT COUNT (s.animalspecieid) as AmountOfSpecies FROM animalspecie s";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            AnimalSpecie animalspecie = new();
-            while (await reader.ReadAsync())
+            try
             {
-                animalspecie = new()
+                string sqlQ = "SELECT COUNT (s.animalspecieid) as AmountOfSpecies FROM animalspecie s";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlQ);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                AnimalSpecie animalspecie = new();
+                while (await reader.ReadAsync())
                 {
+                    animalspecie = new()
+                    {
 
-                    AnimalSpecieId = reader.GetInt32(0),
+                        AnimalSpecieId = reader.GetInt32(0),
 
-                };
+                    };
 
+                }
+
+                return animalspecie;
             }
 
-            return animalspecie;
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+
         }
 
         /// <summary>
         /// Count how many species there are in each animal class
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Animal>> NumberOfSpecieInClass()
+        public async Task<IEnumerable<Animal>> NumberOfAnimalsInClass()
         {
-            List<Animal> animals = new List<Animal>();
-            string sqlQ = "SELECT c.animalclassname, COUNT(s.animalspecieid) FROM animalclass c FULL JOIN animalspecie s ON s.animalclassid = c.animalclassid FULL JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY c.animalclassname ORDER BY COUNT(s.animalspecieid) DESC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-            Animal animal = new();
-
-            while (await reader.ReadAsync())
+            try
             {
+                List<Animal> animals = new List<Animal>();
+                string sqlQ = "SELECT c.animalclassname, COUNT (a.animalid) FROM animalclass c full JOIN animalspecie s ON s.animalclassid = c.animalclassid full JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY c.animalclassname ORDER BY COUNT(a.animalid) DESC";
 
-                animal = new()
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlQ);
+                await using var reader = await command.ExecuteReaderAsync();
+                Animal animal = new();
+
+                while (await reader.ReadAsync())
                 {
-                    AnimalSpecie = new()
+
+                    animal = new()
                     {
-                        AnimalSpecieId = reader.GetInt32(1),
+                        AnimalId= reader.GetInt32(1),
 
-
-                        AnimalClass = new()
+                        AnimalSpecie = new()
                         {
-                            AnimalClassName = (string)reader["animalclassname"]
+                    
+                            AnimalClass = new()
+                            {
+                                AnimalClassName = (string)reader["animalclassname"]
+
+                            }
 
                         }
 
-                    }
-
-                };
+                    };
 
 
-                animals.Add(animal);
+                    animals.Add(animal);
 
+                }
+                return animals;
             }
-            return animals;
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+
         }
 
 
@@ -425,25 +627,56 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<AnimalClass>> GetAnimalClass()
         {
-            List<AnimalClass> animalClass = new List<AnimalClass>();
-            string sqlQ = "SELECT * FROM animalclass ";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            AnimalClass animalclass = new AnimalClass();
-            while (await reader.ReadAsync())
+            try
             {
-                animalclass = new AnimalClass()
-                {
-                    AnimalClassId = reader.GetInt32(0),
-                    AnimalClassName = (string)reader["animalclassname"]
+                List<AnimalClass> animalClass = new List<AnimalClass>();
+                string sqlQ = "SELECT * FROM animalclass ";
 
-                };
-                animalClass.Add(animalclass);
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlQ);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                AnimalClass animalclass = new AnimalClass();
+                while (await reader.ReadAsync())
+                {
+                    animalclass = new AnimalClass()
+                    {
+                        AnimalClassId = reader.GetInt32(0),
+                        AnimalClassName = (string)reader["animalclassname"]
+
+                    };
+                    animalClass.Add(animalclass);
+                }
+                return animalClass;
             }
-            return animalClass;
+
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+
         }
 
 
@@ -454,33 +687,62 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<AnimalSpecie> FindClass(AnimalSpecie selectAnimalspecie)
         {
-            string sqlQuestion = "Select s.animalspeciename, c.animalclassname, s.latinname From animalspecie s Join animalclass c ON s.animalclassid = c.animalclassid Where animalspeciename = @animalspeciename";
-
-            
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQuestion);
-            command.Parameters.AddWithValue("animalspeciename", selectAnimalspecie.AnimalSpecieName);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            AnimalSpecie animalspecie = new();
-            while (await reader.ReadAsync())
+            try
             {
-                animalspecie = new()
+                string sqlQuestion = "Select s.animalspeciename, c.animalclassname, s.latinname From animalspecie s Join animalclass c ON s.animalclassid = c.animalclassid Where animalspeciename = @animalspeciename";
 
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlQuestion);
+                command.Parameters.AddWithValue("animalspeciename", selectAnimalspecie.AnimalSpecieName);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                AnimalSpecie animalspecie = new();
+                while (await reader.ReadAsync())
                 {
-                    AnimalSpecieName = (string)reader["animalspeciename"],
-                    LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
+                    animalspecie = new()
 
-                    AnimalClass= new()
                     {
-                        AnimalClassName = (string)reader["animalclassname"]
-                    }
-                
+                        AnimalSpecieName = (string)reader["animalspeciename"],
+                        LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
 
-                };
+                        AnimalClass = new()
+                        {
+                            AnimalClassName = (string)reader["animalclassname"]
+                        }
 
+
+                    };
+
+                }
+                return animalspecie;
             }
-            return animalspecie;
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
 
 
             //Lägg in try catch. Någon kan ta bort en klass och då finns han inte längre när du söker.
@@ -497,34 +759,63 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<AnimalSpecie>> GetAnimalSpecie()
         {
-            List <AnimalSpecie> animalSpecies = new List <AnimalSpecie>();
-            string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
-            
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            
-            await using var command = dataSource.CreateCommand(sqlQ);
-            await using var reader = await command.ExecuteReaderAsync();
-            AnimalSpecie animalspecie = new AnimalSpecie();
-            while (await reader.ReadAsync())
+            try
             {
-           
+                List<AnimalSpecie> animalSpecies = new List<AnimalSpecie>();
+                string sqlQ = "SELECT * FROM animalspecie ORDER BY animalspeciename ASC";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+
+                await using var command = dataSource.CreateCommand(sqlQ);
+                await using var reader = await command.ExecuteReaderAsync();
+                AnimalSpecie animalspecie = new AnimalSpecie();
+                while (await reader.ReadAsync())
+                {
+
                     animalspecie = new AnimalSpecie()
                     {
                         AnimalSpecieId = reader.GetInt32(0),
                         AnimalSpecieName = (string)reader["animalspeciename"],
-                        
-                        AnimalClass= new()
+
+                        AnimalClass = new()
                         {
                             AnimalClassId = reader.GetInt32(3)
                         }
-                        
-                        
+
+
                     };
-            
-                
-                animalSpecies.Add(animalspecie);
+
+
+                    animalSpecies.Add(animalspecie);
+                }
+                return animalSpecies;
             }
-            return animalSpecies;
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
         }
 
 
@@ -536,38 +827,67 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<IEnumerable<Animal>> GetAnimalBySpeficClass(AnimalClass animalclass)
         {
-            List<Animal> animals = new List<Animal>();
-
-            var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlJoin);
-            command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
-            await using var reader = await command.ExecuteReaderAsync();
-
-            Animal animal = new Animal();
-
-            while (await reader.ReadAsync())  
+            try
             {
-                animal = new Animal()
+                List<Animal> animals = new List<Animal>();
+
+                var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlJoin);
+                command.Parameters.AddWithValue("animalclassname", animalclass.AnimalClassName);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                Animal animal = new Animal();
+
+                while (await reader.ReadAsync())
                 {
-                    AnimalId = reader.GetInt32(0),   
-
-                    AnimalSpecie = new()
+                    animal = new Animal()
                     {
-                        AnimalSpecieName = (string)reader["animalspeciename"],
-                        
-                        AnimalClass = new()
-                        {
-                            AnimalClassName = (string)reader["animalclassname"]
-                        }
-                        
-                    }                    
-                };
+                        AnimalId = reader.GetInt32(0),
 
-                animals.Add(animal);
+                        AnimalSpecie = new()
+                        {
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+
+                            AnimalClass = new()
+                            {
+                                AnimalClassName = (string)reader["animalclassname"]
+                            }
+
+                        }
+                    };
+
+                    animals.Add(animal);
+                }
+                return animals;
             }
-            return animals;
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
         }
 
         #endregion
@@ -583,22 +903,51 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<Animal> UpdateCharacterName(string newCharaternamne, Animal animal)
         {
-            string sqlCommand = "UPDATE animal SET charactername = @charactername WHERE animalid = @animalid";
-  
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("charactername", (object) newCharaternamne ?? DBNull.Value);
-            command.Parameters.AddWithValue("animalid", animal.AnimalId);
-            await command.ExecuteNonQueryAsync();
-
-            var newAnimal = new Animal()
+            try
             {
-                AnimalId = animal.AnimalId,
-                CharacterName = newCharaternamne,
-           
-            };
+                string sqlCommand = "UPDATE animal SET charactername = @charactername WHERE animalid = @animalid";
 
-            return newAnimal;
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("charactername", (object)newCharaternamne ?? DBNull.Value);
+                command.Parameters.AddWithValue("animalid", animal.AnimalId);
+                await command.ExecuteNonQueryAsync();
+
+                var newAnimal = new Animal()
+                {
+                    AnimalId = animal.AnimalId,
+                    CharacterName = newCharaternamne,
+
+                };
+
+                return newAnimal;
+            }
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
 
         }
 
@@ -608,25 +957,55 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <param name="newLatinName"></param>
         /// <param name="animalSN"></param>
         /// <returns></returns>
-        public async Task<AnimalSpecie> UpdateLatinName(string newLatinName, string animalSN) 
+        public async Task<AnimalSpecie> UpdateLatinName(string newLatinName, string animalSN)
         {
-            string sqlCommand = "UPDATE animalspecie SET latinname = @latinname WHERE animalspeciename = @animalspeciename";
+            try
+            {
 
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("latinname", (object)newLatinName ?? DBNull.Value);
-            command.Parameters.AddWithValue("animalspeciename", animalSN);
-            await command.ExecuteNonQueryAsync();
+                string sqlCommand = "UPDATE animalspecie SET latinname = @latinname WHERE animalspeciename = @animalspeciename";
 
-            var newAnimal = new AnimalSpecie()
-            {             
-                    
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("latinname", (object)newLatinName ?? DBNull.Value);
+                command.Parameters.AddWithValue("animalspeciename", animalSN);
+                await command.ExecuteNonQueryAsync();
+
+                var newAnimal = new AnimalSpecie()
+                {
+
                     AnimalSpecieName = animalSN,
                     LatinName = newLatinName
-                
-            };
 
-            return newAnimal;
+                };
+
+                return newAnimal;
+            }
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
         }
 
         /// <summary>
@@ -637,27 +1016,56 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task<Animal> UpdateAnimalSpecie(Animal animal, int newAnimalSpecieId)
         {
-
-            string sqlCommand = "UPDATE animal SET animalspecieid = @animalspecieid WHERE animalid = @animalid";
-
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalspecieid", newAnimalSpecieId);
-            command.Parameters.AddWithValue("animalid", animal.AnimalId);
-            await command.ExecuteNonQueryAsync();
-
-            var newAnimal = new Animal()
+            try
             {
-                AnimalId = animal.AnimalId,
 
-                AnimalSpecie = new()
+                string sqlCommand = "UPDATE animal SET animalspecieid = @animalspecieid WHERE animalid = @animalid";
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalspecieid", newAnimalSpecieId);
+                command.Parameters.AddWithValue("animalid", animal.AnimalId);
+                await command.ExecuteNonQueryAsync();
+
+                var newAnimal = new Animal()
                 {
-                    AnimalSpecieId = newAnimalSpecieId,
-                   
-                }
-            };
+                    AnimalId = animal.AnimalId,
 
-            return newAnimal;
+                    AnimalSpecie = new()
+                    {
+                        AnimalSpecieId = newAnimalSpecieId,
+
+                    }
+                };
+
+                return newAnimal;
+            }
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
 
 
         }
@@ -673,15 +1081,45 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task DeleteAnimal(Animal animal)
         {
+        try
+        {
             string sqlCommand = "DELETE FROM animal WHERE animalid = @animalid";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);           
+            await using var command = dataSource.CreateCommand(sqlCommand);
             command.Parameters.AddWithValue("animalid", animal.AnimalId);
             await command.ExecuteNonQueryAsync();
 
-          
         }
+        catch (PostgresException ex)
+        {
+
+            string errorMessage = "Something went wrong";
+            string errorCode = ex.SqlState;
+
+
+            switch (errorCode)
+            {
+                case PostgresErrorCodes.ForeignKeyViolation:
+                    errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                    break;
+
+                case PostgresErrorCodes.UniqueViolation:
+                    errorMessage = "The value already exists. The value must be unique.";
+                    break;
+
+                case PostgresErrorCodes.StringDataRightTruncation:
+                    errorMessage = "The value has too many characters. Max 255 characters.";
+                    break;
+
+                default:
+                    break;
+            }
+
+            throw new Exception(errorMessage, ex);
+        }
+
+    }
 
         /// <summary>
         /// Delete an animal in animal specie 
@@ -690,15 +1128,45 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <returns></returns>
         public async Task DeleteAnimalInSpecie(AnimalSpecie animalSpecie)
         {
-            string sqlCommand = "DELETE FROM animal WHERE animalspecieid = @animalspecieid";
+            try
+            {
+                string sqlCommand = "DELETE FROM animal WHERE animalspecieid = @animalspecieid";
 
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlCommand);
-            command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
-            await command.ExecuteNonQueryAsync();
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlCommand);
+                command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
+                await command.ExecuteNonQueryAsync();
+            }
+                catch (PostgresException ex)
+                {
+
+                    string errorMessage = "Something went wrong";
+                    string errorCode = ex.SqlState;
 
 
-        }
+                    switch (errorCode)
+                    {
+                        case PostgresErrorCodes.ForeignKeyViolation:
+                            errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                            break;
+
+                        case PostgresErrorCodes.UniqueViolation:
+                            errorMessage = "The value already exists. The value must be unique.";
+                            break;
+
+                        case PostgresErrorCodes.StringDataRightTruncation:
+                            errorMessage = "The value has too many characters. Max 255 characters.";
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    throw new Exception(errorMessage, ex);
+                }
+
+
+            }
 
         /// <summary>
         /// Delete a animal specie
@@ -723,16 +1191,27 @@ namespace ProgrammeringMotDatabaser.DAL
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
+
                 switch (errorCode)
                 {
-                    case PostgresErrorCodes.ForeignKeyViolation: 
-                        errorMessage = "There are still animals as this specie. Do you want to delete them all?";
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it. Do you wish to delete all animals in this specie?";
                         break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
                     default:
                         break;
                 }
+
                 throw new Exception(errorMessage, ex);
-            }           
+            }
         }
 
         /// <summary>
@@ -741,7 +1220,7 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <param name="animalClass"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAnimalClass(AnimalClass animalClass)
+        public async Task DeleteAnimalClass(AnimalClass animalClass)//22001, 23503, 23505
         {
             try
             {
@@ -752,11 +1231,12 @@ namespace ProgrammeringMotDatabaser.DAL
                 command.Parameters.AddWithValue("animalclassid", animalClass.AnimalClassId);
                 await command.ExecuteNonQueryAsync();
             }
-            catch (PostgresException ex) //22001, Det är för många bokstäver, 23503  finns referenser kvar, 23505 finns redan ett värde med det namnet, måste vara unikt,
+            catch (PostgresException ex) 
             {
 
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
+
 
                 switch (errorCode)
                 {
@@ -775,12 +1255,13 @@ namespace ProgrammeringMotDatabaser.DAL
                     default:
                         break;
                 }
+
                 throw new Exception(errorMessage, ex);
             }
         }
         #endregion
 
- 
+
 
 
 
