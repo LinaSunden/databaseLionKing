@@ -158,8 +158,13 @@ namespace ProgrammeringMotDatabaser
             else
                 try
                 {
-                    var checkIfAnimalExists = await db.AddAnimal(animalName, int.Parse(specieId));
-                    MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");
+                    if (animalName== string.Empty)
+                    {
+                        animalName = null;
+                    }
+
+                    /*var checkIfAnimalExists = */ await db.AddAnimal(animalName, int.Parse(specieId));
+                    /*MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");*/ //Något blir fel när den hoppar in och ska köra den andra metoden i AddAnimal.. Den söker på ett djur med null som namn.. 
                    
                     txtinput.Focus();
                     DisplayCBO();

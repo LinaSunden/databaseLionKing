@@ -139,7 +139,7 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <param name="specieId"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Animal> AddAnimal(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
+        public async Task /*<Animal>*/ AddAnimal(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
         {
             try
             {
@@ -151,8 +151,8 @@ namespace ProgrammeringMotDatabaser.DAL
                 command.Parameters.AddWithValue("animalspecieid", specieId);
                 await command.ExecuteNonQueryAsync();
 
-                var animal = GetAnimalByCharacterName(characterName);
-                return await animal;
+                //var animal = GetAnimalByCharacterName(characterName); //Någonting blir fel här när characterName är null.Vet inte varför Men får upp olika felmeddelanden. 
+                //return await animal;
             }
             catch (PostgresException ex)
             {
@@ -362,8 +362,8 @@ namespace ProgrammeringMotDatabaser.DAL
                
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var command = dataSource.CreateCommand(sqlQuestion);
-            command.Parameters.AddWithValue("charactername", characterName);
-            await using var reader = await command.ExecuteReaderAsync();
+            command.Parameters.AddWithValue ("charactername", (object)characterName ?? DBNull.Value);
+                await using var reader = await command.ExecuteReaderAsync();
 
 
             
