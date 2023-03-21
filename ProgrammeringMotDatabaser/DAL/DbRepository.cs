@@ -139,17 +139,25 @@ namespace ProgrammeringMotDatabaser.DAL
         /// <param name="specieId"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task /*<Animal>*/ AddAnimal(string characterName, int specieId) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
+        public async Task <Animal> AddAnimal(Animal animal)                                                                   
         {
             try
             {
-                string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid)";
+                string sqlCommand = "insert into animal(charactername, animalspecieid) values(@charactername, @animalspecieid) returning animalid";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlCommand);
-                command.Parameters.AddWithValue("charactername", (object)characterName ?? DBNull.Value); 
-                command.Parameters.AddWithValue("animalspecieid", specieId);
-                await command.ExecuteNonQueryAsync();
+                command.Parameters.AddWithValue("charactername", (object)animal.CharacterName ?? DBNull.Value); 
+                command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecie.AnimalSpecieId);
+                
+                animal.AnimalId = (int) await command.ExecuteScalarAsync();
+
+               return animal;
+                
+
+                
+                //await command.ExecuteNonQueryAsync();
+
 
                 //var animal = GetAnimalByCharacterName(characterName); //Någonting blir fel här när characterName är null.Vet inte varför Men får upp olika felmeddelanden. 
                 //return await animal;
@@ -172,41 +180,83 @@ namespace ProgrammeringMotDatabaser.DAL
 
         }
 
-        //public async void ErrorMessageCatch()
-        //{
-
-        //        string errorMessage = "Something went wrong";
-        //        string errorCode = ex.SqlState;
-
-        //        switch (errorCode)
-        //        {
-        //            case PostgresErrorCodes.UniqueViolation:
-        //                errorMessage = "There is already an animal with that name. The animal name must be unique";
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //        throw new Exception(errorMessage, ex);
-
-        //}
-
-        /// <summary>
-        /// Create a animal class
-        /// </summary>
-        /// <param name="animalclass"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
 
         #endregion
 
 
         #region Read - All Methods that are conncted to read
 
-        /// <summary>
-        /// This method make a list with all Animals and all info about them. Using every propertie in class Animal, AnimalSpecie and Animal Class
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
+
+        public async Task<Animal> GetAnimalById(int animalId)
+        {
+
+            string sql = "Select a.animalid, a.charactername, s.animalspeciename from animal a Join animalspecie s on s.animalspecieid = a.animalspecieid where a.animalid = @animalid";
+
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var command = dataSource.CreateCommand(sql);
+            command.Parameters.AddWithValue("animalid", animalId);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            Animal animal = new Animal();
+            while (await reader.ReadAsync())
+            {
+                animal = new()
+                {
+                    AnimalId = reader.GetInt32(0),
+                    CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
+                    
+                    AnimalSpecie = new()
+                    {
+                      
+                        AnimalSpecieName = (string) reader["animalspeciename"],
+
+                    }
+                    
+                  
+                };
+            }
+
+
+            return animal;
+        }
+
+
+
+
+    
+
+    //Animal animal = new();
+    //            while (await reader.ReadAsync())
+    //            {
+    //                animal = new ()
+    //                {
+    //                    AnimalId = reader.GetInt32(0),
+    //                    CharacterName = reader["charactername"] == DBNull.Value? null : (string) reader["charactername"],
+
+    //                    AnimalSpecie = new()
+    //                    {
+    //                        AnimalSpecieName = (string)reader["animalspeciename"],
+    //                        LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
+
+    //                        AnimalClass = new()
+    //                        {
+    //                            AnimalClassName = (string)reader["animalclassname"]
+
+    //                        }
+    //                    }
+
+
+    //                };
+    //            }
+    //            return animal;
+
+
+
+/// <summary>
+/// This method make a list with all Animals and all info about them. Using every propertie in class Animal, AnimalSpecie and Animal Class
+/// </summary>
+/// <returns></returns>
+public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
         {
             try
             {

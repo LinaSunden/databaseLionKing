@@ -23,8 +23,7 @@ namespace ProgrammeringMotDatabaser.Models
 
 
         #region DisplayMemberPath
-        public string CreateAnimalSuccess => $"You have successfully created {CharacterName} who is a {AnimalSpecie.AnimalSpecieName} with animal id: {AnimalId}";
-
+    
         public string CountAnimalsInClass => $"Class: {AnimalSpecie.AnimalClass.AnimalClassName} Count: {AnimalId}";
 
         public string DeleteAnimals => $"Animal id: {AnimalId}, Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}"; //refererar till att listan där vi väljer delete visas

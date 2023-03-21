@@ -156,16 +156,42 @@ namespace ProgrammeringMotDatabaser
 
             }
             else
+            {
+               
+
                 try
                 {
-                    if (animalName== string.Empty)
+                    if (animalName == string.Empty)
                     {
                         animalName = null;
                     }
 
-                    /*var checkIfAnimalExists = */ await db.AddAnimal(animalName, int.Parse(specieId));
-                    /*MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");*/ //Något blir fel när den hoppar in och ska köra den andra metoden i AddAnimal.. Den söker på ett djur med null som namn.. 
-                   
+                    var animal = new Animal()
+                    {
+
+                        CharacterName = animalName,
+
+                        AnimalSpecie = new()
+                        {
+                            AnimalSpecieId = int.Parse(specieId)
+
+                        }
+
+                    };
+
+                    var createdAnimal = await db.AddAnimal(animal);
+                    
+                    var animalWithSpecieName = await db.GetAnimalById(createdAnimal.AnimalId);
+
+                    MessageBox.Show($"You have successfully created {createdAnimal.CharacterName} an animal who is a {animalWithSpecieName.AnimalSpecie.AnimalSpecieName} with animal id: {createdAnimal.AnimalId}");
+
+                    //{ animalWithSpecieName.AnimalSpecie.AnimalSpecieName}
+
+                    /*var checkIfAnimalExists = */
+                    //await db.AddAnimal(animalName, int.Parse(specieId));
+                    //MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");
+                    //Något blir fel när den hoppar in och ska köra den andra metoden i AddAnimal.. Den söker på ett djur med null som namn.. 
+
                     txtinput.Focus();
                     DisplayCBO();
                     UpdateListBoxes();
@@ -178,6 +204,13 @@ namespace ProgrammeringMotDatabaser
 
                     MessageBox.Show(ex.Message);
                 }
+
+            }
+
+                
+            
+
+             
 
 
 
