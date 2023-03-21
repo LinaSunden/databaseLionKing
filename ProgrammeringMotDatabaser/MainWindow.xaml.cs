@@ -160,8 +160,9 @@ namespace ProgrammeringMotDatabaser
                 {
                     var checkIfAnimalExists = await db.AddAnimal(animalName, int.Parse(specieId));
                     MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");
+                   
+                    txtinput.Focus();
                     DisplayCBO();
-
                     UpdateListBoxes();
                     ClearCbo();
                     ClearTextboxes();
