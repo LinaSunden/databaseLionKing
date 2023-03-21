@@ -153,14 +153,7 @@ namespace ProgrammeringMotDatabaser.DAL
                 animal.AnimalId = (int) await command.ExecuteScalarAsync();
 
                return animal;
-                
-
-                
-                //await command.ExecuteNonQueryAsync();
-
-
-                //var animal = GetAnimalByCharacterName(characterName); //Någonting blir fel här när characterName är null.Vet inte varför Men får upp olika felmeddelanden. 
-                //return await animal;
+                   
             }
             catch (PostgresException ex)
             {
@@ -186,10 +179,14 @@ namespace ProgrammeringMotDatabaser.DAL
 
         #region Read - All Methods that are conncted to read
 
-
+        /// <summary>
+        /// Get an animal thru the animalid, return animal with AnimalspecieName
+        /// </summary>
+        /// <param name="animalId"></param>
+        /// <returns></returns>
         public async Task<Animal> GetAnimalById(int animalId)
         {
-
+            try{ 
             string sql = "Select a.animalid, a.charactername, s.animalspeciename from animal a Join animalspecie s on s.animalspecieid = a.animalspecieid where a.animalid = @animalid";
 
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
@@ -204,51 +201,51 @@ namespace ProgrammeringMotDatabaser.DAL
                 {
                     AnimalId = reader.GetInt32(0),
                     CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
-                    
+
                     AnimalSpecie = new()
                     {
-                      
-                        AnimalSpecieName = (string) reader["animalspeciename"],
+
+                        AnimalSpecieName = (string)reader["animalspeciename"],
 
                     }
-                    
-                  
+
+
                 };
             }
 
-
             return animal;
+
+            }
+            catch (PostgresException ex)
+            {
+
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The value already exists. The value must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
         }
 
-
-
-
-    
-
-    //Animal animal = new();
-    //            while (await reader.ReadAsync())
-    //            {
-    //                animal = new ()
-    //                {
-    //                    AnimalId = reader.GetInt32(0),
-    //                    CharacterName = reader["charactername"] == DBNull.Value? null : (string) reader["charactername"],
-
-    //                    AnimalSpecie = new()
-    //                    {
-    //                        AnimalSpecieName = (string)reader["animalspeciename"],
-    //                        LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
-
-    //                        AnimalClass = new()
-    //                        {
-    //                            AnimalClassName = (string)reader["animalclassname"]
-
-    //                        }
-    //                    }
-
-
-    //                };
-    //            }
-    //            return animal;
+         
 
 
 

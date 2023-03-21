@@ -185,13 +185,6 @@ namespace ProgrammeringMotDatabaser
 
                     MessageBox.Show($"You have successfully created {createdAnimal.CharacterName} an animal who is a {animalWithSpecieName.AnimalSpecie.AnimalSpecieName} with animal id: {createdAnimal.AnimalId}");
 
-                    //{ animalWithSpecieName.AnimalSpecie.AnimalSpecieName}
-
-                    /*var checkIfAnimalExists = */
-                    //await db.AddAnimal(animalName, int.Parse(specieId));
-                    //MessageBox.Show($"{checkIfAnimalExists.CreateAnimalSuccess}");
-                    //Något blir fel när den hoppar in och ska köra den andra metoden i AddAnimal.. Den söker på ett djur med null som namn.. 
-
                     txtinput.Focus();
                     DisplayCBO();
                     UpdateListBoxes();
