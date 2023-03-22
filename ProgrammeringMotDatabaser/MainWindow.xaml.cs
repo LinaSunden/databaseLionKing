@@ -315,7 +315,23 @@ namespace ProgrammeringMotDatabaser
             //{
             //    MessageBox.Show("Please choose an animal from listbox");
             //}
-            
+
+
+
+            //Monira när du år klar med det du skulle ändra på knapptrycket så kan du lägga in denna koden som gör att användaren inte kan fylla i siffror.
+            //if (AreOnlyLetters(newCharacterName) == false)
+            //{
+            //    MessageBox.Show("You can only type letters for character name");
+            //}
+
+            //else if(AreOnlyLetters(newLatinName)== false)
+            //{
+            //    MessageBox.Show("You can only type letters for latin name");
+            //}
+
+
+
+
             try
             {
                 var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
