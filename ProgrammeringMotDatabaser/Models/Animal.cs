@@ -26,8 +26,6 @@ namespace ProgrammeringMotDatabaser.Models
     
         public string CountAnimalsInClass => $"Class: {AnimalSpecie.AnimalClass.AnimalClassName} Count: {AnimalId}";
 
-        public string DeleteAnimals => $"Animal id: {AnimalId}, Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}"; //refererar till att listan där vi väljer delete visas
-
         public string CountAnimalInEachSpecie => $"Specie: {AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
 
         public string AllAnimals => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}, Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";

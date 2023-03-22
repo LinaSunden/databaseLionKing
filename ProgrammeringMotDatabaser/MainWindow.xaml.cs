@@ -474,7 +474,7 @@ namespace ProgrammeringMotDatabaser
         {
             Animal selected = lstBox.SelectedItem as Animal;
 
-            lblDeleteAnimalid.Content = $"AnimalId: {selected.AnimalId}";
+            lblDeleteAnimalid.Content = $"Animal id: {selected.AnimalId}";
             lblCharacterNameDelete.Content = $"Name: {selected.CharacterName}";
             lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
            
@@ -836,7 +836,7 @@ namespace ProgrammeringMotDatabaser
             lblupdateanimalclass.Content =  string.Empty;
             lblShowAnimalClassForSpecie.Content = string.Empty;
 
-            lblDeleteAnimalid.Content = "Animal Id: ";
+            lblDeleteAnimalid.Content = "Animal id: ";
             lblCharacterNameDelete.Content = "Character name: ";
             lblAnimalSpecieDelete.Content = "Animal specie: ";
         }
