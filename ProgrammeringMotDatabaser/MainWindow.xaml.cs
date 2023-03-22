@@ -718,8 +718,16 @@ namespace ProgrammeringMotDatabaser
                 MessageBox.Show(ex.Message);
             }          
         }
-        private void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
+        internal async void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            string searchText = txtCharacterName.Text;
+            var searchCharacterName = await db.SearchAfterAnimalsCharacterName(searchText);
+
+
+            lstBox.ItemsSource = searchCharacterName;
+            lstBox.DisplayMemberPath = "AllAnimalsWithAName";
+
+
             btnsearch.IsEnabled = true;
 
         }

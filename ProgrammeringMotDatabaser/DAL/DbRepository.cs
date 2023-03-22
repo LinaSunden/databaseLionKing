@@ -370,7 +370,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 List<Animal> animals = new List<Animal>();
 
 
-                var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
+                var sqlJoin = "SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlJoin);
@@ -434,6 +434,87 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 throw new Exception(errorMessage, ex);
             }
         }
+
+
+        /// <summary>
+        /// This method make it possible to search and get results for each letter the put in. It's make a list of all animals that match the letter of the input
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<IEnumerable<Animal>> SearchAfterAnimalsCharacterName(string searchLetters)
+        {
+            try
+            {
+                List<Animal> animals = new List<Animal>();
+
+
+                var sqlJoin = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername LIKE '"+searchLetters+ "%' ORDER BY charactername ASC";
+
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlJoin);
+                await using var reader = await command.ExecuteReaderAsync();
+
+                Animal animal = new Animal();
+
+                while (await reader.ReadAsync())
+                {
+                    animal = new()
+                    {
+                        AnimalId = reader.GetInt32(0),
+                        CharacterName = (string)reader["charactername"],
+
+
+                        AnimalSpecie = new()
+                        {
+                            AnimalSpecieName = (string)reader["animalspeciename"],
+
+                            AnimalClass = new()
+                            {
+                                AnimalClassName = (string)reader["animalclassname"]
+
+                            }
+
+                        }
+                    };
+
+                    animals.Add(animal);
+                }
+                return animals;
+            }
+
+            catch (PostgresException ex)
+            {
+                string errorMessage = "Something went wrong";
+                string errorCode = ex.SqlState;
+
+                switch (errorCode)
+                {
+                    case PostgresErrorCodes.ForeignKeyViolation:
+
+                        errorMessage = "This value has connections that is not included.";
+                        break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The name already exists.The name must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie name need to have values";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                throw new Exception(errorMessage, ex);
+            }
+        }
+
 
 
         /// <summary>
