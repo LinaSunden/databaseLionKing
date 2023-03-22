@@ -450,6 +450,11 @@ namespace ProgrammeringMotDatabaser
             lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
 
             return selected;
+
+            ClearCbo();
+            ClearTextboxes();
+            UpdateListBoxes();
+            DisplayCBO(); 
         }
 
         #endregion
