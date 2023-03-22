@@ -47,7 +47,7 @@
         </GroupBox>
         <GroupBox x:Name="gBoxCreateAnimal" Header="Create new animal" Margin="50,658,735,155" FontWeight="Bold">
             <StackPanel Margin="0, 10, 0, 10">
-                <Label Content="Animal name" FontWeight="Normal"/>
+                <Label Content="Character name" FontWeight="Normal"/>
                 <TextBox x:Name="txtinput" TextWrapping="Wrap" Width="120" BorderBrush="#FF111112" Margin="-40, 0, 0, 10" FontWeight="Normal"/>
                 <Label Content="Animal specie" FontWeight="Normal"/>
                 <ComboBox x:Name="cbospecie" Width="124" SelectionChanged="cbospecie_SelectionChanged" Margin="-40, 0, 0, 10" FontWeight="Normal" />

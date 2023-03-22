@@ -38,21 +38,34 @@ namespace ProgrammeringMotDatabaser
 
 
         #region Create 
- 
 
 
-        /// <summary>
-        /// Button that creates a animal class
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void btncreateclass_Click(object sender, RoutedEventArgs e)
+
+      
+
+            /// <summary>
+            /// Button that creates a animal class
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
+            private async void btncreateclass_Click(object sender, RoutedEventArgs e)
         {
 
+
+
+            
             var newClassName = txtinputclassname.Text;
+
+            
+
             if (newClassName == "")
             {
                 MessageBox.Show("Please fill in the name of the animal class you wish to create");
+            }
+
+            else if (AreOnlyLetters(newClassName) == false)
+            {
+                MessageBox.Show("You can only type letters for animalclass name");
             }
 
             else
@@ -98,6 +111,17 @@ namespace ProgrammeringMotDatabaser
                 MessageBox.Show("Please fill in the name of the animal specie you wish to create");
 
             }
+
+           else if (AreOnlyLetters(animalSpecieName) == false)
+            {
+                MessageBox.Show("You can only type letters for animalspecie name");
+            }
+
+            else if (AreOnlyLetters(latinName) == false)
+            {
+                MessageBox.Show("You can only type letters for latin name");
+            }
+
             else if (animalClass == null)
             {
                 MessageBox.Show("Please select an animalclass from the dropdown box");
@@ -151,11 +175,17 @@ namespace ProgrammeringMotDatabaser
             var specieId = GetAnimalSpecieId();
             string animalName = txtinput.Text;
 
-            if (specieId == null)
+            if (AreOnlyLetters(animalName) == false)
+            {
+                MessageBox.Show("You can only type letters for animal name");
+            }
+
+            else if (specieId == null)
             {
                 MessageBox.Show("To create an animal you need to declare it's specie from the combobox below");
 
             }
+
             else
             {
                
@@ -217,14 +247,18 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private async void btnsearch_Click(object sender, RoutedEventArgs e)
         {
+            
 
             try
             {
                 string characterName = txtCharacterName.Text;
                 var animal = await db.GetAnimalByCharacterName(characterName);
+                if (AreOnlyLetters(characterName) == false)
+                {
+                    MessageBox.Show("You can only type letters for character name");
+                }
 
-
-                if (animal.CharacterName == null)//Kanske finns en mer korrekt lösning på detta. Men den fungerar.
+                else if (animal.CharacterName == null)
                 {
                     MessageBox.Show($"There is no animal called {characterName}");
                     ClearTextboxes();
@@ -863,8 +897,20 @@ namespace ProgrammeringMotDatabaser
             }
         }
 
-        
-      
+        private bool AreOnlyLetters(string name)// Vad jag skriver för variabelnamn på min indataparameter spelar ingen roll, huvudsaken är att jag talar om vilken datatyp jag vill ta emot, int, string, char osv.
+        {
 
+            foreach (char c in name)
+            {
+                if (Char.IsDigit(c))
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+      
     }
 }
