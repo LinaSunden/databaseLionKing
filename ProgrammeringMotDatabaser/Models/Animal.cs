@@ -30,9 +30,9 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string CountAnimalInEachSpecie => $"Specie: {AnimalSpecie.AnimalSpecieName} Count: {AnimalId}";
 
-        public string AllAnimalsWithAName => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}, Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
+        public string AllAnimals => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}, Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 
-        public string AllInfoAboutAnimals => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName} Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
+        //public string NoSearchResult => $"There is no charactername";
 
         public string AnimalsInEachClass => $"Animal id: {AnimalId}, Specie: {AnimalSpecie.AnimalSpecieName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 

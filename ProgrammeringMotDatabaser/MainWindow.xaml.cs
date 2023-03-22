@@ -240,48 +240,7 @@ namespace ProgrammeringMotDatabaser
 
         #region Read
 
-        /// <summary>
-        /// Search after an animal with a specific charatername 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void btnsearch_Click(object sender, RoutedEventArgs e)
-        {
-            
-
-            try
-            {
-                string characterName = txtCharacterName.Text;
-                var animal = await db.GetAnimalByCharacterName(characterName);
-                if (AreOnlyLetters(characterName) == false)
-                {
-                    MessageBox.Show("You can only type letters for character name");
-                }
-
-                else if (animal.CharacterName == null)
-                {
-                    MessageBox.Show($"There is no animal called {characterName}");
-                    ClearTextboxes();
-                }
-                else
-                {
-                    lblCharacterName.Content = $"Character name: {animal.CharacterName}";
-                    lblAnimalSpecie.Content = $"Animal specie: {animal.AnimalSpecie.AnimalSpecieName}";
-                    lblLatinName.Content = $"Latin name: {animal.AnimalSpecie.LatinName}";
-                    lblAnimalClass.Content = $"Animal class: {animal.AnimalSpecie.AnimalClass.AnimalClassName}";
-                    ClearTextboxes();
-                    txtCharacterName.Focus();
-                    btnsearch.IsEnabled = false;
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-            }
-        }
+      
 
 
 
@@ -538,6 +497,13 @@ namespace ProgrammeringMotDatabaser
         private void lstBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DisplaySelectedAnimalInTextBox();
+
+            Animal selected = lstBox.SelectedItem as Animal;
+
+            lblDeleteAnimalid.Content = $"AnimalId: {selected.AnimalId}";
+            lblCharacterNameDelete.Content = $"Name: {selected.CharacterName}";
+            lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
+
         }
       
         /// <summary>
@@ -721,16 +687,55 @@ namespace ProgrammeringMotDatabaser
         internal async void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = txtCharacterName.Text;
-            var searchCharacterName = await db.SearchAfterAnimalsCharacterName(searchText);
 
+            if (AreOnlyLetters(searchText) == false)
+            {
+                MessageBox.Show("You can only type letters for character name");
+            }
 
-            lstBox.ItemsSource = searchCharacterName;
-            lstBox.DisplayMemberPath = "AllAnimalsWithAName";
+            try
+            {
+                
+                var searchCharacterName = await db.SearchAfterAnimalsCharacterName(searchText);
 
+                lstBox.ItemsSource = searchCharacterName;
+                
+                bool NoCharactersWithName = searchCharacterName.Count() == 0;
 
-            btnsearch.IsEnabled = true;
+                if (NoCharactersWithName)
+                {
+                    MessageBox.Show($"Theres no character name with this letter combination {searchText}");
+                    //lstBox.DisplayMemberPath = "NoSearchResult";
+                }
+                else
+                {
+                    lstBox.DisplayMemberPath = "AllAnimals";
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
 
         }
+
+
+        
+
+                
+
+                //else if (animal.CharacterName == null)
+                //{
+                //    MessageBox.Show($"There is no animal called {characterName}");
+                //    ClearTextboxes();
+                //}
+                //else
+
+
+
 
 
 
@@ -742,7 +747,7 @@ namespace ProgrammeringMotDatabaser
                 var allAnimals = await db.AllInfoAboutAllAnimals();
                 lstBox.ItemsSource = null;
                 lstBox.ItemsSource = allAnimals;
-                lstBox.DisplayMemberPath = "AllInfoAboutAnimals";
+                lstBox.DisplayMemberPath = "AllAnimals";
                 UpdateListBoxes();
                
             }
@@ -763,7 +768,7 @@ namespace ProgrammeringMotDatabaser
 
                 lstBox.ItemsSource = null;
                 lstBox.ItemsSource = allCharactersWithNames;
-                lstBox.DisplayMemberPath = "AllAnimalsWithAName";
+                lstBox.DisplayMemberPath = "AllAnimals";
                 
             }
             catch (Exception ex)
@@ -856,7 +861,7 @@ namespace ProgrammeringMotDatabaser
             lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
 
             lstBox.ItemsSource = displayList;
-            lstBox.DisplayMemberPath = "AllInfoAboutAnimals";
+            lstBox.DisplayMemberPath = "AllAnimals";
 
         }
 
@@ -935,6 +940,6 @@ namespace ProgrammeringMotDatabaser
             return true;
         }
 
-      
+    
     }
 }
