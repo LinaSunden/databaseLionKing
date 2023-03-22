@@ -293,7 +293,7 @@ namespace ProgrammeringMotDatabaser
 
             try
             {
-                var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
+                var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInUpdateTextBox());
             }
             catch (Exception ex)
             {
@@ -323,7 +323,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     int animaSpecieId = select.AnimalSpecieId;
 
-                    var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInTextBox(), animaSpecieId);
+                    var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInUpdateTextBox(), animaSpecieId);
                 }
             }
             catch (Exception ex)
@@ -353,8 +353,8 @@ namespace ProgrammeringMotDatabaser
             try
             {
 
-               await db.DeleteAnimal(DisplayAnimalFromDeleteListBox());
-                MessageBox.Show($"You have successfully deleted the animal: {DisplayAnimalFromDeleteListBox().CharacterName}");
+               await db.DeleteAnimal(DisplayAnimalInDeleteAnimalGroupB());
+                MessageBox.Show($"You have successfully deleted the animal: {DisplayAnimalInDeleteAnimalGroupB().CharacterName}");
                 ClearCbo();
                 ClearTextboxes();
                 UpdateListBoxes();
@@ -467,16 +467,18 @@ namespace ProgrammeringMotDatabaser
      
    
         /// <summary>
-        /// View the specific animal that the user double-click on in the listbox
+        /// View in delete animal groupbox the specific animal that the user double-click on in the listbox
         /// </summary>
         /// <returns></returns>
-        internal Animal DisplayAnimalFromDeleteListBox()
+        internal Animal DisplayAnimalInDeleteAnimalGroupB()
         {
-            Animal selected = lstBoxDelete.SelectedItem as Animal;
+            Animal selected = lstBox.SelectedItem as Animal;
 
             lblDeleteAnimalid.Content = $"AnimalId: {selected.AnimalId}";
             lblCharacterNameDelete.Content = $"Name: {selected.CharacterName}";
             lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
+           
+            btnDeleteAnimal.IsEnabled = true;
 
             return selected;
 
@@ -496,33 +498,19 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private void lstBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            DisplaySelectedAnimalInTextBox();
+            DisplaySelectedAnimalInUpdateTextBox();
 
-            Animal selected = lstBox.SelectedItem as Animal;
-
-            lblDeleteAnimalid.Content = $"AnimalId: {selected.AnimalId}";
-            lblCharacterNameDelete.Content = $"Name: {selected.CharacterName}";
-            lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
-
+            DisplayAnimalInDeleteAnimalGroupB();
+            
         }
       
-        /// <summary>
-        /// Displays animaldetails in labels from the delete listbox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void lstBoxDelete_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-            DisplayAnimalFromDeleteListBox();
-            btnDeleteAnimal.IsEnabled= true;
-        }
+       
 
         /// <summary>
         /// Method to display the selected animal from main list in labels
         /// </summary>
         /// <returns></returns>
-        internal Animal DisplaySelectedAnimalInTextBox()
+        internal Animal DisplaySelectedAnimalInUpdateTextBox()
         {
 
             Animal selected = lstBox.SelectedItem as Animal;
@@ -601,20 +589,6 @@ namespace ProgrammeringMotDatabaser
                 MessageBox.Show(ex.Message);
             }
 
-            try
-            {
-                var displayList = await db.AllInfoAboutAllAnimals();
-                lstBoxDelete.ItemsSource = displayList;
-                lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-          
-
-            btnupdateanimal.IsEnabled = false;
 
         }
 
@@ -720,22 +694,6 @@ namespace ProgrammeringMotDatabaser
 
 
         }
-
-
-        
-
-                
-
-                //else if (animal.CharacterName == null)
-                //{
-                //    MessageBox.Show($"There is no animal called {characterName}");
-                //    ClearTextboxes();
-                //}
-                //else
-
-
-
-
 
 
 
@@ -855,9 +813,6 @@ namespace ProgrammeringMotDatabaser
         private async void UpdateListBoxes()
         {
             var displayList = await db.AllInfoAboutAllAnimals();
-
-            lstBoxDelete.ItemsSource = displayList;
-            lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
 
             lstBox.ItemsSource = displayList;
             lstBox.DisplayMemberPath = "AllAnimals";
