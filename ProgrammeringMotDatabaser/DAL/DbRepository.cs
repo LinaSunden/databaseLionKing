@@ -49,15 +49,28 @@ namespace ProgrammeringMotDatabaser.DAL
             }
             catch (PostgresException ex)
             {
-
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
                 switch (errorCode)
                 {
-                    case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The class already exists. The class name must be unique";
+                    case PostgresErrorCodes.ForeignKeyViolation:
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The name already exists.The name must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name need to have a value";
+                        break;
+
                     default:
                         break;
                 }
@@ -105,20 +118,18 @@ namespace ProgrammeringMotDatabaser.DAL
             }
             catch (PostgresException ex)
             {
-
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
-                    case PostgresErrorCodes.ForeignKeyViolation:                                             
+                    case PostgresErrorCodes.ForeignKeyViolation:
 
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The name already exists. The name must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
@@ -126,10 +137,8 @@ namespace ProgrammeringMotDatabaser.DAL
                         break;
 
                     case PostgresErrorCodes.NotNullViolation:
-                        errorMessage = "Please fill in a name for animal specie. It has to have a name.";
+                        errorMessage = "Animal class id  and animal specie name need to have values";
                         break;
-
-                        
 
                     default:
                         break;
@@ -169,12 +178,27 @@ namespace ProgrammeringMotDatabaser.DAL
 
                 switch (errorCode)
                 {
-                    case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "There is already an animal with that name. The animal name must be unique";
+                    case PostgresErrorCodes.ForeignKeyViolation:
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
+
+                    case PostgresErrorCodes.UniqueViolation:
+                        errorMessage = "The name already exists.The name must be unique.";
+                        break;
+
+                    case PostgresErrorCodes.StringDataRightTruncation:
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal id  and animal specie id need to have values";
+                        break;
+
                     default:
                         break;
                 }
+
                 throw new Exception(errorMessage, ex);
             }
 
@@ -225,23 +249,26 @@ namespace ProgrammeringMotDatabaser.DAL
             }
             catch (PostgresException ex)
             {
-
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
-
 
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal id  and animal specie name need to have values";
                         break;
 
                     default:
@@ -301,23 +328,26 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             }
             catch(PostgresException ex)
             {
-
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
-
 
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie name need to have values";
                         break;
 
                     default:
@@ -326,7 +356,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
                 throw new Exception(errorMessage, ex);
             }
-             
+
         }
 
         /// <summary>
@@ -378,19 +408,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie name need to have values";
                         break;
 
                     default:
@@ -452,19 +486,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie name need to have values";
                         break;
 
                     default:
@@ -521,19 +559,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal id and animal specie name need to have a values";
                         break;
 
                     default:
@@ -579,19 +621,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal specie id need to have a value";
                         break;
 
                     default:
@@ -650,19 +696,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name need to have value";
                         break;
 
                     default:
@@ -709,19 +759,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name need to have value";
                         break;
 
                     default:
@@ -776,19 +830,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie namne need to have values";
                         break;
 
                     default:
@@ -849,19 +907,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie namne need to have values";
                         break;
 
                     default:
@@ -921,19 +983,23 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
 
-
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that is not included.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Animal class name and animal specie namne need to have values";
                         break;
 
                     default:
@@ -980,20 +1046,26 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             {
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
+             
 
 
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that have been updated. Try again";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Please select the animal you wish to update";
                         break;
 
                     default:
@@ -1038,20 +1110,26 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             {
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
+                
 
 
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
-                        errorMessage = $"This value has connections that must be deleted before you can delete it.";
+
+                        errorMessage = "This value has connections that have been updated. Try again";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
-                        errorMessage = "The value already exists. The value must be unique.";
+                        errorMessage = "The name already exists.The name must be unique.";
                         break;
 
                     case PostgresErrorCodes.StringDataRightTruncation:
-                        errorMessage = "The value has too many characters. Max 255 characters.";
+                        errorMessage = "The name has too many characters.";
+                        break;
+
+                    case PostgresErrorCodes.NotNullViolation:
+                        errorMessage = "Please select the animal you wish to update";
                         break;
 
                     default:
@@ -1098,28 +1176,14 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             {
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
-                string errorCodeSpecifik = ex.ConstraintName;
+               
 
 
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
 
-                        errorMessage = "This value has connections that must be deleted before you can delete it.";
-
-                        switch (errorCodeSpecifik)
-                        {
-                            case "animalspecie_animalclassid_fkey":
-                                errorMessage = "There is animal species in this class, you have to delete them first.";
-                                break;
-
-
-                            case "animal_animalspecieid_fkey":
-                                errorMessage = "There is animals in the animal specie, you have to delete them first. Do you wish to delete all animals in this specie?";
-                                break;
-
-                        }
-
+                        errorMessage = "This value has connections that have been updated. Try again";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
@@ -1177,7 +1241,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
 
-                        errorMessage = "This value has connections that must be deleted before you can delete it.";
+                        errorMessage = "This animal has connections that must be deleted before you can delete it.";
                         break;
 
                     case PostgresErrorCodes.UniqueViolation:
@@ -1198,6 +1262,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
                 throw new Exception(errorMessage, ex);
             }
+
 
     }
 
