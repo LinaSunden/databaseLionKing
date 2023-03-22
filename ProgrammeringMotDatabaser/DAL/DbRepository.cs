@@ -522,7 +522,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             try
             {
                 List<Animal> animals = new List<Animal>();
-                string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
+                string sqlQ = "SELECT s.animalspeciename, COUNT (a.animalid) FROM animalspecie s FULL JOIN animal a ON s.animalspecieid = a.animalspecieid GROUP BY s.animalspeciename ORDER BY COUNT(a.animalid) DESC";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlQ);
