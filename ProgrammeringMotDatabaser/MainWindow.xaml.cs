@@ -104,6 +104,7 @@ namespace ProgrammeringMotDatabaser
             }
             else
             {
+             
                 if (latinName == string.Empty)
                 {
                     latinName = null;
@@ -199,15 +200,7 @@ namespace ProgrammeringMotDatabaser
                 }
 
             }
-
-                
-            
-
-             
-
-
-
-          
+        
 
         }
 
@@ -244,8 +237,9 @@ namespace ProgrammeringMotDatabaser
                     lblAnimalClass.Content = $"Animal class: {animal.AnimalSpecie.AnimalClass.AnimalClassName}";
                     ClearTextboxes();
                     txtCharacterName.Focus();
-
+                    btnsearch.IsEnabled = false;
                 }
+
 
             }
             catch (Exception ex)
@@ -276,14 +270,21 @@ namespace ProgrammeringMotDatabaser
             string newLatinName = txtupdatelatinname.Text;
             var animalspecie = txtupdateanimalspecie.Text;
 
+            var selected = DisplaySelectedAnimalInTextBox();
+
             if (newCharacterName == string.Empty || newCharacterName == null)
             {
                 newCharacterName = null;
             }
 
+            if (selected == null)
+            {
+                MessageBox.Show("Please choose an animal from listbox");
+            }
+            
             try
             {
-                var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
+                var newAnimalName = await db.UpdateCharacterName(newCharacterName, selected);
             }
             catch (Exception ex)
             {
@@ -343,11 +344,14 @@ namespace ProgrammeringMotDatabaser
             try
             {
 
-                await db.DeleteAnimal(DisplayAnimalFromDeleteListBox());
+               await db.DeleteAnimal(DisplayAnimalFromDeleteListBox());
+                MessageBox.Show($"You have successfully deleted the animal: {DisplayAnimalFromDeleteListBox().CharacterName}");
                 ClearCbo();
                 ClearTextboxes();
                 UpdateListBoxes();
                 DisplayCBO();
+
+                btnDeleteAnimal.IsEnabled= false;
             }
             catch (Exception ex)
             {
@@ -363,6 +367,12 @@ namespace ProgrammeringMotDatabaser
        /// <param name="e"></param>
         private async void btnDeleteAnimalSpecie_Click(object sender, RoutedEventArgs e)
         {
+            if (cboDeleteAimalSpecie.SelectedItem == null)
+            {
+                MessageBox.Show("Please select animal specie you wish to delete");
+
+            }
+
             try
             {
                 if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
@@ -414,8 +424,18 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private async void btnDeleteAnimalClass_Click(object sender, RoutedEventArgs e) //återkom till denna när vi har tid, se till att användaren kan se vilka arter som ska tas bort elr erbjud användaren att ta bort arterna som krävs
         {
+
+            
+            if (cboDeleteAimalClass.SelectedItem == null)
+            {
+                MessageBox.Show("Please select animal class you wish to delete");
+
+            }
+
             try
             {
+               
+                
                 if (cboDeleteAimalClass.SelectedItem is AnimalClass select)
                 {
 
@@ -451,10 +471,7 @@ namespace ProgrammeringMotDatabaser
 
             return selected;
 
-            ClearCbo();
-            ClearTextboxes();
-            UpdateListBoxes();
-            DisplayCBO(); 
+       
         }
 
         #endregion
@@ -482,6 +499,7 @@ namespace ProgrammeringMotDatabaser
         {
 
             DisplayAnimalFromDeleteListBox();
+            btnDeleteAnimal.IsEnabled= true;
         }
 
         /// <summary>
@@ -492,6 +510,12 @@ namespace ProgrammeringMotDatabaser
         {
 
             Animal selected = lstBox.SelectedItem as Animal;
+
+            if (selected == null) 
+            {
+                MessageBox.Show("Please choose an animal from listbox");
+                return null;
+            }
 
             lblupdateanimalclass.Content = selected.AnimalSpecie.AnimalClass.AnimalClassName;
             lblupdateanimalid.Content = $"Animal id: {selected.AnimalId}";
@@ -575,6 +599,7 @@ namespace ProgrammeringMotDatabaser
           
 
             btnupdateanimal.IsEnabled = false;
+
         }
 
         private async void cboupdateanimalspecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -793,6 +818,10 @@ namespace ProgrammeringMotDatabaser
             lblupdateanimalid.Content = string.Empty;
             lblupdateanimalclass.Content =  string.Empty;
             lblShowAnimalClassForSpecie.Content = string.Empty;
+
+            lblDeleteAnimalid.Content = "Animal Id: ";
+            lblCharacterNameDelete.Content = "Character name: ";
+            lblAnimalSpecieDelete.Content = "Animal specie: ";
         }
         /// <summary>
         /// Resets all comboboxes

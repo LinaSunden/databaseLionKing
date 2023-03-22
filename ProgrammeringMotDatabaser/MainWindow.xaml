@@ -118,7 +118,7 @@
                 <Label x:Name="lblDeleteAnimalid" Content="Animal id:" FontWeight="Normal"/>
                 <Label x:Name="lblCharacterNameDelete" Content="Character name: " FontWeight="Normal"/>
                 <Label x:Name="lblAnimalSpecieDelete" Content="Animal specie:" FontWeight="Normal"/>
-                <Button x:Name="btnDeleteAnimal" Content="Delete Animal" Width="120" FontWeight="Normal" Margin="0,10,-50,0" Click="btnDeleteAnimal_Click"/>
+                <Button x:Name="btnDeleteAnimal" Content="Delete Animal" Width="120" FontWeight="Normal" Margin="0,10,-50,0" Click="btnDeleteAnimal_Click" IsEnabled="False"/>
 
             </StackPanel>
 
