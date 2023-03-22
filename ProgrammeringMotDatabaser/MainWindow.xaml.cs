@@ -704,8 +704,7 @@ namespace ProgrammeringMotDatabaser
 
                 if (NoCharactersWithName)
                 {
-                    MessageBox.Show($"Theres no character name with this letter combination {searchText}");
-                    //lstBox.DisplayMemberPath = "NoSearchResult";
+                    MessageBox.Show($"There's no character name with this letter combination: {searchText}"); 
                 }
                 else
                 {

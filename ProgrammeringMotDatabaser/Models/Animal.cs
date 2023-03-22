@@ -32,8 +32,6 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string AllAnimals => $"Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}, Latin name: {AnimalSpecie.LatinName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 
-        //public string NoSearchResult => $"There is no charactername";
-
         public string AnimalsInEachClass => $"Animal id: {AnimalId}, Specie: {AnimalSpecie.AnimalSpecieName}, Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
 
         #endregion
