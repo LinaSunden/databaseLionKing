@@ -118,7 +118,7 @@
 
         </GroupBox>
         <GroupBox Header="Search for animal by character name" Margin="745,110,873,878" FontWeight="Bold" Grid.ColumnSpan="2">
-            <TextBox x:Name="txtCharacterName" TextWrapping="Wrap" FontWeight="Normal" Margin="63,0,18,0" TextChanged="txtCharacterName_TextChanged" Height="20"/>
+            <TextBox x:Name="txtCharacterName" TextWrapping="Wrap" FontWeight="Normal" Margin="63,0,18,0" TextChanged="txtCharacterName_TextChanged" Height="20" GotFocus="txtCharacterName_GotFocus"/>
         </GroupBox>
 
 
