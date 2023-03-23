@@ -1282,7 +1282,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             try
             {
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieidx = @animalspecieid";
+                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";
                 await using var command = dataSource.CreateCommand(sqlCommand);
                 
 
