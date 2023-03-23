@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -1338,6 +1339,8 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
             }
 
+
+
         /// <summary>
         /// Delete a animal specie
         /// </summary>
@@ -1346,23 +1349,26 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
         /// <exception cref="Exception"></exception>
         public async Task DeleteAnimalSpecie(AnimalSpecie animalSpecie)
         {
+            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+            await using var connection = await dataSource.OpenConnectionAsync();
+            await using var transaction = await connection.BeginTransactionAsync();
             try
             {
-                string sqlCommand = "DELETE FROM animalspeciex WHERE animalspecieid = @animalspecieid";
-
-                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";                
                 await using var command = dataSource.CreateCommand(sqlCommand);
+
                 command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
                 await command.ExecuteNonQueryAsync();
             }
             catch (PostgresException ex)
             {
-
+                await transaction.RollbackAsync();
+                
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
                 string errorCodeSpecifik = ex.ConstraintName;
 
-
+                
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
@@ -1403,6 +1409,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 throw new Exception(errorMessage, ex);
 
             }
+            await transaction.CommitAsync();
         }
 
         /// <summary>

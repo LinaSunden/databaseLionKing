@@ -1,4 +1,5 @@
-﻿using ProgrammeringMotDatabaser.DAL;
+﻿using Npgsql;
+using ProgrammeringMotDatabaser.DAL;
 using ProgrammeringMotDatabaser.Models;
 using System;
 using System.Collections.Generic;
@@ -632,29 +633,33 @@ namespace ProgrammeringMotDatabaser
             }
                catch (Exception ex) 
             {
-               MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
+                if (ex.InnerException is PostgresException)
+                { }
+                    MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
 
-                if (messageBoxResult == MessageBoxResult.Yes)
-                {
-                    if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
+
+                    if (messageBoxResult == MessageBoxResult.Yes)
                     {
-                        await db.DeleteAnimalInSpecie(select); 
-                        await db.DeleteAnimalSpecie(select);
-                        MessageBox.Show($"All animals in the {select.AnimalSpecieName} specie, and the specie itself, is now deleted");
-                        ClearCbo();
-                        ClearTextboxes();
-                        UpdateListBoxes();
-                        DisplayCBO();
-                        WelcomeMessage();
+                        if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
+                        {
+                            await db.DeleteAnimalInSpecie(select);
+                            await db.DeleteAnimalSpecie(select);
+                            MessageBox.Show($"All animals in the {select.AnimalSpecieName} specie, and the specie itself, is now deleted");
+                            ClearCbo();
+                            ClearTextboxes();
+                            UpdateListBoxes();
+                            DisplayCBO();
+                            WelcomeMessage();
+
+                        }
 
                     }
+                    else if (messageBoxResult == MessageBoxResult.No)
+                    {
+                        ClearCbo();
 
-                }
-                else if (messageBoxResult == MessageBoxResult.No)
-                {
-                    ClearCbo();
-
-                }
+                    }
+                
             }
 
         }
