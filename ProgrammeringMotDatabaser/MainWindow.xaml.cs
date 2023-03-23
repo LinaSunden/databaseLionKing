@@ -938,5 +938,9 @@ namespace ProgrammeringMotDatabaser
 
         #endregion
 
+        private void txtCharacterName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            rdbtnAllAnimals.IsChecked = true;
+        }
     }
 }
