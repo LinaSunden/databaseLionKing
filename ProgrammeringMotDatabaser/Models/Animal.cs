@@ -34,6 +34,8 @@ namespace ProgrammeringMotDatabaser.Models
 
         public string DeletedAnimals => $"Animal id: {AnimalId}, Charactername: {CharacterName}, Specie: {AnimalSpecie.AnimalSpecieName}";
 
+        public string AnimalSpecieInClass => $"Specie: {AnimalSpecie.AnimalSpecieName} Class: {AnimalSpecie.AnimalClass.AnimalClassName}";
+
         #endregion
 
 

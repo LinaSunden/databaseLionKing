@@ -726,8 +726,41 @@ namespace ProgrammeringMotDatabaser
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("There is animal species in this class, you have to delete them first."))
+                {
+                    try
+                    {
+                        if (cboDeleteAimalClass.SelectedItem is AnimalClass select)
+                        {
+                            var animalSpecies = await db.GetAnimalBySpeficClass(select);
 
-                MessageBox.Show(ex.Message);
+                            lstBox.ItemsSource = null;
+                            lstBox.ItemsSource = animalSpecies;
+                            lstBox.DisplayMemberPath = "AnimalSpecieInClass";
+                            lblAnimalRegistry.Content = $"Species that need to be deleted before delete animal class {select.AnimalClassName}";
+
+
+                            MessageBox.Show($"There is animal species in {select.AnimalClassName} class, you have to delete them first. You can se the species that need to be deleted in the list until you press the OK button");
+                            ClearCbo();
+                            ClearTextboxes();
+                            UpdateListBoxes();
+                            DisplayCBO();
+                            WelcomeMessage();
+                            lblAnimalRegistry.Content = "Animal registry";
+                        }
+                    }
+                    catch (Exception ex1)
+                    {
+                        MessageBox.Show(ex1.Message);
+                    }
+                        
+                }
+
+                else
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                    
             
              }
         }
