@@ -370,7 +370,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 List<Animal> animals = new List<Animal>();
 
 
-                var sqlJoin = $"SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
+                var sqlJoin = "SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlJoin);
@@ -437,48 +437,50 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
 
         /// <summary>
-        /// Method that searches for a specific animal by charactername
+        /// This method make it possible to search and get results for each letter the put in. It's make a list of all animals that match the letter of the input
         /// </summary>
-        /// <param name="characterName"></param>
         /// <returns></returns>
-        public async Task<Animal> GetAnimalByCharacterName(string characterName) //testa lowercase i metoden så att man kan söka på Simba och simba oavsett stor eller liten bokstav                                                                        
+        /// <exception cref="Exception"></exception>
+        public async Task<IEnumerable<Animal>> SearchAfterAnimalsCharacterName(string searchLetters)
         {
             try
             {
-            string sqlQuestion = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid =animalspecie.animalclassid WHERE animal.charactername= @charactername";
-             
-               
-            await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-            await using var command = dataSource.CreateCommand(sqlQuestion);
-            command.Parameters.AddWithValue ("charactername", (object)characterName ?? DBNull.Value);
+                List<Animal> animals = new List<Animal>();
+
+
+                var sqlJoin = "SELECT animalid, charactername, animalspeciename, latinname, animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername LIKE '"+searchLetters+ "%' ORDER BY charactername ASC";
+
+
+                await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                await using var command = dataSource.CreateCommand(sqlJoin);
                 await using var reader = await command.ExecuteReaderAsync();
 
+                Animal animal = new Animal();
 
-            
-                Animal animal = new();
                 while (await reader.ReadAsync())
                 {
                     animal = new()
                     {
                         AnimalId = reader.GetInt32(0),
-                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
+                        CharacterName = (string)reader["charactername"],
+
 
                         AnimalSpecie = new()
                         {
                             AnimalSpecieName = (string)reader["animalspeciename"],
-                            LatinName = reader["latinname"] == DBNull.Value ? null : (string)reader["latinname"],
 
                             AnimalClass = new()
                             {
                                 AnimalClassName = (string)reader["animalclassname"]
 
                             }
+
                         }
-
-
                     };
+
+                    animals.Add(animal);
                 }
-                return animal;
+                return animals;
             }
 
             catch (PostgresException ex)
@@ -512,6 +514,10 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 throw new Exception(errorMessage, ex);
             }
         }
+
+
+
+        
 
         /// <summary>
         /// Count all animals in each specie

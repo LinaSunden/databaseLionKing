@@ -240,48 +240,7 @@ namespace ProgrammeringMotDatabaser
 
         #region Read
 
-        /// <summary>
-        /// Search after an animal with a specific charatername 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void btnsearch_Click(object sender, RoutedEventArgs e)
-        {
-            
-
-            try
-            {
-                string characterName = txtCharacterName.Text;
-                var animal = await db.GetAnimalByCharacterName(characterName);
-                if (AreOnlyLetters(characterName) == false)
-                {
-                    MessageBox.Show("You can only type letters for character name");
-                }
-
-                else if (animal.CharacterName == null)
-                {
-                    MessageBox.Show($"There is no animal called {characterName}");
-                    ClearTextboxes();
-                }
-                else
-                {
-                    lblCharacterName.Content = $"Character name: {animal.CharacterName}";
-                    lblAnimalSpecie.Content = $"Animal specie: {animal.AnimalSpecie.AnimalSpecieName}";
-                    lblLatinName.Content = $"Latin name: {animal.AnimalSpecie.LatinName}";
-                    lblAnimalClass.Content = $"Animal class: {animal.AnimalSpecie.AnimalClass.AnimalClassName}";
-                    ClearTextboxes();
-                    txtCharacterName.Focus();
-                    btnsearch.IsEnabled = false;
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-            }
-        }
+      
 
 
 
@@ -334,7 +293,7 @@ namespace ProgrammeringMotDatabaser
 
             try
             {
-                var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInTextBox());
+                var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInUpdateTextBox());
             }
             catch (Exception ex)
             {
@@ -364,7 +323,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     int animaSpecieId = select.AnimalSpecieId;
 
-                    var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInTextBox(), animaSpecieId);
+                    var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInUpdateTextBox(), animaSpecieId);
                 }
             }
             catch (Exception ex)
@@ -394,8 +353,8 @@ namespace ProgrammeringMotDatabaser
             try
             {
 
-               await db.DeleteAnimal(DisplayAnimalFromDeleteListBox());
-                MessageBox.Show($"You have successfully deleted the animal: {DisplayAnimalFromDeleteListBox().CharacterName}");
+               await db.DeleteAnimal(DisplayAnimalInDeleteAnimalGroupB());
+                MessageBox.Show($"You have successfully deleted the animal: {DisplayAnimalInDeleteAnimalGroupB().CharacterName}");
                 ClearCbo();
                 ClearTextboxes();
                 UpdateListBoxes();
@@ -508,16 +467,18 @@ namespace ProgrammeringMotDatabaser
      
    
         /// <summary>
-        /// View the specific animal that the user double-click on in the listbox
+        /// View in delete animal groupbox the specific animal that the user double-click on in the listbox
         /// </summary>
         /// <returns></returns>
-        internal Animal DisplayAnimalFromDeleteListBox()
+        internal Animal DisplayAnimalInDeleteAnimalGroupB()
         {
-            Animal selected = lstBoxDelete.SelectedItem as Animal;
+            Animal selected = lstBox.SelectedItem as Animal;
 
-            lblDeleteAnimalid.Content = $"AnimalId: {selected.AnimalId}";
+            lblDeleteAnimalid.Content = $"Animal id: {selected.AnimalId}";
             lblCharacterNameDelete.Content = $"Name: {selected.CharacterName}";
             lblAnimalSpecieDelete.Content = $"Specie: {selected.AnimalSpecie.AnimalSpecieName}";
+           
+            btnDeleteAnimal.IsEnabled = true;
 
             return selected;
 
@@ -537,26 +498,19 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private void lstBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            DisplaySelectedAnimalInTextBox();
+            DisplaySelectedAnimalInUpdateTextBox();
+
+            DisplayAnimalInDeleteAnimalGroupB();
+            
         }
       
-        /// <summary>
-        /// Displays animaldetails in labels from the delete listbox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void lstBoxDelete_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-            DisplayAnimalFromDeleteListBox();
-            btnDeleteAnimal.IsEnabled= true;
-        }
+       
 
         /// <summary>
         /// Method to display the selected animal from main list in labels
         /// </summary>
         /// <returns></returns>
-        internal Animal DisplaySelectedAnimalInTextBox()
+        internal Animal DisplaySelectedAnimalInUpdateTextBox()
         {
 
             Animal selected = lstBox.SelectedItem as Animal;
@@ -635,20 +589,6 @@ namespace ProgrammeringMotDatabaser
                 MessageBox.Show(ex.Message);
             }
 
-            try
-            {
-                var displayList = await db.AllInfoAboutAllAnimals();
-                lstBoxDelete.ItemsSource = displayList;
-                lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-          
-
-            btnupdateanimal.IsEnabled = false;
 
         }
 
@@ -718,12 +658,42 @@ namespace ProgrammeringMotDatabaser
                 MessageBox.Show(ex.Message);
             }          
         }
-        private void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
+        internal async void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            btnsearch.IsEnabled = true;
+            string searchText = txtCharacterName.Text;
+
+            if (AreOnlyLetters(searchText) == false)
+            {
+                MessageBox.Show("You can only type letters for character name");
+            }
+
+            try
+            {
+                
+                var searchCharacterName = await db.SearchAfterAnimalsCharacterName(searchText);
+
+                lstBox.ItemsSource = searchCharacterName;
+                
+                bool NoCharactersWithName = searchCharacterName.Count() == 0;
+
+                if (NoCharactersWithName)
+                {
+                    MessageBox.Show($"There's no character name with this letter combination: {searchText}"); 
+                }
+                else
+                {
+                    lstBox.DisplayMemberPath = "AllAnimals";
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
 
         }
-
 
 
 
@@ -734,7 +704,7 @@ namespace ProgrammeringMotDatabaser
                 var allAnimals = await db.AllInfoAboutAllAnimals();
                 lstBox.ItemsSource = null;
                 lstBox.ItemsSource = allAnimals;
-                lstBox.DisplayMemberPath = "AllInfoAboutAnimals";
+                lstBox.DisplayMemberPath = "AllAnimals";
                 UpdateListBoxes();
                
             }
@@ -755,7 +725,7 @@ namespace ProgrammeringMotDatabaser
 
                 lstBox.ItemsSource = null;
                 lstBox.ItemsSource = allCharactersWithNames;
-                lstBox.DisplayMemberPath = "AllAnimalsWithAName";
+                lstBox.DisplayMemberPath = "AllAnimals";
                 
             }
             catch (Exception ex)
@@ -844,11 +814,8 @@ namespace ProgrammeringMotDatabaser
         {
             var displayList = await db.AllInfoAboutAllAnimals();
 
-            lstBoxDelete.ItemsSource = displayList;
-            lstBoxDelete.DisplayMemberPath = "DeleteAnimals";
-
             lstBox.ItemsSource = displayList;
-            lstBox.DisplayMemberPath = "AllInfoAboutAnimals";
+            lstBox.DisplayMemberPath = "AllAnimals";
 
         }
 
@@ -869,7 +836,7 @@ namespace ProgrammeringMotDatabaser
             lblupdateanimalclass.Content =  string.Empty;
             lblShowAnimalClassForSpecie.Content = string.Empty;
 
-            lblDeleteAnimalid.Content = "Animal Id: ";
+            lblDeleteAnimalid.Content = "Animal id: ";
             lblCharacterNameDelete.Content = "Character name: ";
             lblAnimalSpecieDelete.Content = "Animal specie: ";
         }
@@ -927,6 +894,6 @@ namespace ProgrammeringMotDatabaser
             return true;
         }
 
-      
+    
     }
 }
