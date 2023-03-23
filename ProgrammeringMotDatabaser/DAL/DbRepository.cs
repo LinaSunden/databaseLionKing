@@ -370,7 +370,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 List<Animal> animals = new List<Animal>();
 
 
-                var sqlJoin = "SELECT animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
+                var sqlJoin = "SELECT animal.animalid, animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animal JOIN animalspecie ON animalspecie.animalspecieid = animal.animalspecieid JOIN animalclass ON animalclass.animalclassid = animalspecie.animalclassid WHERE animal.charactername IS NOT NULL ORDER BY charactername ASC";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlJoin);
@@ -382,6 +382,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 {
                     animal = new()
                     {
+                        AnimalId= reader.GetInt32(0),
                         CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"], 
 
 

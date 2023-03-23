@@ -60,9 +60,9 @@
         <GroupBox x:Name="gBoxRadioBtnViews" Header="" Margin="338,228,374,716">
             <StackPanel>
                 <RadioButton x:Name="rdbtnAllAnimals" Content="All animals" Checked="RadioButton_Checked" IsChecked="True" RenderTransformOrigin="0.039,0.537" Margin="0, 0, 0, 5"/>
-                <RadioButton Content="Animals with character name" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_1" Margin="0, 0, 0, 5"/>
-                <RadioButton Content="Number of animals in each class" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_2" Margin="0, 0, 0, 5"/>
-                <RadioButton Content="Number of animals in each specie " RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_3" Margin="0, 0, 0, 5"/>
+                <RadioButton x:Name="rdbtnAnimalsWithCharacterName" Content="Animals with character name" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_1" Margin="0, 0, 0, 5"/>
+                <RadioButton x:Name="rdbtnNumberOfAnimalsInEachClass" Content="Number of animals in each class" RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_2" Margin="0, 0, 0, 5"/>
+                <RadioButton x:Name="rdbtnNumberOfAnimalsInEachSpecie" Content="Number of animals in each specie " RenderTransformOrigin="0.039,0.537" Checked="RadioButton_Checked_3" Margin="0, 0, 0, 5"/>
             </StackPanel>
         </GroupBox>
         <GroupBox x:Name="gBoxAllAnimalsInSpecificClass" Header="All Animals in a specifc animal class" Margin="334,362,378,615" FontWeight="Bold">

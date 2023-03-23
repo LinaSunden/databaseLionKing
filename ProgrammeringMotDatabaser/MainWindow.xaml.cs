@@ -238,14 +238,246 @@ namespace ProgrammeringMotDatabaser
 
 
 
-        #region Read
+   
+        #region Read 
 
+        /// <summary>
+        /// Welcome message when the program starts. Contains info about how many species there is in the animalregristry
+        /// </summary>
+        public async void WelcomeMessage()
+        {
+            try
+            {
+                var showTotalSpecies = await db.CountSpecie();
+                txtBlockWelcome.Text = $"Welcome Mufasa \n Currently you have {showTotalSpecies.AnimalSpecieId} species in your kingdom";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
+
+        /// <summary>
+        /// When choosing an animalspecie display which animalclass it belongs in(update lbls)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cboupdateanimalspecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AnimalSpecie animalspecie = (AnimalSpecie)cboupdateanimalspecie.SelectedItem;
+            if (animalspecie == null)
+            {
+                return;
+            }
+            try
+            {
+
+                var selectedAnimalspecie = await db.FindClass(animalspecie);
+
+                lblupdateanimalclass.Content = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
+
+                txtupdatelatinname.Text = $"{selectedAnimalspecie.LatinName}";
+                txtupdateanimalspecie.Text = $"{selectedAnimalspecie.AnimalSpecieName}";
+
+                btnupdateanimal.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        /// <summary>
+        /// When choosing a class automatically display animals in that class in listbox 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbolistofclasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AnimalClass animalclass = (AnimalClass)cbolistofclasses.SelectedItem;
+            if (animalclass == null)
+            {
+                return;
+            }
+            try
+            {              
+                var listOfClasses = await db.GetAnimalBySpeficClass(animalclass);
+
+                lstBox.ItemsSource = listOfClasses;
+                lstBox.DisplayMemberPath = "AnimalsInEachClass";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        /// <summary>
+        /// When choosing a specie automatically display which animalclass it belongs to (create animal)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbospecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AnimalSpecie animalspecie = (AnimalSpecie)cbospecie.SelectedItem;
+
+            if (animalspecie == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var selectedAnimalspecie = await db.FindClass(animalspecie);
+                lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.AnimalClass.AnimalClassName}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }          
+        }
+
+        /// <summary>
+        /// Method to detect only characters in search box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal async void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = txtCharacterName.Text;
+
+            if (AreOnlyLetters(searchText) == false)
+            {
+                MessageBox.Show("You can only type letters for character name");
+            }
+
+            try
+            {
+                
+                var searchCharacterName = await db.SearchAfterAnimalsCharacterName(searchText);
+
+                lstBox.ItemsSource = searchCharacterName;
+                
+                bool NoCharactersWithName = searchCharacterName.Count() == 0;
+
+                if (NoCharactersWithName)
+                {
+                    MessageBox.Show($"There's no character name with this letter combination: {searchText}"); 
+                }
+                else
+                {
+                    lstBox.DisplayMemberPath = "AllAnimals";
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// Radiobutton display all animals and order dem after specie name.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var allAnimals = await db.AllInfoAboutAllAnimals();
+                lstBox.ItemsSource = null;
+                lstBox.ItemsSource = allAnimals;
+                lstBox.DisplayMemberPath = "AllAnimals";
+                UpdateListBoxes();
+               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+           
+        }
+
+        /// <summary>
+        /// Radiobutton that display all animals that have a charactername
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                var allCharactersWithNames = await db.GetAnimalWithCharacterName();
+
+
+
+                lstBox.ItemsSource = null;
+                lstBox.ItemsSource = allCharactersWithNames;
+                lstBox.DisplayMemberPath = "AllAnimals";
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// when checked displays how many species is in a class
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void RadioButton_Checked_2(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var numberOfAnimalsInClass = await db.NumberOfAnimalsInClass();
+                                
+                lstBox.ItemsSource = null;
+                lstBox.ItemsSource = numberOfAnimalsInClass;
+                lstBox.DisplayMemberPath = "CountAnimalsInClass";
+                
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message);          
+            }
+              
+        }
+        /// <summary>
+        /// when checked displays how many animals is in each specie 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void RadioButton_Checked_3(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
+                lstBox.ItemsSource = null;
+                lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
+                lstBox.DisplayMemberPath = "CountAnimalInEachSpecie";
+                
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+         
+        }
+
+#endregion
       
-
-
-
-        #endregion
-
 
 
 
@@ -493,7 +725,9 @@ namespace ProgrammeringMotDatabaser
 
 
 
-      
+
+        #region Methods to clear, update and check that inputs is just letters
+
 
         /// <summary>
         /// Uses the main List to display a selected animal 
@@ -502,13 +736,19 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private void lstBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if ((bool)rdbtnNumberOfAnimalsInEachClass.IsChecked || (bool)rdbtnNumberOfAnimalsInEachSpecie.IsChecked || cbolistofclasses.IsFocused)
+            {
+
+                return;
+            }
+
             DisplaySelectedAnimalInUpdateTextBox();
 
             DisplayAnimalInDeleteAnimalGroupB();
-            
+
         }
-      
-       
+
+
 
         /// <summary>
         /// Method to display the selected animal from main list in labels
@@ -516,14 +756,11 @@ namespace ProgrammeringMotDatabaser
         /// <returns></returns>
         internal Animal DisplaySelectedAnimalInUpdateTextBox()
         {
+         
+
 
             Animal selected = lstBox.SelectedItem as Animal;
 
-            //if (selected == null) 
-            //{
-            //    MessageBox.Show("Please choose an animal from listbox");
-            //    return null;
-            //}
 
             lblupdateanimalclass.Content = selected.AnimalSpecie.AnimalClass.AnimalClassName;
             lblupdateanimalid.Content = $"Animal id: {selected.AnimalId}";
@@ -534,6 +771,7 @@ namespace ProgrammeringMotDatabaser
 
             lblupdateanimalclass.Content = selected.AnimalSpecie.AnimalClass.AnimalClassName;
             btnupdateanimal.IsEnabled = false;
+            
 
             return selected;
         }
@@ -573,213 +811,6 @@ namespace ProgrammeringMotDatabaser
         }
 
 
-
-      
-
-
-
-        /// <summary>
-        /// Welcome message when the program starts. Contains info about how many species there is in the animalregristry
-        /// </summary>
-        public async void WelcomeMessage()
-        {
-            try
-            {
-                var showTotalSpecies = await db.CountSpecie();
-                txtBlockWelcome.Text = $"Welcome Mufasa \n Currently you have {showTotalSpecies.AnimalSpecieId} species in your kingdom";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-
-        }
-
-        private async void cboupdateanimalspecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            AnimalSpecie animalspecie = (AnimalSpecie)cboupdateanimalspecie.SelectedItem;
-            if (animalspecie == null)
-            {
-                return;
-            }
-            try
-            {
-
-                var selectedAnimalspecie = await db.FindClass(animalspecie);
-
-                lblupdateanimalclass.Content = $"{selectedAnimalspecie.AnimalClass.AnimalClassName}";
-
-                txtupdatelatinname.Text = $"{selectedAnimalspecie.LatinName}";
-                txtupdateanimalspecie.Text = $"{selectedAnimalspecie.AnimalSpecieName}";
-
-                btnupdateanimal.IsEnabled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        private async void cbolistofclasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            AnimalClass animalclass = (AnimalClass)cbolistofclasses.SelectedItem;
-            if (animalclass == null)
-            {
-                return;
-            }
-            try
-            {              
-                var listOfClasses = await db.GetAnimalBySpeficClass(animalclass);
-
-                lstBox.ItemsSource = listOfClasses;
-                lstBox.DisplayMemberPath = "AnimalsInEachClass";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        private async void cbospecie_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            AnimalSpecie animalspecie = (AnimalSpecie)cbospecie.SelectedItem;
-
-            if (animalspecie == null)
-            {
-                return;
-            }
-
-            try
-            {
-                var selectedAnimalspecie = await db.FindClass(animalspecie);
-                lblShowAnimalClassForSpecie.Content = $"Animal class: {selectedAnimalspecie.AnimalClass.AnimalClassName}";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }          
-        }
-        internal async void txtCharacterName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string searchText = txtCharacterName.Text;
-
-            if (AreOnlyLetters(searchText) == false)
-            {
-                MessageBox.Show("You can only type letters for character name");
-            }
-
-            try
-            {
-                
-                var searchCharacterName = await db.SearchAfterAnimalsCharacterName(searchText);
-
-                lstBox.ItemsSource = searchCharacterName;
-                
-                bool NoCharactersWithName = searchCharacterName.Count() == 0;
-
-                if (NoCharactersWithName)
-                {
-                    MessageBox.Show($"There's no character name with this letter combination: {searchText}"); 
-                }
-                else
-                {
-                    lstBox.DisplayMemberPath = "AllAnimals";
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-            }
-
-
-        }
-
-
-
-        private async void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var allAnimals = await db.AllInfoAboutAllAnimals();
-                lstBox.ItemsSource = null;
-                lstBox.ItemsSource = allAnimals;
-                lstBox.DisplayMemberPath = "AllAnimals";
-                UpdateListBoxes();
-               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-           
-        }
-
-        private async void RadioButton_Checked_1(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-
-                var allCharactersWithNames = await db.GetAnimalWithCharacterName();
-
-                lstBox.ItemsSource = null;
-                lstBox.ItemsSource = allCharactersWithNames;
-                lstBox.DisplayMemberPath = "AllAnimals";
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// when checked displays how many species is in a class
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void RadioButton_Checked_2(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var numberOfAnimalsInClass = await db.NumberOfAnimalsInClass();
-                lstBox.ItemsSource = null;
-                lstBox.ItemsSource = numberOfAnimalsInClass;
-                lstBox.DisplayMemberPath = "CountAnimalsInClass";
-                
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show(ex.Message);          
-            }
-              
-        }
-        /// <summary>
-        /// when checked displays how many animals is in each specie 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void RadioButton_Checked_3(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var showNumberOfAnimalsBySpecie = await db.CountAnimalInEachSpecie();
-                lstBox.ItemsSource = null;
-                lstBox.ItemsSource = showNumberOfAnimalsBySpecie;
-                lstBox.DisplayMemberPath = "CountAnimalInEachSpecie";
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-         
-        }
         /// <summary>
         /// Makes sure that the comboboxes displays animalclass and speice lists
         /// </summary>
@@ -884,6 +915,11 @@ namespace ProgrammeringMotDatabaser
             }
         }
 
+        /// <summary>
+        /// Check if a text contains any numbers and return a bool
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         private bool AreOnlyLetters(string name)// Vad jag skriver för variabelnamn på min indataparameter spelar ingen roll, huvudsaken är att jag talar om vilken datatyp jag vill ta emot, int, string, char osv.
         {
 
@@ -898,6 +934,7 @@ namespace ProgrammeringMotDatabaser
             return true;
         }
 
-    
+        #endregion
+
     }
 }
