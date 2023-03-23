@@ -639,33 +639,39 @@ namespace ProgrammeringMotDatabaser
             }
                catch (Exception ex) 
             {
-
-                
-                MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
+                if (ex.Message.Contains("There is animals in the animal specie, you have to delete them first. Do you wish to delete all animals in this specie?"))
+                {
+                    MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
 
 
                     if (messageBoxResult == MessageBoxResult.Yes)
 
                     {
-
-                        if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
+                        try
                         {
-                          
-                            var animals = await db.DeleteAnimalInSpecieAndTheSpecie(select);
-                        
+                            if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
+                            {
 
-                        lstBox.ItemsSource = null;
-                        lstBox.ItemsSource = animals;
-                        lstBox.DisplayMemberPath = "DeletedAnimals";
+                                var animals = await db.DeleteAnimalInSpecieAndTheSpecie(select);
 
 
-                        MessageBox.Show($"The {select.AnimalSpecieName} specie is now deleted, and you can see the deleted animals in the list until you press the OK button");
-                            ClearCbo();
-                            ClearTextboxes();
-                            UpdateListBoxes();
-                            DisplayCBO();
-                            WelcomeMessage();
+                                lstBox.ItemsSource = null;
+                                lstBox.ItemsSource = animals;
+                                lstBox.DisplayMemberPath = "DeletedAnimals";
+                                lblAnimalRegistry.Content = "Deleted animals";
 
+                                MessageBox.Show($"The {select.AnimalSpecieName} specie is now deleted, and you can see the deleted animals in the list until you press the OK button");
+                                ClearCbo();
+                                ClearTextboxes();
+                                UpdateListBoxes();
+                                DisplayCBO();
+                                WelcomeMessage();
+                                lblAnimalRegistry.Content = "Animal registry";
+                            }
+                        }
+                        catch (Exception ex1)
+                        {
+                            MessageBox.Show(ex1.Message);
                         }
 
                     }
@@ -674,7 +680,15 @@ namespace ProgrammeringMotDatabaser
                         ClearCbo();
 
                     }
-                
+                }
+
+
+                else
+                {
+                    MessageBox.Show(ex.Message);
+                }
+               
+
             }
 
         }
@@ -684,7 +698,7 @@ namespace ProgrammeringMotDatabaser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void btnDeleteAnimalClass_Click(object sender, RoutedEventArgs e) //återkom till denna när vi har tid, se till att användaren kan se vilka arter som ska tas bort elr erbjud användaren att ta bort arterna som krävs
+        private async void btnDeleteAnimalClass_Click(object sender, RoutedEventArgs e)
         {
 
             
@@ -938,7 +952,7 @@ namespace ProgrammeringMotDatabaser
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private bool AreOnlyLetters(string name)// Vad jag skriver för variabelnamn på min indataparameter spelar ingen roll, huvudsaken är att jag talar om vilken datatyp jag vill ta emot, int, string, char osv.
+        private bool AreOnlyLetters(string name)
         {
 
             foreach (char c in name)
@@ -954,9 +968,14 @@ namespace ProgrammeringMotDatabaser
 
         #endregion
 
+        /// <summary>
+        /// When the search textbox is in focus, the radiobutton that show all Animals with charactername become activated 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtCharacterName_GotFocus(object sender, RoutedEventArgs e)
         {
-            rdbtnAllAnimals.IsChecked = true;
+            rdbtnAnimalsWithCharacterName.IsChecked = true;
         }
     }
 }

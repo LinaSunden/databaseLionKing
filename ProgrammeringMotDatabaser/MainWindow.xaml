@@ -55,7 +55,7 @@
             </StackPanel>
         </GroupBox>
 
-        <Label Content="Animal registry" HorizontalAlignment="Left" Margin="601,167,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+        <Label x:Name="lblAnimalRegistry" Content="Animal registry" HorizontalAlignment="Left" Margin="601,167,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
         <Label Content="Select view of animal registry" HorizontalAlignment="Left" Margin="334,200,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
         <GroupBox x:Name="gBoxRadioBtnViews" Header="" Margin="338,228,374,716">
             <StackPanel>

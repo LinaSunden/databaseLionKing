@@ -1282,7 +1282,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             try
             {
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";
+                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieidx = @animalspecieid";
                 await using var command = dataSource.CreateCommand(sqlCommand);
                 
 
@@ -1398,13 +1398,13 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
             }
                                    
-            catch (PostgresException ex)
+            catch (PostgresException ex1)
             {
                 await transaction.RollbackAsync();
 
                 string errorMessage = "Something went wrong";
-                string errorCode = ex.SqlState;
-                string errorCodeSpecifik = ex.ConstraintName;
+                string errorCode = ex1.SqlState;
+                string errorCodeSpecifik = ex1.ConstraintName;
 
 
                 switch (errorCode)
@@ -1444,7 +1444,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                         break;
                 }
 
-                throw new Exception(errorMessage, ex);
+                throw new Exception(errorMessage, ex1);
 
             }
             await transaction.CommitAsync();
