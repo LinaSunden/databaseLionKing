@@ -225,6 +225,12 @@ namespace ProgrammeringMotDatabaser
                 {
 
                     MessageBox.Show(ex.Message);
+                    DisplayCBO();
+                    UpdateListBoxes();
+                    ClearCbo();
+                    ClearTextboxes();
+                    rdbtnAllAnimals.IsChecked = true;
+
                 }
 
             }
@@ -633,18 +639,27 @@ namespace ProgrammeringMotDatabaser
             }
                catch (Exception ex) 
             {
-                if (ex.InnerException is PostgresException)
-                { }
-                    MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
+
+                
+                MessageBoxResult messageBoxResult = MessageBox.Show(ex.Message, "Message", MessageBoxButton.YesNo);
 
 
                     if (messageBoxResult == MessageBoxResult.Yes)
+
                     {
+
                         if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
                         {
-                            await db.DeleteAnimalInSpecie(select);
-                            await db.DeleteAnimalSpecie(select);
-                            MessageBox.Show($"All animals in the {select.AnimalSpecieName} specie, and the specie itself, is now deleted");
+                          
+                            var animals = await db.DeleteAnimalInSpecieAndTheSpecie(select);
+                        
+
+                        lstBox.ItemsSource = null;
+                        lstBox.ItemsSource = animals;
+                        lstBox.DisplayMemberPath = "DeletedAnimals";
+
+
+                        MessageBox.Show($"The {select.AnimalSpecieName} specie is now deleted, and you can see the deleted animals in the list until you press the OK button");
                             ClearCbo();
                             ClearTextboxes();
                             UpdateListBoxes();
@@ -681,8 +696,7 @@ namespace ProgrammeringMotDatabaser
 
             try
             {
-               
-                
+                              
                 if (cboDeleteAimalClass.SelectedItem is AnimalClass select)
                 {
 
@@ -698,8 +712,10 @@ namespace ProgrammeringMotDatabaser
             }
             catch (Exception ex)
             {
+
                 MessageBox.Show(ex.Message);
-            }
+            
+             }
         }
 
      

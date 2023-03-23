@@ -4,6 +4,7 @@ using Npgsql.Internal.TypeHandlers.LTreeHandlers;
 using ProgrammeringMotDatabaser.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -168,8 +169,8 @@ namespace ProgrammeringMotDatabaser.DAL
                 command.Parameters.AddWithValue("animalspecieid", animal.AnimalSpecie.AnimalSpecieId);
                 
                 animal.AnimalId = (int) await command.ExecuteScalarAsync();
-
-               return animal;
+               
+                return animal;
                    
             }
             catch (PostgresException ex)
@@ -1274,24 +1275,24 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
     }
 
-        /// <summary>
-        /// Delete an animal in animal specie 
-        /// </summary>
-        /// <param name="animalSpecie"></param>
-        /// <returns></returns>
-        public async Task DeleteAnimalInSpecie(AnimalSpecie animalSpecie)
+     
+        public async Task DeleteAnimalSpecie(AnimalSpecie animalSpecie)
         {
+
             try
             {
-                string sqlCommand = "DELETE FROM animal WHERE animalspecieid = @animalspecieid";
-
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";
                 await using var command = dataSource.CreateCommand(sqlCommand);
+                
+
                 command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
                 await command.ExecuteNonQueryAsync();
             }
-                catch (PostgresException ex)
-                {
+            catch (PostgresException ex)
+            {
+                
+
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
                 string errorCodeSpecifik = ex.ConstraintName;
@@ -1313,6 +1314,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                             case "animal_animalspecieid_fkey":
                                 errorMessage = "There is animals in the animal specie, you have to delete them first. Do you wish to delete all animals in this specie?";
                                 break;
+
                         }
 
                         break;
@@ -1334,41 +1336,77 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                 }
 
                 throw new Exception(errorMessage, ex);
-            }
-
 
             }
+           
+        }
+
+
+        
+
 
 
 
         /// <summary>
-        /// Delete a animal specie
+        /// Delete a animals in a specifik specie, then the method delete the chosen specie 
         /// </summary>
         /// <param name="animalSpecie"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAnimalSpecie(AnimalSpecie animalSpecie)
+        public async Task<IEnumerable<Animal>> DeleteAnimalInSpecieAndTheSpecie(AnimalSpecie animalSpecie)
         {
             await using var dataSource = NpgsqlDataSource.Create(_connectionString);
             await using var connection = await dataSource.OpenConnectionAsync();
             await using var transaction = await connection.BeginTransactionAsync();
             try
             {
-                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";                
-                await using var command = dataSource.CreateCommand(sqlCommand);
+                List<Animal> animals = new List<Animal>();
 
-                command.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
-                await command.ExecuteNonQueryAsync();
+                string sqlCommand1 = "DELETE FROM animal WHERE animalspecieid = @animalspecieid returning *";
+                await using var command1 = dataSource.CreateCommand(sqlCommand1);
+                command1.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
+
+                await using var reader = await command1.ExecuteReaderAsync();
+
+                Animal animal = new Animal();
+                while (await reader.ReadAsync())
+                {
+                    animal = new()
+                    {
+                        AnimalId = reader.GetInt32(0),
+                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
+
+
+                        AnimalSpecie = new()
+                        {
+                            AnimalSpecieId = reader.GetInt32(2),
+                            AnimalSpecieName = animalSpecie.AnimalSpecieName,
+
+                         
+                        }
+                    };
+                    animals.Add(animal);
+
+
+                    string sqlCommand2 = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";
+                    await using var command2 = dataSource.CreateCommand(sqlCommand2);
+                    command2.Parameters.AddWithValue("animalspecieid", animalSpecie.AnimalSpecieId);
+                    await command2.ExecuteNonQueryAsync();
+
+                }
+                            return animals;
+
             }
+                                   
             catch (PostgresException ex)
             {
                 await transaction.RollbackAsync();
-                
+
                 string errorMessage = "Something went wrong";
                 string errorCode = ex.SqlState;
                 string errorCodeSpecifik = ex.ConstraintName;
 
-                
+
                 switch (errorCode)
                 {
                     case PostgresErrorCodes.ForeignKeyViolation:
@@ -1383,7 +1421,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
 
                             case "animal_animalspecieid_fkey":
-                                errorMessage = "There is animals in the animal specie, you have to delete them first. Do you wish to delete all animals in this specie?";
+                                errorMessage = "There is animals in the animal specie, you have to delete them first.";
                                 break;
 
                         }
@@ -1398,7 +1436,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                         errorMessage = "The name has too many characters.";
                         break;
 
-                    case PostgresErrorCodes.NotNullViolation: 
+                    case PostgresErrorCodes.NotNullViolation:
                         errorMessage = "Please select the animal specie you wish to delete";
                         break;
 
@@ -1451,7 +1489,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
                               
                             case "animal_animalspecieid_fkey":
-                                 errorMessage = "There is animals in the animal specie, you have to delete them first. Do you wish to delete all animals in this specie?";
+                                 errorMessage = "There is animals in the animal specie, you have to delete them first.";
                                  break;
                                 
                         }                              
@@ -1466,7 +1504,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                         errorMessage = "The name has too many characters.";
                         break;
 
-                    case PostgresErrorCodes.NotNullViolation: //Lägg in fler switchatser
+                    case PostgresErrorCodes.NotNullViolation: 
                         errorMessage = "Please select the animal class you wish to delete";
                         break;
 
