@@ -20,7 +20,7 @@ namespace ProgrammeringMotDatabaser.DAL
     {
         private readonly string _connectionString;
 
-        public DbRepository()  //constructor, access to connectionstring
+        public DbRepository()  
         {
             var config = new ConfigurationBuilder().AddUserSecrets<DbRepository>().Build();
             _connectionString = config.GetConnectionString("develop");
@@ -1348,7 +1348,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
         {
             try
             {
-                string sqlCommand = "DELETE FROM animalspecie WHERE animalspecieid = @animalspecieid";
+                string sqlCommand = "DELETE FROM animalspeciex WHERE animalspecieid = @animalspecieid";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlCommand);
@@ -1477,26 +1477,6 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
 
 
 
-
-
-       //Kolla på föreläsningen igen och se om vi fattar hur vi kan använda oss av dessa metoder på ett smart sätt.
-
-        private static T? ConvertFromDBVal<T>(object obj)
-        {
-            if (obj == null || obj == DBNull.Value)
-            {
-                return default;
-            }
-            return (T)obj;
-        }
-        private static object ConvertToDBVal<T>(object obj)
-        {
-            if (obj == null || obj == string.Empty)
-            {
-                return DBNull.Value;
-            }
-            return (T)obj;
-        }
 
 
     }

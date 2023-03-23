@@ -51,9 +51,7 @@ namespace ProgrammeringMotDatabaser
             private async void btncreateclass_Click(object sender, RoutedEventArgs e)
             {
 
-
-
-            
+           
             var newClassName = txtinputclassname.Text;
 
             
@@ -89,7 +87,6 @@ namespace ProgrammeringMotDatabaser
                 }
             }
             DisplayCBO();
-
             UpdateListBoxes();
             ClearCbo();
             ClearTextboxes();
@@ -641,7 +638,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     if (cboDeleteAimalSpecie.SelectedItem is AnimalSpecie select)
                     {
-                        await db.DeleteAnimalInSpecie(select); // Lägga i en transaktion? Båda metoderna..
+                        await db.DeleteAnimalInSpecie(select); 
                         await db.DeleteAnimalSpecie(select);
                         MessageBox.Show($"All animals in the {select.AnimalSpecieName} specie, and the specie itself, is now deleted");
                         ClearCbo();
