@@ -81,7 +81,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     var newAnimalClass = await db.AddAnimalClass(animalClass);
                     MessageBox.Show($"You have successfully added a new class {newAnimalClass.AnimalClassName}");
-                    //await DisplayCBO();
+
                 }
                 catch (Exception ex)
                 {
@@ -259,42 +259,43 @@ namespace ProgrammeringMotDatabaser
         /// <param name="e"></param>
         private async void btnupdateanimal_Click(object sender, RoutedEventArgs e)
         {
+          Animal selected = lstBox.SelectedItem as Animal;
+
+            if (selected == null)
+            {
+                MessageBox.Show("Please select an animal from the list.");
+                return;
+
+            }
+
             string newCharacterName = txtupdatecharacternameinput.Text;
             string newLatinName = txtupdatelatinname.Text;
             var animalspecie = txtupdateanimalspecie.Text;
-
-            //var selected = DisplaySelectedAnimalInTextBox();
+        
 
             if (newCharacterName == string.Empty || newCharacterName == null)
             {
                 newCharacterName = null;
             }
 
-            //if (selected == null)
-            //{
-            //    MessageBox.Show("Please choose an animal from listbox");
-            //}
 
+            
+            if (AreOnlyLetters(newCharacterName) == false)
+            {
+                MessageBox.Show("You can only type letters for character name");
+            }
 
-
-            //Monira när du år klar med det du skulle ändra på knapptrycket så kan du lägga in denna koden som gör att användaren inte kan fylla i siffror.
-            //if (AreOnlyLetters(newCharacterName) == false)
-            //{
-            //    MessageBox.Show("You can only type letters for character name");
-            //}
-
-            //else if(AreOnlyLetters(newLatinName)== false)
-            //{
-            //    MessageBox.Show("You can only type letters for latin name");
-            //}
-
-
+            else if (AreOnlyLetters(newLatinName) == false)
+            {
+                MessageBox.Show("You can only type letters for latin name");
+            }
 
 
             try
-            {
-                var newAnimalName = await db.UpdateCharacterName(newCharacterName, DisplaySelectedAnimalInUpdateTextBox());
+            {                              
+                    var newAnimalName = await db.UpdateCharacterName(newCharacterName, selected);              
             }
+
             catch (Exception ex)
             {
 
@@ -308,9 +309,12 @@ namespace ProgrammeringMotDatabaser
             }
 
             try
-            {
-                var updatedLatinName = await db.UpdateLatinName(newLatinName, animalspecie);
-            }
+            {                             
+                   var updatedLatinName = await db.UpdateLatinName(newLatinName, animalspecie);
+                                               
+            }            
+            
+        
             catch (Exception ex)
             {
 
@@ -323,7 +327,7 @@ namespace ProgrammeringMotDatabaser
                 {
                     int animaSpecieId = select.AnimalSpecieId;
 
-                    var updatedAnimalSpecie = await db.UpdateAnimalSpecie(DisplaySelectedAnimalInUpdateTextBox(), animaSpecieId);
+                    var updatedAnimalSpecie = await db.UpdateAnimalSpecie(selected, animaSpecieId);
                 }
             }
             catch (Exception ex)
