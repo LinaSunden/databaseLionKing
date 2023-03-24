@@ -732,21 +732,37 @@ namespace ProgrammeringMotDatabaser
                     {
                         if (cboDeleteAimalClass.SelectedItem is AnimalClass select)
                         {
-                            var animalSpecies = await db.GetAnimalBySpeficClass(select);
+                            var animalsInClass = await db.GetAnimalBySpeficClass(select);
+                            bool noAnimalsInTheClass = animalsInClass.Count() == 0;
 
-                            lstBox.ItemsSource = null;
-                            lstBox.ItemsSource = animalSpecies;
-                            lstBox.DisplayMemberPath = "AnimalSpecieInClass";
-                            lblAnimalRegistry.Content = $"Species that need to be deleted before delete animal class {select.AnimalClassName}";
+                            if (noAnimalsInTheClass) 
+                            {
+                                MessageBox.Show($"There is animal species in {select.AnimalClassName} class, you have to delete them first.");
+                            }
+
+                            else
+                            {
+
+                                lstBox.ItemsSource = null;
+                                lstBox.ItemsSource = animalsInClass;
+                                lstBox.DisplayMemberPath = "AnimalsInClass";
+                                
+                                lblAnimalRegistry.Content = $"Species and animals that need to be deleted before you can delete the animal class {select.AnimalClassName}";
 
 
-                            MessageBox.Show($"There is animal species in {select.AnimalClassName} class, you have to delete them first. You can se the species that need to be deleted in the list until you press the OK button");
+                                MessageBox.Show($"There is animal and species in {select.AnimalClassName} class, you have to delete them first. You can se the animals and species that need to be deleted in the list until you press the OK button");
+
+                                
+                                lblAnimalRegistry.Content = "Animal registry";
+                            }
+                            
+
                             ClearCbo();
                             ClearTextboxes();
                             UpdateListBoxes();
                             DisplayCBO();
                             WelcomeMessage();
-                            lblAnimalRegistry.Content = "Animal registry";
+                          
                         }
                     }
                     catch (Exception ex1)
@@ -765,8 +781,9 @@ namespace ProgrammeringMotDatabaser
              }
         }
 
-     
-   
+
+
+
         /// <summary>
         /// View in delete animal groupbox the specific animal that the user double-click on in the listbox
         /// </summary>

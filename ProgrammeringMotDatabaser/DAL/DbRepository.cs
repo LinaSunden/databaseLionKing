@@ -465,7 +465,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                     animal = new()
                     {
                         AnimalId = reader.GetInt32(0),
-                        CharacterName = (string)reader["charactername"],
+                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
 
 
                         AnimalSpecie = new()
@@ -956,7 +956,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
             {
                 List<Animal> animals = new List<Animal>();
 
-                var sqlJoin = $"SELECT animal.animalid, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
+                var sqlJoin = $"SELECT animal.animalid, animal.charactername, animalspecie.animalspeciename, animalclass.animalclassname FROM animalclass JOIN animalspecie ON animalspecie.animalclassid = animalclass.animalclassid JOIN animal ON animal.animalspecieid = animalspecie.animalspecieid WHERE animalclass.animalclassname = @animalclassname ORDER BY animalspeciename ASC";
 
                 await using var dataSource = NpgsqlDataSource.Create(_connectionString);
                 await using var command = dataSource.CreateCommand(sqlJoin);
@@ -970,6 +970,7 @@ public async Task<IEnumerable<Animal>> AllInfoAboutAllAnimals()
                     animal = new Animal()
                     {
                         AnimalId = reader.GetInt32(0),
+                        CharacterName = reader["charactername"] == DBNull.Value ? null : (string)reader["charactername"],
 
                         AnimalSpecie = new()
                         {
